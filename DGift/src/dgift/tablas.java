@@ -5,13 +5,17 @@
  */
 package dgift;
 
+import java.util.Date;
 import ConexionSQL.ConexionUsuarios;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -29,10 +33,15 @@ public class tablas extends javax.swing.JFrame {
         
         this.setLocationRelativeTo(null);
         mostrarDatos();
+        mostrarDatosClientes();
+        mostrarDatosBanco();
+        mostrarDatosComunas();
+        mostrarDatosRrss();
+        mostrarDatosCategoriaArt();
         
     }
-    
-    public void filtrarDatos(String valor){
+//USUARIOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void filtrarDatos(String valor){
   
       String[] titulos={"ID","Nombre","Contraseña"};
       String[] registros =new String[3];
@@ -64,8 +73,7 @@ public class tablas extends javax.swing.JFrame {
      
      
   }  
-    
-  public void mostrarDatos(){
+ public void mostrarDatos(){
   
       String[] titulos={"ID","Nombre","Contraseña"};
       String[] registros =new String[3];
@@ -114,15 +122,14 @@ public class tablas extends javax.swing.JFrame {
   JOptionPane.showMessageDialog(null,"Error al eliminar Registros"+e.getMessage());   
  }
      
- } 
-  
-public void limpiarCajas(){
+ }   
+ public void limpiarCajas(){
     txtusuario_maestros_usuarios.setText("");
     txtcontraseña_maestros_usuarios.setText("");
     
     
 }
-  public void actualizarDatos(){
+ public void actualizarDatos(){
  
  try{
     
@@ -145,9 +152,7 @@ public void limpiarCajas(){
       
     JOptionPane.showMessageDialog(null,"Error de Edicion "+e.getMessage());
 }
- }  
-    
-    
+ }    
  public void insertarDatos(){
  
  try{
@@ -169,6 +174,748 @@ public void limpiarCajas(){
 }
  }
     @SuppressWarnings("unchecked")
+    
+//CLIENTESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void insertarDatosClientes(){
+ 
+ try{
+    
+    String SQL ="insert into cliente(CLI_RUT_CLIENTE,CLI_NOMBRE,CLI_CELULAR,CLI_TELEFONO,CLI_CORREO,CLI_NACIMIENTO,CLI_ACTIVADO_DESACTIVADO) values(?,?,?,?,?,?,?)";
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1,txtrut_maestros_clientes.getText());
+    pst.setString(2,txt_ncliente_maestros_clientes.getText());
+    pst.setString(3,txtcel_maestros_clientes.getText()); 
+    pst.setString(4,txtfono_maestros_clientes.getText());
+    pst.setString(5,txtemaill_maestros_clientes.getText());
+    pst.setString(6,((JTextField)txtfnac_maestros_clientes.getDateEditor().getUiComponent()).getText());
+    
+    int seleccionado=cboxatcdes_maestros_clientes.getSelectedIndex();
+    pst.setString(7,cboxatcdes_maestros_clientes.getItemAt(seleccionado));
+    
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Exitoso");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Registro Fallido"+e.getMessage());
+}
+ }   
+ public void limpiarCajasClientes(){
+    txtrut_maestros_clientes.setText("");
+    txt_ncliente_maestros_clientes.setText("");
+    txtcel_maestros_clientes.setText("");
+    txtfono_maestros_clientes.setText("");
+    txtemaill_maestros_clientes.setText("");
+    txtfnac_maestros_clientes.setCalendar(null);
+    cboxatcdes_maestros_clientes.setSelectedItem(null);
+    
+    
+    
+  
+}  
+ public void actualizarDatosClientes(){
+     
+ try{
+      
+    String SQL ="update cliente set CLI_RUT_CLIENTE=?,CLI_NOMBRE=?,CLI_CELULAR=?,CLI_TELEFONO=?,CLI_CORREO=?,CLI_NACIMIENTO=?,CLI_ACTIVADO_DESACTIVADO=? where CLI_RUT_CLIENTE=? ";
+    
+     int filaSeleccionado=listadeclientes_maestros.getSelectedRow();
+    String dao=(String)listadeclientes_maestros.getValueAt(filaSeleccionado, 0);
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1,txtrut_maestros_clientes.getText());
+    pst.setString(2,txt_ncliente_maestros_clientes.getText());
+    pst.setString(3,txtcel_maestros_clientes.getText()); 
+    pst.setInt(4,Integer.parseInt(txtfono_maestros_clientes.getText()));
+    pst.setString(5,txtemaill_maestros_clientes.getText());
+    pst.setString(6,((JTextField)txtfnac_maestros_clientes.getDateEditor().getUiComponent()).getText());
+    
+    int seleccionado=cboxatcdes_maestros_clientes.getSelectedIndex();
+    pst.setString(7,cboxatcdes_maestros_clientes.getItemAt(seleccionado));
+   
+    
+    pst.setString(8, dao);
+   pst.execute();
+
+ 
+    JOptionPane.showMessageDialog(null," Registro Editado ");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error de Edicion "+e.getMessage());
+}
+ } 
+ public void mostrarDatosClientes(){
+  
+      String[] titulos={"RUT","Nombre","Celular","Telefono","Correo","Fecha de Nacimiento","Estado"};
+      String[] registros =new String[7];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from cliente";
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("CLI_RUT_CLIENTE");
+             registros[1]=rs.getString("CLI_NOMBRE"); 
+             registros[2]=rs.getString("CLI_CELULAR");
+              registros[3]=rs.getString("CLI_TELEFONO");
+             registros[4]=rs.getString("CLI_CORREO"); 
+             registros[5]=rs.getString("CLI_NACIMIENTO");
+             registros[6]=rs.getString("CLI_ACTIVADO_DESACTIVADO");
+             modelo.addRow(registros);
+             
+         }
+         
+         listadeclientes_maestros.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     }
+     
+     
+     
+  } 
+ public void eliminarRegistrosClientes(){
+ int filaSeleccionada=listadeclientes_maestros.getSelectedRow();
+ 
+ try{
+    String SQL="delete from cliente where CLI_RUT_CLIENTE="+listadeclientes_maestros.getValueAt(filaSeleccionada,0);
+    
+    Statement st=con.createStatement();
+    
+    int n = st.executeUpdate(SQL);
+  if(n>=0){
+  JOptionPane.showMessageDialog(null,"Registro Eliminado");
+  }
+    
+ }catch(Exception e){
+  JOptionPane.showMessageDialog(null,"Error al eliminar Registros"+e.getMessage());   
+ }
+     
+ }   
+ public void filtrarDatosClientes(String valor){
+  
+      String[] titulos={"RUT","Nombre","Celular","Telefono","Correo","Fecha de Nacimiento","Estado"};
+      String[] registros =new String[7];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from cliente where CLI_RUT_CLIENTE like '%"+valor+"%'";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+              registros[0]=rs.getString("CLI_RUT_CLIENTE");
+             registros[1]=rs.getString("CLI_NOMBRE"); 
+             registros[2]=rs.getString("CLI_CELULAR");
+              registros[3]=rs.getString("CLI_TELEFONO");
+             registros[4]=rs.getString("CLI_CORREO"); 
+             registros[5]=rs.getString("CLI_NACIMIENTO");
+             registros[6]=rs.getString("CLI_ACTIVADO_DESACTIVADO");
+             modelo.addRow(registros);
+             
+         }
+         
+         listadeclientes_maestros.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar Clientes "+e.getMessage());
+     }
+     
+     
+     
+  }  
+
+ //BANCOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void insertarDatosBanco(){
+ 
+ try{
+    
+    String SQL ="insert into bancos(BAN_DESCRIPCION,BAN_ACTIVADO_DESACTIVADO) values(?,?)";
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1,txtnbanco_maestros_bancos.getText());
+  
+    int seleccionado=cbbanco_maestros_bancos.getSelectedIndex();
+    pst.setString(2,cbbanco_maestros_bancos.getItemAt(seleccionado));
+    
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Editado");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error de Edición"+e.getMessage());
+}
+ }   
+ public void limpiarCajasBanco(){
+    txtnbanco_maestros_bancos.setText("");
+    cbbanco_maestros_bancos.setSelectedItem(null);
+    
+}  
+ public void actualizarDatosBanco(){
+     
+ try{
+      
+    String SQL ="update bancos set BAN_DESCRIPCION=?,BAN_ACTIVADO_DESACTIVADO=? where BAN_ID_BANCO=? ";
+    
+     int filaSeleccionado=bancosregistrados.getSelectedRow();
+    String dao=(String)bancosregistrados.getValueAt(filaSeleccionado, 0);
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1, txtnbanco_maestros_bancos.getText());
+   int seleccionado=cbbanco_maestros_bancos.getSelectedIndex();
+    pst.setString(2,cbbanco_maestros_bancos.getItemAt(seleccionado));
+    
+    pst.setString(3, dao);
+   pst.execute();
+
+ 
+    JOptionPane.showMessageDialog(null," Registro Editado ");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error de Edicion "+e.getMessage());
+}
+ } 
+ public void mostrarDatosBanco(){
+  
+      String[] titulos={"ID Banco","Banco","Estado"};
+      String[] registros =new String[3];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from bancos";
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("BAN_ID_BANCO");
+             registros[1]=rs.getString("BAN_DESCRIPCION"); 
+             registros[2]=rs.getString("BAN_ACTIVADO_DESACTIVADO"); 
+            
+             modelo.addRow(registros);
+             
+         }
+         
+         bancosregistrados.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     }
+     
+     
+     
+  } 
+ public void eliminarRegistrosBanco(){
+     
+ int filaSeleccionada=bancosregistrados.getSelectedRow();
+ 
+ try{
+    String SQL="delete from bancos where BAN_ID_BANCO="+bancosregistrados.getValueAt(filaSeleccionada,0);
+    
+    Statement st=con.createStatement();
+    
+    int n = st.executeUpdate(SQL);
+  if(n>=0){
+  JOptionPane.showMessageDialog(null,"Registro Eliminado");
+  }
+    
+ }catch(Exception e){
+  JOptionPane.showMessageDialog(null,"Error al eliminar Registros"+e.getMessage());   
+ }
+     
+ }   
+ public void filtrarDatosBanco(String valor){
+  
+      String[] titulos={"ID Banco","Banco","Estado"};
+      String[] registros =new String[3];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from bancos where BAN_DESCRIPCION like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("BAN_ID_BANCO");
+             registros[1]=rs.getString("BAN_DESCRIPCION"); 
+             registros[2]=rs.getString("BAN_ACTIVADO_DESACTIVADO"); 
+             
+             modelo.addRow(registros);
+             
+         }
+         
+          bancosregistrados.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar bancos "+e.getMessage());
+     }
+     
+     
+     
+  } 
+ 
+//COMUNASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void insertarDatosComunas(){
+ 
+ try{
+    
+    String SQL ="insert into comunas(COM_DESCRIPCION,COM_ACTIVADO_DESACTIVADO) values(?,?)";
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1,txtncomuna_maestros_comunas.getText());
+    int seleccionado=cbcomuna_maestros_comunas.getSelectedIndex();
+    pst.setString(2,cbcomuna_maestros_comunas.getItemAt(seleccionado));
+    
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Editado");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error de Edición"+e.getMessage());
+}
+ }   
+ public void actualizarDatosComunas(){
+     
+ try{
+      
+    String SQL ="update comunas set COM_DESCRIPCION=?,COM_ACTIVADO_DESACTIVADO=? where COM_ID_COMUNA=? ";
+    
+     int filaSeleccionado=comunasregistradas.getSelectedRow();
+    String dao=(String)comunasregistradas.getValueAt(filaSeleccionado, 0);
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1, txtncomuna_maestros_comunas.getText());
+    int seleccionado=cbcomuna_maestros_comunas.getSelectedIndex();
+    pst.setString(2,cbcomuna_maestros_comunas.getItemAt(seleccionado));
+    pst.setString(3, dao);
+    
+   pst.execute();
+
+ 
+    JOptionPane.showMessageDialog(null," Registro Editado ");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error de Edicion "+e.getMessage());
+}
+ } 
+ public void limpiarCajasComunas(){
+    txtncomuna_maestros_comunas.setText("");
+    cbcomuna_maestros_comunas.setSelectedItem(null);
+     
+}
+ public void mostrarDatosComunas(){
+  
+      String[] titulos={"ID Comunas","Comunas","Estado"};
+      String[] registros =new String[3];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from comunas";
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("COM_ID_COMUNA");
+             registros[1]=rs.getString("COM_DESCRIPCION"); 
+             registros[2]=rs.getString("COM_ACTIVADO_DESACTIVADO");
+             
+             modelo.addRow(registros);
+             
+         }
+         
+         comunasregistradas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     }
+     
+     
+     
+  } 
+ public void eliminarRegistrosComunas(){
+     
+ int filaSeleccionada=comunasregistradas.getSelectedRow();
+ 
+ try{
+    String SQL="delete from comunas where COM_ID_COMUNA="+comunasregistradas.getValueAt(filaSeleccionada,0);
+    
+    Statement st=con.createStatement();
+    
+    int n = st.executeUpdate(SQL);
+  if(n>=0){
+  JOptionPane.showMessageDialog(null,"Registro Eliminado");
+  }
+    
+ }catch(Exception e){
+  JOptionPane.showMessageDialog(null,"Error al eliminar Registros"+e.getMessage());   
+ }
+     
+ }   
+ public void filtrarDatosComunas(String valor){
+  
+      String[] titulos={"ID Comunas","Comunas","Estado"};
+      String[] registros =new String[3];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from comunas where COM_DESCRIPCION like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+            registros[0]=rs.getString("COM_ID_COMUNA");
+            registros[1]=rs.getString("COM_DESCRIPCION"); 
+            registros[2]=rs.getString("COM_ACTIVADO_DESACTIVADO");
+            
+             modelo.addRow(registros);
+             
+         }
+         
+          comunasregistradas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar comunas "+e.getMessage());
+     }
+     
+     
+     
+  } 
+ 
+ //RRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void insertarDatosRrss(){
+ 
+ try{
+    
+    String SQL ="insert into rrss (RRS_NOMBRE,RRS_ACTIVADO_DESACTIVADO) values(?,?)";
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1,txtnrrss_maestros_rrss.getText());
+    int seleccionado=cbrrss_maestros_rrss.getSelectedIndex();
+    pst.setString(2,cbrrss_maestros_rrss.getItemAt(seleccionado));
+    
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Exitoso");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+}
+ }   
+ public void limpiarCajasRrss(){
+    txtnrrss_maestros_rrss.setText("");
+    cbrrss_maestros_rrss.setSelectedItem(null);
+    
+}
+ public void actualizarDatosRrss(){
+     
+ try{
+      
+    String SQL ="update rrss set RRS_NOMBRE=?,RRS_ACTIVADO_DESACTIVADO=? where RRS_ID_RRSS=? ";
+    
+     int filaSeleccionado=redessociales.getSelectedRow();
+    String dao=(String)redessociales.getValueAt(filaSeleccionado, 0);
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1, txtnrrss_maestros_rrss.getText());
+   int seleccionado=cbrrss_maestros_rrss.getSelectedIndex();
+    pst.setString(2,cbrrss_maestros_rrss.getItemAt(seleccionado));
+    pst.setString(3, dao);
+    
+   pst.execute();
+
+ 
+    JOptionPane.showMessageDialog(null," Registro Editado ");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error de Edicion "+e.getMessage());
+}
+ } 
+ public void mostrarDatosRrss(){
+  
+      String[] titulos={"ID RRSS","RRSS","Estado"};
+      String[] registros =new String[3];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from rrss";
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("RRS_ID_RRSS");
+             registros[1]=rs.getString("RRS_NOMBRE"); 
+             registros[2]=rs.getString("RRS_ACTIVADO_DESACTIVADO"); 
+             
+             modelo.addRow(registros);
+             
+         }
+         
+         redessociales.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     }
+     
+     
+     
+  } 
+ public void eliminarRegistrosRrss(){
+     
+ int filaSeleccionada=redessociales.getSelectedRow();
+ 
+ try{
+    String SQL="delete from rrss where RRS_ID_RRSS="+redessociales.getValueAt(filaSeleccionada,0);
+    
+    Statement st=con.createStatement();
+    
+    int n = st.executeUpdate(SQL);
+  if(n>=0){
+  JOptionPane.showMessageDialog(null,"Registro Eliminado");
+  }
+    
+ }catch(Exception e){
+  JOptionPane.showMessageDialog(null,"Error al eliminar Registros"+e.getMessage());   
+ }
+     
+ }   
+ public void filtrarDatosRrss(String valor){
+  
+      String[] titulos={"ID RRSS","RRSS","Estado"};
+      String[] registros =new String[3];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from rrss where RRS_NOMBRE like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+            registros[0]=rs.getString("RRS_ID_RRSS");
+            registros[1]=rs.getString("RRS_NOMBRE"); 
+            registros[2]=rs.getString("RRS_ACTIVADO_DESACTIVADO");
+            
+             modelo.addRow(registros);
+             
+         }
+         
+          redessociales.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar RRSS "+e.getMessage());
+     }
+     
+     
+     
+  } 
+ 
+ //CATEGORIA_ARTICULOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void insertarDatosCategoriaArt(){
+ 
+ try{
+    
+    String SQL ="insert into categoria_articulo (CAT_DESCRIPCION,CAT_ACTIVADO_DESACTIVADO) values(?,?)";
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1,txtcategoria_maestros_catarticulos.getText());
+    int seleccionado=cbcategoria_maestros_catarticulos.getSelectedIndex();
+    pst.setString(2,cbcategoria_maestros_catarticulos.getItemAt(seleccionado));
+    
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Exitoso");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+}
+ }   
+ public void limpiarCajasCategoriaArt(){
+    txtcategoria_maestros_catarticulos.setText("");
+    cbcategoria_maestros_catarticulos.setSelectedItem(null);
+    
+}
+ public void actualizarDatosCategoriaArt(){
+     
+ try{
+      
+    String SQL ="update categoria_articulo set CAT_DESCRIPCION=?,CAT_ACTIVADO_DESACTIVADO=? where ID_Categoria=? ";
+    
+     int filaSeleccionado=categoriaarticulos.getSelectedRow();
+    String dao=(String)categoriaarticulos.getValueAt(filaSeleccionado, 0);
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1, txtcategoria_maestros_catarticulos.getText());
+   int seleccionado=cbcategoria_maestros_catarticulos.getSelectedIndex();
+    pst.setString(2,cbcategoria_maestros_catarticulos.getItemAt(seleccionado));
+    pst.setString(3, dao);
+    
+   pst.execute();
+
+ 
+    JOptionPane.showMessageDialog(null," Registro Editado ");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error de Edicion "+e.getMessage());
+}
+ } 
+ public void mostrarDatosCategoriaArt(){
+  
+      String[] titulos={"ID Categoria","Categoria","Estado"};
+      String[] registros =new String[3];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from categoria_articulo";
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("ID_Categoria");
+             registros[1]=rs.getString("CAT_DESCRIPCION"); 
+             registros[2]=rs.getString("CAT_ACTIVADO_DESACTIVADO"); 
+             
+             modelo.addRow(registros);
+             
+         }
+         
+         categoriaarticulos.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     }
+     
+     
+     
+  } 
+ public void eliminarRegistrosCategoriaArt(){
+     
+ int filaSeleccionada=categoriaarticulos.getSelectedRow();
+ 
+ try{
+    String SQL="delete from categoria_articulo where ID_Categoria="+categoriaarticulos.getValueAt(filaSeleccionada,0);
+    
+    Statement st=con.createStatement();
+    
+    int n = st.executeUpdate(SQL);
+  if(n>=0){
+  JOptionPane.showMessageDialog(null,"Registro Eliminado");
+  }
+    
+ }catch(Exception e){
+  JOptionPane.showMessageDialog(null,"Error al eliminar Registros"+e.getMessage());   
+ }
+     
+ } 
+ public void filtrarDatosCategoriaArt(String valor){
+  
+      String[] titulos={"ID Categoria","Categoria","Estado"};
+      String[] registros =new String[3];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from categoria_articulo where CAT_DESCRIPCION like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("ID_Categoria");
+             registros[1]=rs.getString("CAT_DESCRIPCION"); 
+             registros[2]=rs.getString("CAT_ACTIVADO_DESACTIVADO");
+            
+             modelo.addRow(registros);
+             
+         }
+         
+          categoriaarticulos.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar RRSS "+e.getMessage());
+     }
+     
+     
+     
+  } 
+ 
+ //ARTICULOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void insertarDatosArticulos(){
+ 
+ try{
+    
+    String SQL ="insert into articulo (CAT_ID_CATEGORIA,ART_DESCRIPCION,ART_Unidades,ART_FECHA_VENCIMIENTO,ART_MARCAS) values(?,?,?,?,?)";
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+   
+    int i;
+    DefaultComboBoxModel modelo= new DefaultComboBoxModel();
+    for(i=0;i<=10;i++)
+    {
+        modelo.addElement(i);
+        
+    }
+    //pst.setString(1,cboxcategoria_maestros_articulos.getItemAt(CAT_DESCRIPCION));
+    
+    pst.setString(2,txtnarticulo_maestros_articulo.getText());
+    pst.setString(3,txtunidades_maestros_articulos.getText());
+   
+    
+     pst.setString(4,((JTextField)txtfnac_maestros_clientes.getDateEditor().getUiComponent()).getText());
+    
+    pst.setString(5,txtmarcas_maestros_articulos.getText());
+    
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Exitoso");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+}
+ }   
+ 
+ 
+ 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -435,14 +1182,16 @@ public void limpiarCajas(){
         txt_ncliente_maestros_clientes = new javax.swing.JTextField();
         txtfono_maestros_clientes = new javax.swing.JTextField();
         txtrut_maestros_clientes = new javax.swing.JTextField();
-        txtfnac_maestros_clientes = new javax.swing.JTextField();
         txtemaill_maestros_clientes = new javax.swing.JTextField();
-        cboxredsocial_maestros_clientes = new javax.swing.JComboBox<>();
+        cboxatcdes_maestros_clientes = new javax.swing.JComboBox<>();
         txtcel_maestros_clientes = new javax.swing.JTextField();
         btncancelar_maestros_clientes = new javax.swing.JButton();
         btnguardar_maestros_clientes = new javax.swing.JButton();
+        txtfnac_maestros_clientes = new com.toedter.calendar.JDateChooser();
         jLabel72 = new javax.swing.JLabel();
         jLabel73 = new javax.swing.JLabel();
+        jLabel48 = new javax.swing.JLabel();
+        txtBuscarClientes = new javax.swing.JTextField();
         proveedores = new javax.swing.JPanel();
         proveedores1 = new javax.swing.JPanel();
         jLabel74 = new javax.swing.JLabel();
@@ -473,19 +1222,17 @@ public void limpiarCajas(){
         jLabel81 = new javax.swing.JLabel();
         jLabel82 = new javax.swing.JLabel();
         jLabel83 = new javax.swing.JLabel();
-        jLabel84 = new javax.swing.JLabel();
         txtnarticulo_maestros_articulo = new javax.swing.JTextField();
         txtunidades_maestros_articulos = new javax.swing.JTextField();
         txtmarcas_maestros_articulos = new javax.swing.JTextField();
-        txtcodigo_maestros_articulos = new javax.swing.JTextField();
         jLabel85 = new javax.swing.JLabel();
         jLabel86 = new javax.swing.JLabel();
         jLabel87 = new javax.swing.JLabel();
         cboxcategoria_maestros_articulos = new javax.swing.JComboBox<>();
-        txtfvencimiento_maestros_articulos = new javax.swing.JFormattedTextField();
         cboxproveedor_maestros_articulos = new javax.swing.JComboBox<>();
         btncancelar_maestros_articulos = new javax.swing.JButton();
         btnguardar_maestros_articulos = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jScrollPane18 = new javax.swing.JScrollPane();
         listaarticulos = new javax.swing.JTable();
         btneditar_maestros_articulos = new javax.swing.JButton();
@@ -522,27 +1269,27 @@ public void limpiarCajas(){
         jPanel3 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         txtnrrss_maestros_rrss = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
-        txtcodigo_maestros_rrss = new javax.swing.JTextField();
         btncancelar_maestros_rrss = new javax.swing.JButton();
         btnguardar_maestros_rrss = new javax.swing.JButton();
+        cbrrss_maestros_rrss = new javax.swing.JComboBox<>();
+        jLabel142 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         redessociales = new javax.swing.JTable();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         txtbusqueda_maestros_rrss = new javax.swing.JTextField();
-        btnbuscar_maestros_rrss = new javax.swing.JButton();
         btneditar_maestros_rrss = new javax.swing.JButton();
         btndesactivar_maestros_rrss = new javax.swing.JButton();
+        jLabel141 = new javax.swing.JLabel();
         categoria_articulos = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         txtcategoria_maestros_catarticulos = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
-        txtcodigo_maestros_catarticulos = new javax.swing.JTextField();
         btncancelar_maestros_catarticulos = new javax.swing.JButton();
         btnguardar_maestros_catarticulos = new javax.swing.JButton();
+        cbcategoria_maestros_catarticulos = new javax.swing.JComboBox<>();
         jLabel43 = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
         btneditar_maestros_catarticulos = new javax.swing.JButton();
@@ -556,33 +1303,33 @@ public void limpiarCajas(){
         jLabel44 = new javax.swing.JLabel();
         jLabel45 = new javax.swing.JLabel();
         txtncomuna_maestros_comunas = new javax.swing.JTextField();
-        txtcodigo_maestros_comunas = new javax.swing.JTextField();
-        jLabel61 = new javax.swing.JLabel();
         btnguardar_maestros_comunas = new javax.swing.JButton();
         btncancelar_maestros_comunas = new javax.swing.JButton();
+        cbcomuna_maestros_comunas = new javax.swing.JComboBox<>();
+        jLabel41 = new javax.swing.JLabel();
         jLabel62 = new javax.swing.JLabel();
         txtbusqueda_maestros_comunas = new javax.swing.JTextField();
         jPanel20 = new javax.swing.JPanel();
         btneditar_maestros_comunas = new javax.swing.JButton();
         jScrollPane14 = new javax.swing.JScrollPane();
         comunasregistradas = new javax.swing.JTable();
-        btnbuscar_maestros_comunas = new javax.swing.JButton();
         btndesactivar_maestros_comunas = new javax.swing.JButton();
+        jLabel52 = new javax.swing.JLabel();
         bancos = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel40 = new javax.swing.JLabel();
         txtnbanco_maestros_bancos = new javax.swing.JTextField();
-        jLabel41 = new javax.swing.JLabel();
         btnguardar_maestros_bancos = new javax.swing.JButton();
         btncancelar_maestros_bancos = new javax.swing.JButton();
-        txtcodigo_maestros_bancos = new javax.swing.JTextField();
+        cbbanco_maestros_bancos = new javax.swing.JComboBox<>();
+        jLabel20 = new javax.swing.JLabel();
         txtbusqueda_maestros_bancos = new javax.swing.JTextField();
-        btnbuscar_maestros_bancos = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
         bancosregistrados = new javax.swing.JTable();
         btneditar_maestros_bancos = new javax.swing.JButton();
         btndesactivar_maestros_bancos = new javax.swing.JButton();
         jLabel140 = new javax.swing.JLabel();
+        jLabel61 = new javax.swing.JLabel();
         categoria_ventas = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel46 = new javax.swing.JLabel();
@@ -611,7 +1358,7 @@ public void limpiarCajas(){
         btnCancelar_maestros_usuarios = new javax.swing.JButton();
         txtcontraseña_maestros_usuarios = new javax.swing.JTextField();
         btnactualizar_maestros_usuarios = new javax.swing.JButton();
-        btnbuscar_maestros_usuarios = new javax.swing.JButton();
+        jLabel84 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
 
         jCheckBox1.setText("jCheckBox1");
@@ -859,7 +1606,7 @@ public void limpiarCajas(){
                 .addComponent(jLabel117)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panel_ventas.addTab("venta", venta);
@@ -1045,7 +1792,7 @@ public void limpiarCajas(){
                 .addComponent(jLabel29)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(confirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27)
                     .addComponent(btnbuscar_ventas_confirmacion)
@@ -1272,7 +2019,7 @@ public void limpiarCajas(){
                 .addComponent(jLabel59)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel60)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1362,7 +2109,7 @@ public void limpiarCajas(){
                         .addComponent(btnguardar_compras_solicitudes)
                         .addGap(66, 66, 66)
                         .addComponent(btncancelar_compras_solicitudes)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(24, Short.MAX_VALUE))
                     .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
                         .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(62, 62, 62)
@@ -1395,9 +2142,9 @@ public void limpiarCajas(){
                             .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
                                 .addGap(16, 16, 16)
                                 .addComponent(jScrollPane22, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(25, Short.MAX_VALUE))
                     .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1697,7 +2444,7 @@ public void limpiarCajas(){
                 .addGroup(registro_comprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btneditar_compras_registro)
                     .addComponent(btneliminar_compras_registro))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panel_compras.addTab("registro compra", registro_compras);
@@ -2442,22 +3189,23 @@ public void limpiarCajas(){
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel55)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel17Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel53)
-                    .addComponent(txtdesde_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel54)
-                    .addComponent(txthasta_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel56)
-                    .addComponent(txtrut_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnbuscarinfo_informes_infodevycambios))
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel55))
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel53)
+                            .addComponent(txtdesde_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel54)
+                            .addComponent(txthasta_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel56)
+                            .addComponent(txtrut_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnbuscarinfo_informes_infodevycambios))))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -2556,28 +3304,43 @@ public void limpiarCajas(){
 
         listadeclientes_maestros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Nombre Cliente", "Celular", "Telefono", "Correo Electonico", "Red Social", "Accion "
+
             }
         ));
+        listadeclientes_maestros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listadeclientes_maestrosMouseClicked(evt);
+            }
+        });
         jScrollPane16.setViewportView(listadeclientes_maestros);
 
         btnventas_maestros_clientes.setText("Ventas");
 
         btneditar_maestros_clientes.setText("Editar");
+        btneditar_maestros_clientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditar_maestros_clientesActionPerformed(evt);
+            }
+        });
 
         btndesactivar_maestros_clientes.setText("Desactivar");
+        btndesactivar_maestros_clientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndesactivar_maestros_clientesActionPerformed(evt);
+            }
+        });
 
         jPanel16.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -2591,13 +3354,27 @@ public void limpiarCajas(){
 
         jLabel67.setText(" E-mail");
 
-        jLabel68.setText("Red Social");
+        jLabel68.setText("Estado:");
 
         jLabel70.setText("F.Nacimiento");
 
+        cboxatcdes_maestros_clientes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
+
         btncancelar_maestros_clientes.setText("Cancelar");
+        btncancelar_maestros_clientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_maestros_clientesActionPerformed(evt);
+            }
+        });
 
         btnguardar_maestros_clientes.setText("Guardar");
+        btnguardar_maestros_clientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardar_maestros_clientesActionPerformed(evt);
+            }
+        });
+
+        txtfnac_maestros_clientes.setDateFormatString("yyyy-MM-dd");
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -2614,7 +3391,7 @@ public void limpiarCajas(){
                                     .addComponent(jLabel67, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(95, 95, 95)
                                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cboxredsocial_maestros_clientes, 0, 155, Short.MAX_VALUE)
+                                    .addComponent(cboxatcdes_maestros_clientes, 0, 155, Short.MAX_VALUE)
                                     .addComponent(txtemaill_maestros_clientes, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(txtfono_maestros_clientes, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(142, 142, 142)
@@ -2632,11 +3409,11 @@ public void limpiarCajas(){
                         .addGap(57, 57, 57)
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtrut_maestros_clientes, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                            .addComponent(txtfnac_maestros_clientes)
-                            .addComponent(txtcel_maestros_clientes))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtcel_maestros_clientes)
+                            .addComponent(txtfnac_maestros_clientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(390, Short.MAX_VALUE))
                     .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addComponent(jLabel68, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel68, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btncancelar_maestros_clientes)
                         .addGap(50, 50, 50)
@@ -2665,13 +3442,13 @@ public void limpiarCajas(){
                             .addComponent(jLabel67))
                         .addGap(7, 7, 7)
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cboxredsocial_maestros_clientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cboxatcdes_maestros_clientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel68)
                             .addComponent(btncancelar_maestros_clientes)
                             .addComponent(btnguardar_maestros_clientes)))
                     .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGap(9, 9, 9)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel70)
                             .addComponent(txtfnac_maestros_clientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -2684,6 +3461,14 @@ public void limpiarCajas(){
         jLabel72.setText("Clientes");
 
         jLabel73.setText("Lista de Clientes");
+
+        jLabel48.setText("Buscar por RUT:");
+
+        txtBuscarClientes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarClientesKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout clientesLayout = new javax.swing.GroupLayout(clientes);
         clientes.setLayout(clientesLayout);
@@ -2706,8 +3491,12 @@ public void limpiarCajas(){
                         .addComponent(jLabel72))
                     .addGroup(clientesLayout.createSequentialGroup()
                         .addGap(397, 397, 397)
-                        .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(616, Short.MAX_VALUE))
+                        .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(149, 149, 149)
+                        .addComponent(jLabel48)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtBuscarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(312, Short.MAX_VALUE))
         );
         clientesLayout.setVerticalGroup(
             clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2717,8 +3506,11 @@ public void limpiarCajas(){
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel73)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel73)
+                    .addComponent(jLabel48)
+                    .addComponent(txtBuscarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane16, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -2881,7 +3673,7 @@ public void limpiarCajas(){
                 .addComponent(jLabel126)
                 .addGap(8, 8, 8)
                 .addComponent(proveedores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(proveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnbuscar_maestros_proveedores)
                     .addComponent(jLabel80)
@@ -2906,8 +3698,6 @@ public void limpiarCajas(){
 
         jLabel83.setText("Marcas");
 
-        jLabel84.setText("Codigo Articulo");
-
         jLabel85.setText("Categoria Articulo");
 
         jLabel86.setText("Fecha Vencimiento");
@@ -2931,12 +3721,10 @@ public void limpiarCajas(){
                 .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel81)
                     .addComponent(jLabel82)
-                    .addComponent(jLabel83)
-                    .addComponent(jLabel84))
+                    .addComponent(jLabel83))
                 .addGap(18, 18, 18)
                 .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtnarticulo_maestros_articulo)
-                    .addComponent(txtcodigo_maestros_articulos, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                    .addComponent(txtnarticulo_maestros_articulo, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                     .addComponent(txtunidades_maestros_articulos)
                     .addComponent(txtmarcas_maestros_articulos))
                 .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2949,8 +3737,8 @@ public void limpiarCajas(){
                         .addGap(46, 46, 46)
                         .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cboxcategoria_maestros_articulos, 0, 134, Short.MAX_VALUE)
-                            .addComponent(txtfvencimiento_maestros_articulos)
-                            .addComponent(cboxproveedor_maestros_articulos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cboxproveedor_maestros_articulos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, articulos1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2972,9 +3760,9 @@ public void limpiarCajas(){
                 .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(articulos1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtfvencimiento_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel86))
+                        .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel86)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel87)
@@ -2990,8 +3778,6 @@ public void limpiarCajas(){
                             .addComponent(txtmarcas_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel84)
-                            .addComponent(txtcodigo_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btncancelar_maestros_articulos)
                             .addComponent(btnguardar_maestros_articulos))))
                 .addGap(43, 43, 43))
@@ -3045,7 +3831,7 @@ public void limpiarCajas(){
             .addGroup(articulosLayout.createSequentialGroup()
                 .addGap(471, 471, 471)
                 .addComponent(jLabel139)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 339, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 379, Short.MAX_VALUE)
                 .addComponent(btnbuscar_maestros_articulos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtbusqueda_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3076,10 +3862,7 @@ public void limpiarCajas(){
 
         tabla_packs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Codigo Pack", "Nombre Pack", "Cantidad", "Seleccion"
@@ -3297,33 +4080,46 @@ public void limpiarCajas(){
 
         jLabel19.setText("Nombre RRSS");
 
-        jLabel20.setText("Codigo RRSS");
-
         btncancelar_maestros_rrss.setText("Cancelar");
+        btncancelar_maestros_rrss.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_maestros_rrssActionPerformed(evt);
+            }
+        });
 
         btnguardar_maestros_rrss.setText("Guardar");
+        btnguardar_maestros_rrss.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardar_maestros_rrssActionPerformed(evt);
+            }
+        });
+
+        cbrrss_maestros_rrss.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
+
+        jLabel142.setText("Estado:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel19)
-                .addGap(49, 49, 49)
-                .addComponent(txtnrrss_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
-                .addComponent(jLabel20)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel19)
+                        .addGap(49, 49, 49)
+                        .addComponent(txtnrrss_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(220, 220, 220)
+                        .addComponent(jLabel142)
+                        .addGap(58, 58, 58)
+                        .addComponent(cbrrss_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btncancelar_maestros_rrss)
-                        .addGap(79, 79, 79)
-                        .addComponent(btnguardar_maestros_rrss))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(txtcodigo_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(64, 64, 64)))
+                .addComponent(btnguardar_maestros_rrss)
+                .addGap(143, 143, 143))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3332,32 +4128,31 @@ public void limpiarCajas(){
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
                     .addComponent(txtnrrss_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel20)
-                    .addComponent(txtcodigo_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                    .addComponent(cbrrss_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel142))
+                .addGap(24, 79, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btncancelar_maestros_rrss)
-                    .addComponent(btnguardar_maestros_rrss))
-                .addGap(24, 24, 24))
+                    .addComponent(btnguardar_maestros_rrss)
+                    .addComponent(btncancelar_maestros_rrss))
+                .addContainerGap())
         );
 
         redessociales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Codigo RRSS", "Nombre RRSS", "accion"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            }
+        ));
+        redessociales.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                redessocialesMouseClicked(evt);
             }
         });
         jScrollPane4.setViewportView(redessociales);
@@ -3367,11 +4162,27 @@ public void limpiarCajas(){
 
         jLabel17.setText("Redes Sociales");
 
-        btnbuscar_maestros_rrss.setText("Buscar");
+        txtbusqueda_maestros_rrss.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbusqueda_maestros_rrssKeyReleased(evt);
+            }
+        });
 
         btneditar_maestros_rrss.setText("Editar");
+        btneditar_maestros_rrss.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditar_maestros_rrssActionPerformed(evt);
+            }
+        });
 
         btndesactivar_maestros_rrss.setText("Desactivar");
+        btndesactivar_maestros_rrss.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndesactivar_maestros_rrssActionPerformed(evt);
+            }
+        });
+
+        jLabel141.setText("Buscar por nombre:");
 
         javax.swing.GroupLayout RRSSLayout = new javax.swing.GroupLayout(RRSS);
         RRSS.setLayout(RRSSLayout);
@@ -3384,9 +4195,9 @@ public void limpiarCajas(){
                     .addGroup(RRSSLayout.createSequentialGroup()
                         .addGap(161, 161, 161)
                         .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(87, 87, 87)
-                        .addComponent(btnbuscar_maestros_rrss)
-                        .addGap(34, 34, 34)
+                        .addGap(85, 85, 85)
+                        .addComponent(jLabel141)
+                        .addGap(18, 18, 18)
                         .addComponent(txtbusqueda_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(RRSSLayout.createSequentialGroup()
                         .addGap(26, 26, 26)
@@ -3410,10 +4221,10 @@ public void limpiarCajas(){
                 .addGroup(RRSSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtbusqueda_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnbuscar_maestros_rrss))
+                    .addComponent(jLabel141))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(RRSSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btneditar_maestros_rrss)
                     .addComponent(btndesactivar_maestros_rrss))
@@ -3430,11 +4241,23 @@ public void limpiarCajas(){
 
         jLabel25.setText("Categoría articulo");
 
-        jLabel28.setText("Código Categoria");
+        jLabel28.setText("Estado:");
 
         btncancelar_maestros_catarticulos.setText("Cancelar");
+        btncancelar_maestros_catarticulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_maestros_catarticulosActionPerformed(evt);
+            }
+        });
 
         btnguardar_maestros_catarticulos.setText("Guardar");
+        btnguardar_maestros_catarticulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardar_maestros_catarticulosActionPerformed(evt);
+            }
+        });
+
+        cbcategoria_maestros_catarticulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -3449,18 +4272,19 @@ public void limpiarCajas(){
                 .addComponent(jLabel25)
                 .addGap(27, 27, 27)
                 .addComponent(txtcategoria_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(jLabel28)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(txtcodigo_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btncancelar_maestros_catarticulos)
                         .addGap(99, 99, 99)
                         .addComponent(btnguardar_maestros_catarticulos)
-                        .addGap(161, 161, 161))))
+                        .addGap(161, 161, 161))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(jLabel28)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbcategoria_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3471,7 +4295,7 @@ public void limpiarCajas(){
                     .addComponent(jLabel25)
                     .addComponent(txtcategoria_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel28)
-                    .addComponent(txtcodigo_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbcategoria_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btncancelar_maestros_catarticulos)
@@ -3486,7 +4310,7 @@ public void limpiarCajas(){
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 21, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3494,25 +4318,41 @@ public void limpiarCajas(){
         );
 
         btneditar_maestros_catarticulos.setText("Editar");
+        btneditar_maestros_catarticulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditar_maestros_catarticulosActionPerformed(evt);
+            }
+        });
 
         categoriaarticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Código categoria", "Categoria articulo", "Accion"
+
             }
         ));
+        categoriaarticulos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                categoriaarticulosMouseClicked(evt);
+            }
+        });
         jScrollPane9.setViewportView(categoriaarticulos);
+
+        txtbusqueda_maestros_catarticulos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbusqueda_maestros_catarticulosKeyReleased(evt);
+            }
+        });
 
         btndesactivar_maestros_catarticulos.setText("Desactivar");
 
@@ -3539,7 +4379,7 @@ public void limpiarCajas(){
                         .addComponent(btndesactivar_maestros_catarticulos)
                         .addGap(431, 431, 431))
                     .addGroup(categoria_articulosLayout.createSequentialGroup()
-                        .addComponent(jScrollPane9)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 1167, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -3566,7 +4406,7 @@ public void limpiarCajas(){
                         .addGroup(categoria_articulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btneditar_maestros_catarticulos)
                             .addComponent(btndesactivar_maestros_catarticulos))))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         panel_maestros.addTab("categoria articulos", categoria_articulos);
@@ -3577,14 +4417,6 @@ public void limpiarCajas(){
 
         jLabel45.setText("Nombre Comuna");
 
-        txtcodigo_maestros_comunas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcodigo_maestros_comunasActionPerformed(evt);
-            }
-        });
-
-        jLabel61.setText("Código de comuna");
-
         btnguardar_maestros_comunas.setText("Guardar");
         btnguardar_maestros_comunas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3593,6 +4425,15 @@ public void limpiarCajas(){
         });
 
         btncancelar_maestros_comunas.setText("Cancelar");
+        btncancelar_maestros_comunas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_maestros_comunasActionPerformed(evt);
+            }
+        });
+
+        cbcomuna_maestros_comunas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
+
+        jLabel41.setText("Estado:");
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -3606,18 +4447,18 @@ public void limpiarCajas(){
                         .addComponent(jLabel45)
                         .addGap(50, 50, 50)
                         .addComponent(txtncomuna_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(117, 117, 117)
-                        .addComponent(jLabel61)
-                        .addGap(32, 32, 32)
-                        .addComponent(txtcodigo_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(188, 188, 188)
+                        .addComponent(jLabel41)
+                        .addGap(44, 44, 44)
+                        .addComponent(cbcomuna_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel44))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap(387, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnguardar_maestros_comunas)
                 .addGap(40, 40, 40)
                 .addComponent(btncancelar_maestros_comunas)
-                .addGap(228, 228, 228))
+                .addGap(233, 233, 233))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3628,17 +4469,23 @@ public void limpiarCajas(){
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel45)
                     .addComponent(txtncomuna_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel61)
-                    .addComponent(txtcodigo_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                    .addComponent(cbcomuna_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel41))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btncancelar_maestros_comunas)
-                    .addComponent(btnguardar_maestros_comunas))
-                .addGap(38, 38, 38))
+                    .addComponent(btnguardar_maestros_comunas)
+                    .addComponent(btncancelar_maestros_comunas))
+                .addContainerGap())
         );
 
         jLabel62.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel62.setText("Comunas Regsitradas");
+
+        txtbusqueda_maestros_comunas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbusqueda_maestros_comunasKeyReleased(evt);
+            }
+        });
 
         btneditar_maestros_comunas.setText("Editar");
         btneditar_maestros_comunas.addActionListener(new java.awt.event.ActionListener() {
@@ -3660,31 +4507,41 @@ public void limpiarCajas(){
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel20Layout.createSequentialGroup()
                 .addComponent(btneditar_maestros_comunas)
-                .addGap(0, 23, Short.MAX_VALUE))
+                .addGap(0, 36, Short.MAX_VALUE))
         );
 
         comunasregistradas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Código comuna", "Nombre de comuna", "Accion"
+
             }
         ));
+        comunasregistradas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comunasregistradasMouseClicked(evt);
+            }
+        });
         jScrollPane14.setViewportView(comunasregistradas);
 
-        btnbuscar_maestros_comunas.setText("Buscar");
-
         btndesactivar_maestros_comunas.setText("Desactivar");
+        btndesactivar_maestros_comunas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndesactivar_maestros_comunasActionPerformed(evt);
+            }
+        });
+
+        jLabel52.setText("Buscar por nombre:");
 
         javax.swing.GroupLayout comunasLayout = new javax.swing.GroupLayout(comunas);
         comunas.setLayout(comunasLayout);
@@ -3693,11 +4550,11 @@ public void limpiarCajas(){
             .addGroup(comunasLayout.createSequentialGroup()
                 .addGroup(comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(comunasLayout.createSequentialGroup()
-                        .addGap(215, 215, 215)
+                        .addGap(214, 214, 214)
                         .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(242, 242, 242)
-                        .addComponent(btnbuscar_maestros_comunas)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(253, 253, 253)
+                        .addComponent(jLabel52)
+                        .addGap(18, 18, 18)
                         .addComponent(txtbusqueda_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(comunasLayout.createSequentialGroup()
                         .addContainerGap()
@@ -3713,12 +4570,12 @@ public void limpiarCajas(){
             .addGroup(comunasLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel62)
-                    .addComponent(txtbusqueda_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnbuscar_maestros_comunas))
                 .addGap(15, 15, 15)
+                .addGroup(comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtbusqueda_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel52)
+                    .addComponent(jLabel62))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3740,35 +4597,43 @@ public void limpiarCajas(){
             }
         });
 
-        jLabel41.setText("Codigo Banco:");
-
         btnguardar_maestros_bancos.setText("Guardar");
-
-        btncancelar_maestros_bancos.setText("Cancelar");
-
-        txtcodigo_maestros_bancos.addActionListener(new java.awt.event.ActionListener() {
+        btnguardar_maestros_bancos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcodigo_maestros_bancosActionPerformed(evt);
+                btnguardar_maestros_bancosActionPerformed(evt);
             }
         });
+
+        btncancelar_maestros_bancos.setText("Cancelar");
+        btncancelar_maestros_bancos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_maestros_bancosActionPerformed(evt);
+            }
+        });
+
+        cbbanco_maestros_bancos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
+
+        jLabel20.setText("Estado:");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jLabel40)
-                .addGap(85, 85, 85)
-                .addComponent(txtnbanco_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(147, 147, 147)
-                .addComponent(jLabel41)
-                .addGap(69, 69, 69)
-                .addComponent(txtcodigo_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnguardar_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel40)
+                        .addGap(85, 85, 85)
+                        .addComponent(txtnbanco_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(248, 248, 248)
+                        .addComponent(jLabel20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbbanco_maestros_bancos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(38, 38, 38))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
+                        .addContainerGap(738, Short.MAX_VALUE)
+                        .addComponent(btnguardar_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(87, 87, 87)
                 .addComponent(btncancelar_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(190, 190, 190))
@@ -3780,8 +4645,8 @@ public void limpiarCajas(){
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel40)
                     .addComponent(txtnbanco_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel41)
-                    .addComponent(txtcodigo_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbbanco_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel20))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnguardar_maestros_bancos)
@@ -3789,41 +4654,59 @@ public void limpiarCajas(){
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        btnbuscar_maestros_bancos.setText("Buscar");
+        txtbusqueda_maestros_bancos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtbusqueda_maestros_bancosActionPerformed(evt);
+            }
+        });
+        txtbusqueda_maestros_bancos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbusqueda_maestros_bancosKeyReleased(evt);
+            }
+        });
 
         bancosregistrados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Codigo Banco", "Nombre Banco", "Accion"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            }
+        ));
+        bancosregistrados.setMaximumSize(new java.awt.Dimension(200, 64));
+        bancosregistrados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bancosregistradosMouseClicked(evt);
             }
         });
-        bancosregistrados.setMaximumSize(new java.awt.Dimension(200, 64));
         jScrollPane8.setViewportView(bancosregistrados);
 
         btneditar_maestros_bancos.setText("Editar");
+        btneditar_maestros_bancos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditar_maestros_bancosActionPerformed(evt);
+            }
+        });
 
         btndesactivar_maestros_bancos.setText("Desactivar");
+        btndesactivar_maestros_bancos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndesactivar_maestros_bancosActionPerformed(evt);
+            }
+        });
 
         jLabel140.setText("bancos registrados");
+
+        jLabel61.setText("Buscar por nombre:");
 
         javax.swing.GroupLayout bancosLayout = new javax.swing.GroupLayout(bancos);
         bancos.setLayout(bancosLayout);
@@ -3832,9 +4715,9 @@ public void limpiarCajas(){
             .addGroup(bancosLayout.createSequentialGroup()
                 .addGap(256, 256, 256)
                 .addComponent(jLabel140)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
-                .addComponent(btnbuscar_maestros_bancos)
-                .addGap(56, 56, 56)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel61, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(txtbusqueda_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(301, 301, 301))
             .addComponent(jScrollPane8)
@@ -3855,7 +4738,7 @@ public void limpiarCajas(){
                 .addGroup(bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtbusqueda_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnbuscar_maestros_bancos))
+                        .addComponent(jLabel61))
                     .addComponent(jLabel140))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3863,7 +4746,7 @@ public void limpiarCajas(){
                 .addGroup(bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btneditar_maestros_bancos)
                     .addComponent(btndesactivar_maestros_bancos))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         panel_maestros.addTab("bancos", bancos);
@@ -4000,7 +4883,7 @@ public void limpiarCajas(){
                     .addComponent(txtbusqueda_maestros_catventas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnbuscar_maestros_catventas)
                     .addComponent(jLabel42))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addGroup(categoria_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -4024,19 +4907,19 @@ public void limpiarCajas(){
 
         tablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "ID", "Nombre", "Usuario"
+
             }
         ));
         tablaUsuarios.setMaximumSize(new java.awt.Dimension(200, 64));
@@ -4136,16 +5019,16 @@ public void limpiarCajas(){
                 .addGap(23, 23, 23))
         );
 
-        btnbuscar_maestros_usuarios.setText("buscar");
+        jLabel84.setText("Buscar por nombre:");
 
         javax.swing.GroupLayout usuariosLayout = new javax.swing.GroupLayout(usuarios);
         usuarios.setLayout(usuariosLayout);
         usuariosLayout.setHorizontalGroup(
             usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(usuariosLayout.createSequentialGroup()
-                .addGap(350, 350, 350)
-                .addComponent(btnbuscar_maestros_usuarios)
-                .addGap(30, 30, 30)
+                .addGap(381, 381, 381)
+                .addComponent(jLabel84)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtbusqueda_maestros_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 605, Short.MAX_VALUE))
             .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -4158,12 +5041,12 @@ public void limpiarCajas(){
         usuariosLayout.setVerticalGroup(
             usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(usuariosLayout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGap(29, 29, 29)
                 .addGroup(usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtbusqueda_maestros_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnbuscar_maestros_usuarios))
+                    .addComponent(jLabel84))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -4239,10 +5122,6 @@ public void limpiarCajas(){
         // TODO add your handling code here:
     }//GEN-LAST:event_txtnbanco_maestros_bancosActionPerformed
 
-    private void txtcodigo_maestros_bancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcodigo_maestros_bancosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtcodigo_maestros_bancosActionPerformed
-
     private void txtcategoria_maestros_catventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcategoria_maestros_catventasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtcategoria_maestros_catventasActionPerformed
@@ -4292,6 +5171,10 @@ public void limpiarCajas(){
     }//GEN-LAST:event_btnmenos_maestros_packsActionPerformed
 
     private void btneditar_maestros_comunasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_maestros_comunasActionPerformed
+actualizarDatosComunas();
+mostrarDatosComunas();
+limpiarCajasComunas();
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_comunasActionPerformed
 
@@ -4368,12 +5251,236 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     }//GEN-LAST:event_btndescargar_informes_infodevycambiosActionPerformed
 
     private void btnguardar_maestros_comunasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_maestros_comunasActionPerformed
+insertarDatosComunas();
+mostrarDatosComunas();
+limpiarCajasComunas();
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnguardar_maestros_comunasActionPerformed
 
-    private void txtcodigo_maestros_comunasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcodigo_maestros_comunasActionPerformed
+    private void btnguardar_maestros_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_maestros_clientesActionPerformed
+     insertarDatosClientes();
+     mostrarDatosClientes();
+     limpiarCajasClientes();
+     
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnguardar_maestros_clientesActionPerformed
+
+    private void btncancelar_maestros_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_maestros_clientesActionPerformed
+limpiarCajasClientes();
+
+
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtcodigo_maestros_comunasActionPerformed
+    }//GEN-LAST:event_btncancelar_maestros_clientesActionPerformed
+
+    private void btneditar_maestros_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_maestros_clientesActionPerformed
+ actualizarDatosClientes();
+ limpiarCajasClientes();
+ mostrarDatosClientes();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btneditar_maestros_clientesActionPerformed
+
+    private void btndesactivar_maestros_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesactivar_maestros_clientesActionPerformed
+eliminarRegistrosClientes();
+limpiarCajasClientes();
+mostrarDatosClientes();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btndesactivar_maestros_clientesActionPerformed
+
+    private void listadeclientes_maestrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listadeclientes_maestrosMouseClicked
+int filaSeleccionadoo= listadeclientes_maestros.rowAtPoint(evt.getPoint());
+
+
+txtrut_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,0).toString());
+txt_ncliente_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,1).toString());
+txtcel_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,2).toString());
+txtfono_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,3).toString());
+
+txtemaill_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,4).toString());
+try{
+
+Date date=(Date) new SimpleDateFormat("yyyy-MM-dd").parse((String)listadeclientes_maestros.getValueAt(filaSeleccionadoo,5));
+txtfnac_maestros_clientes.setDate(date);
+}catch(Exception e){
+    JOptionPane.showMessageDialog(null, "Error al editar la fecha "+e.getMessage());    
+}
+
+cboxatcdes_maestros_clientes.setSelectedItem(listadeclientes_maestros.getValueAt(filaSeleccionadoo,6));   
+
+//txtfnac_maestros_clientes.setDate((java.util.Date) listadeclientes_maestros.getValueAt(filaSeleccionadoo,5));
+   
+ 
+    }//GEN-LAST:event_listadeclientes_maestrosMouseClicked
+
+    private void txtBuscarClientesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarClientesKeyReleased
+        filtrarDatosClientes(txtBuscarClientes.getText());
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarClientesKeyReleased
+
+    private void btnguardar_maestros_bancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_maestros_bancosActionPerformed
+insertarDatosBanco();
+limpiarCajasBanco();
+mostrarDatosBanco();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnguardar_maestros_bancosActionPerformed
+
+    private void btncancelar_maestros_bancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_maestros_bancosActionPerformed
+limpiarCajasBanco();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelar_maestros_bancosActionPerformed
+
+    private void btneditar_maestros_bancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_maestros_bancosActionPerformed
+actualizarDatosBanco();
+limpiarCajasBanco();
+mostrarDatosBanco();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btneditar_maestros_bancosActionPerformed
+
+    private void btndesactivar_maestros_bancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesactivar_maestros_bancosActionPerformed
+eliminarRegistrosBanco();
+mostrarDatosBanco();
+limpiarCajasBanco();
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btndesactivar_maestros_bancosActionPerformed
+
+    private void txtbusqueda_maestros_bancosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_bancosKeyReleased
+        filtrarDatosBanco(txtbusqueda_maestros_bancos.getText());        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_maestros_bancosKeyReleased
+
+    private void btnguardar_maestros_rrssActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_maestros_rrssActionPerformed
+insertarDatosRrss();
+mostrarDatosRrss();
+limpiarCajasRrss();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnguardar_maestros_rrssActionPerformed
+
+    private void btncancelar_maestros_comunasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_maestros_comunasActionPerformed
+limpiarCajasComunas();
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelar_maestros_comunasActionPerformed
+
+    private void btndesactivar_maestros_comunasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesactivar_maestros_comunasActionPerformed
+eliminarRegistrosComunas();
+mostrarDatosComunas();
+limpiarCajasComunas();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btndesactivar_maestros_comunasActionPerformed
+
+    private void comunasregistradasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comunasregistradasMouseClicked
+int filaSeleccionadoo= comunasregistradas.rowAtPoint(evt.getPoint());
+
+txtncomuna_maestros_comunas.setText(comunasregistradas.getValueAt(filaSeleccionadoo, 1).toString());
+cbcomuna_maestros_comunas.setSelectedItem(comunasregistradas.getValueAt(filaSeleccionadoo, 2));
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comunasregistradasMouseClicked
+
+    private void txtbusqueda_maestros_comunasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_comunasKeyReleased
+        filtrarDatosComunas(txtbusqueda_maestros_comunas.getText());
+        
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_maestros_comunasKeyReleased
+
+    private void btncancelar_maestros_rrssActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_maestros_rrssActionPerformed
+limpiarCajasRrss();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelar_maestros_rrssActionPerformed
+
+    private void btneditar_maestros_rrssActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_maestros_rrssActionPerformed
+actualizarDatosRrss();
+limpiarCajasRrss();
+mostrarDatosRrss();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btneditar_maestros_rrssActionPerformed
+
+    private void btndesactivar_maestros_rrssActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesactivar_maestros_rrssActionPerformed
+eliminarRegistrosRrss();
+mostrarDatosRrss();
+limpiarCajasRrss();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btndesactivar_maestros_rrssActionPerformed
+
+    private void txtbusqueda_maestros_rrssKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_rrssKeyReleased
+        filtrarDatosRrss(txtbusqueda_maestros_rrss.getText());
+        
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_maestros_rrssKeyReleased
+
+    private void redessocialesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_redessocialesMouseClicked
+int filaSeleccionadoo= redessociales.rowAtPoint(evt.getPoint());
+
+txtnrrss_maestros_rrss.setText(redessociales.getValueAt(filaSeleccionadoo, 1).toString());
+cbrrss_maestros_rrss.setSelectedItem(redessociales.getValueAt(filaSeleccionadoo, 2));
+        // TODO add your handling code here:
+    }//GEN-LAST:event_redessocialesMouseClicked
+
+    private void txtbusqueda_maestros_bancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_bancosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_maestros_bancosActionPerformed
+
+    private void bancosregistradosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bancosregistradosMouseClicked
+int filaSeleccionadoo= bancosregistrados.rowAtPoint(evt.getPoint());
+
+txtnbanco_maestros_bancos.setText(bancosregistrados.getValueAt(filaSeleccionadoo, 1).toString());
+cbbanco_maestros_bancos.setSelectedItem(bancosregistrados.getValueAt(filaSeleccionadoo,2)); 
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bancosregistradosMouseClicked
+
+    private void btnguardar_maestros_catarticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_maestros_catarticulosActionPerformed
+insertarDatosCategoriaArt();
+mostrarDatosCategoriaArt();
+limpiarCajasCategoriaArt();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnguardar_maestros_catarticulosActionPerformed
+
+    private void btncancelar_maestros_catarticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_maestros_catarticulosActionPerformed
+limpiarCajasCategoriaArt();
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelar_maestros_catarticulosActionPerformed
+
+    private void categoriaarticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_categoriaarticulosMouseClicked
+int filaSeleccionadoo= categoriaarticulos.rowAtPoint(evt.getPoint());
+
+txtcategoria_maestros_catarticulos.setText(categoriaarticulos.getValueAt(filaSeleccionadoo, 1).toString());
+cbcategoria_maestros_catarticulos.setSelectedItem(categoriaarticulos.getValueAt(filaSeleccionadoo,2)); 
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categoriaarticulosMouseClicked
+
+    private void btneditar_maestros_catarticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_maestros_catarticulosActionPerformed
+actualizarDatosCategoriaArt();
+mostrarDatosCategoriaArt();
+limpiarCajasCategoriaArt();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btneditar_maestros_catarticulosActionPerformed
+
+    private void txtbusqueda_maestros_catarticulosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_catarticulosKeyReleased
+        filtrarDatosCategoriaArt(txtbusqueda_maestros_catarticulos.getText());
+        
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_maestros_catarticulosKeyReleased
 
     /**
      * @param args the command line arguments
@@ -4427,14 +5534,10 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JButton btnbuscar_informes_infoinventarios;
     private javax.swing.JButton btnbuscar_informes_infoventas;
     private javax.swing.JButton btnbuscar_maestros_articulos;
-    private javax.swing.JButton btnbuscar_maestros_bancos;
     private javax.swing.JButton btnbuscar_maestros_catarticulos;
     private javax.swing.JButton btnbuscar_maestros_catventas;
-    private javax.swing.JButton btnbuscar_maestros_comunas;
     private javax.swing.JButton btnbuscar_maestros_packs;
     private javax.swing.JButton btnbuscar_maestros_proveedores;
-    private javax.swing.JButton btnbuscar_maestros_rrss;
-    private javax.swing.JButton btnbuscar_maestros_usuarios;
     private javax.swing.JButton btnbuscar_ventas_confirmacion;
     private javax.swing.JButton btnbuscar_ventas_listadestino;
     private javax.swing.JButton btnbuscarinfo_informes_infoclientes;
@@ -4515,7 +5618,11 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JPanel categoria_ventas;
     private javax.swing.JTable categoriaarticulos;
     private javax.swing.JTable categorias_ventas_registradas;
+    private javax.swing.JComboBox<String> cbbanco_maestros_bancos;
+    private javax.swing.JComboBox<String> cbcategoria_maestros_catarticulos;
+    private javax.swing.JComboBox<String> cbcomuna_maestros_comunas;
     private javax.swing.JComboBox<String> cboxarticulo_compras_registro;
+    private javax.swing.JComboBox<String> cboxatcdes_maestros_clientes;
     private javax.swing.JComboBox<String> cboxbanco_ventas_confirmacion;
     private javax.swing.JComboBox<String> cboxcategoria_informes_infoinventarios;
     private javax.swing.JComboBox<String> cboxcategoria_maestros_articulos;
@@ -4523,8 +5630,8 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JComboBox<String> cboxproveedor_maestros_articulos;
     private javax.swing.JComboBox<String> cboxrazonsocial_compras_registro;
     private javax.swing.JComboBox<String> cboxrazonsocial_compras_revision;
-    private javax.swing.JComboBox<String> cboxredsocial_maestros_clientes;
     private javax.swing.JComboBox<String> cboxrut_informes_infoinventarios;
+    private javax.swing.JComboBox<String> cbrrss_maestros_rrss;
     private javax.swing.JPanel clientes;
     private javax.swing.JPanel compras;
     private javax.swing.JPanel comunas;
@@ -4545,6 +5652,7 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JPanel informe_ventas;
     private javax.swing.JPanel informes;
     private javax.swing.JCheckBox jCheckBox1;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
@@ -4592,6 +5700,8 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JLabel jLabel139;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel140;
+    private javax.swing.JLabel jLabel141;
+    private javax.swing.JLabel jLabel142;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -4628,10 +5738,12 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
@@ -4755,6 +5867,7 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JTable tablaUsuarios;
     private javax.swing.JTable tabla_packs;
     private javax.swing.JTabbedPane tablas;
+    private javax.swing.JTextField txtBuscarClientes;
     private javax.swing.JTextField txt_ncliente_maestros_clientes;
     private javax.swing.JTextField txtbuscarut_informes_infoventas;
     private javax.swing.JTextField txtbusqueda_informes_infoclientes;
@@ -4776,12 +5889,7 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JTextField txtcategoria_maestros_catventas;
     private javax.swing.JTextField txtcel_maestros_clientes;
     private javax.swing.JTextField txtcodigo_compras_registro;
-    private javax.swing.JTextField txtcodigo_maestros_articulos;
-    private javax.swing.JTextField txtcodigo_maestros_bancos;
-    private javax.swing.JTextField txtcodigo_maestros_catarticulos;
     private javax.swing.JTextField txtcodigo_maestros_catventas;
-    private javax.swing.JTextField txtcodigo_maestros_comunas;
-    private javax.swing.JTextField txtcodigo_maestros_rrss;
     private javax.swing.JTextField txtcomunas_ventas_venta;
     private javax.swing.JTextField txtcontraseña_maestros_usuarios;
     private javax.swing.JTextField txtdesde_informes_infoclientes;
@@ -4796,7 +5904,7 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JTextField txtemaill_maestros_clientes;
     private javax.swing.JTextField txtenvio_ventas_venta;
     private javax.swing.JTextField txtfentrega_ventas_venta;
-    private javax.swing.JTextField txtfnac_maestros_clientes;
+    private com.toedter.calendar.JDateChooser txtfnac_maestros_clientes;
     private javax.swing.JTextField txtfono_maestros_clientes;
     private javax.swing.JTextField txtfono_maestros_proveedores;
     private javax.swing.JTextField txtfono_ventas_venta;
@@ -4804,7 +5912,6 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
     private javax.swing.JTextField txtfpedido_compras_solicitudes;
     private javax.swing.JFormattedTextField txtfrecepcion_compras_registro;
     private javax.swing.JTextField txtfrecepcion_compras_revision;
-    private javax.swing.JFormattedTextField txtfvencimiento_maestros_articulos;
     private javax.swing.JTextField txthasta_informes_infoclientes;
     private javax.swing.JTextField txthasta_informes_infodevycambios;
     private javax.swing.JTextField txthasta_informes_infoinventarios;

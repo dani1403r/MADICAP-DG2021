@@ -151,7 +151,7 @@
                               <Component id="jLabel117" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel26" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="24" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -600,7 +600,7 @@
                                       <Component id="txtbusqueda_ventas_confirmacion" min="-2" pref="118" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="657" max="32767" attributes="0"/>
+                              <EmptySpace pref="662" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -618,7 +618,7 @@
                               <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="21" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnbuscar_ventas_confirmacion" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -936,7 +936,7 @@
                                       <Component id="jLabel63" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="375" max="32767" attributes="0"/>
+                              <EmptySpace pref="390" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jPanel21" alignment="1" max="32767" attributes="0"/>
                       </Group>
@@ -1138,7 +1138,7 @@
                                       <Component id="jLabel60" min="-2" pref="270" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="456" max="32767" attributes="0"/>
+                              <EmptySpace pref="491" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -1156,7 +1156,7 @@
                               <Component id="jLabel59" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jPanel19" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="7" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="jLabel60" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane13" min="-2" pref="120" max="-2" attributes="0"/>
@@ -1460,7 +1460,7 @@
                                           <Component id="btnguardar_compras_solicitudes" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
                                           <Component id="btncancelar_compras_solicitudes" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace pref="24" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel101" min="-2" pref="75" max="-2" attributes="0"/>
@@ -1505,10 +1505,10 @@
                                                   <Component id="jScrollPane22" min="-2" pref="74" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace pref="25" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="20" max="32767" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
                                           <Group type="103" groupAlignment="1" attributes="0">
                                               <Component id="jScrollPane23" min="-2" pref="74" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="3" attributes="0">
@@ -1749,7 +1749,7 @@
                                   <Component id="btneditar_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btneliminar_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="35" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -3095,7 +3095,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="302" max="-2" attributes="0"/>
                               <Component id="jLabel99" min="-2" pref="267" max="-2" attributes="0"/>
-                              <EmptySpace pref="277" max="32767" attributes="0"/>
+                              <EmptySpace pref="284" max="32767" attributes="0"/>
                               <Component id="btnbuscar_informes_clientes" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="txtbusqueda_informes_infoclientes" min="-2" pref="142" max="-2" attributes="0"/>
@@ -3379,7 +3379,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="152" max="32767" attributes="0"/>
+                              <EmptySpace pref="159" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -3515,24 +3515,27 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel53" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtdesde_informes_infodevycambios" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel54" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txthasta_informes_infodevycambios" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel56" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtrut_informes_infodevycambios" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnbuscarinfo_informes_infodevycambios" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                          <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="jLabel53" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txtdesde_informes_infodevycambios" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel54" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txthasta_informes_infodevycambios" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="jLabel56" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txtrut_informes_infodevycambios" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="btnbuscarinfo_informes_infodevycambios" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
                                   <EmptySpace pref="19" max="32767" attributes="0"/>
                               </Group>
@@ -3707,9 +3710,13 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="397" max="-2" attributes="0"/>
                                       <Component id="jLabel73" min="-2" pref="133" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="149" max="-2" attributes="0"/>
+                                      <Component id="jLabel48" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="txtBuscarClientes" min="-2" pref="104" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="616" max="32767" attributes="0"/>
+                              <EmptySpace pref="312" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -3721,8 +3728,12 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel16" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel73" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="12" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jLabel73" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel48" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtBuscarClientes" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="jScrollPane16" min="-2" pref="90" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -3746,53 +3757,18 @@
                         <Component class="javax.swing.JTable" name="listadeclientes_maestros">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="6" rowCount="10">
-                                <Column editable="true" title="Nombre Cliente" type="java.lang.Object"/>
-                                <Column editable="true" title="Celular" type="java.lang.Object"/>
-                                <Column editable="true" title="Telefono" type="java.lang.Object"/>
-                                <Column editable="true" title="Correo Electonico" type="java.lang.Object"/>
-                                <Column editable="true" title="Red Social" type="java.lang.Object"/>
-                                <Column editable="true" title="Accion " type="java.lang.Object"/>
-                              </Table>
+                              <Table columnCount="0" rowCount="10"/>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="0">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
+                              <TableColumnModel selectionModel="0"/>
                             </Property>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="listadeclientes_maestrosMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -3805,11 +3781,17 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Editar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneditar_maestros_clientesActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btndesactivar_maestros_clientes">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Desactivar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesactivar_maestros_clientesActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JPanel" name="jPanel16">
                       <Properties>
@@ -3826,7 +3808,7 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -3835,7 +3817,7 @@
                                                   </Group>
                                                   <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="cboxredsocial_maestros_clientes" pref="155" max="32767" attributes="0"/>
+                                                      <Component id="cboxatcdes_maestros_clientes" pref="155" max="32767" attributes="0"/>
                                                       <Component id="txtemaill_maestros_clientes" alignment="1" max="32767" attributes="0"/>
                                                       <Component id="txtfono_maestros_clientes" alignment="1" max="32767" attributes="0"/>
                                                   </Group>
@@ -3858,13 +3840,13 @@
                                           <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                               <Component id="txtrut_maestros_clientes" alignment="0" pref="183" max="32767" attributes="0"/>
-                                              <Component id="txtfnac_maestros_clientes" alignment="0" max="32767" attributes="0"/>
                                               <Component id="txtcel_maestros_clientes" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="txtfnac_maestros_clientes" max="32767" attributes="0"/>
                                           </Group>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace pref="390" max="32767" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jLabel68" min="-2" pref="55" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel68" min="-2" pref="156" max="-2" attributes="0"/>
                                           <EmptySpace max="32767" attributes="0"/>
                                           <Component id="btncancelar_maestros_clientes" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
@@ -3901,17 +3883,17 @@
                                           </Group>
                                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="cboxredsocial_maestros_clientes" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="cboxatcdes_maestros_clientes" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel68" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="btncancelar_maestros_clientes" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="btnguardar_maestros_clientes" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="jLabel70" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="txtfnac_maestros_clientes" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel70" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txtfnac_maestros_clientes" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
@@ -3953,7 +3935,7 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel68">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Red Social"/>
+                            <Property name="text" type="java.lang.String" value="Estado:"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel70">
@@ -3967,14 +3949,15 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="txtrut_maestros_clientes">
                         </Component>
-                        <Component class="javax.swing.JTextField" name="txtfnac_maestros_clientes">
-                        </Component>
                         <Component class="javax.swing.JTextField" name="txtemaill_maestros_clientes">
                         </Component>
-                        <Component class="javax.swing.JComboBox" name="cboxredsocial_maestros_clientes">
+                        <Component class="javax.swing.JComboBox" name="cboxatcdes_maestros_clientes">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="0"/>
+                              <StringArray count="2">
+                                <StringItem index="0" value="Activado"/>
+                                <StringItem index="1" value="Desactivado"/>
+                              </StringArray>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -3987,10 +3970,21 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncancelar_maestros_clientesActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="btnguardar_maestros_clientes">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardar_maestros_clientesActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="com.toedter.calendar.JDateChooser" name="txtfnac_maestros_clientes">
+                          <Properties>
+                            <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -4004,6 +3998,16 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Lista de Clientes"/>
                       </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel48">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Buscar por RUT:"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="txtBuscarClientes">
+                      <Events>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBuscarClientesKeyReleased"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -4055,7 +4059,7 @@
                               <Component id="jLabel126" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                               <Component id="proveedores1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="20" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btnbuscar_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel80" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -4341,7 +4345,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="471" max="-2" attributes="0"/>
                               <Component id="jLabel139" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="339" max="32767" attributes="0"/>
+                              <EmptySpace pref="379" max="32767" attributes="0"/>
                               <Component id="btnbuscar_maestros_articulos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtbusqueda_maestros_articulos" min="-2" pref="149" max="-2" attributes="0"/>
@@ -4393,12 +4397,10 @@
                                       <Component id="jLabel81" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel82" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel83" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel84" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="txtnarticulo_maestros_articulo" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtcodigo_maestros_articulos" alignment="0" pref="175" max="32767" attributes="0"/>
+                                      <Component id="txtnarticulo_maestros_articulo" alignment="0" pref="175" max="32767" attributes="0"/>
                                       <Component id="txtunidades_maestros_articulos" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtmarcas_maestros_articulos" alignment="0" max="32767" attributes="0"/>
                                   </Group>
@@ -4413,8 +4415,8 @@
                                           <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                               <Component id="cboxcategoria_maestros_articulos" alignment="0" pref="134" max="32767" attributes="0"/>
-                                              <Component id="txtfvencimiento_maestros_articulos" alignment="0" max="32767" attributes="0"/>
                                               <Component id="cboxproveedor_maestros_articulos" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jDateChooser1" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="32767" attributes="0"/>
                                       </Group>
@@ -4444,9 +4446,9 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="txtfvencimiento_maestros_articulos" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel86" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Component id="jLabel86" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jDateChooser1" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
@@ -4467,8 +4469,6 @@
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="jLabel84" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="txtcodigo_maestros_articulos" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="btncancelar_maestros_articulos" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="btnguardar_maestros_articulos" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -4495,18 +4495,11 @@
                             <Property name="text" type="java.lang.String" value="Marcas"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel84">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Codigo Articulo"/>
-                          </Properties>
-                        </Component>
                         <Component class="javax.swing.JTextField" name="txtnarticulo_maestros_articulo">
                         </Component>
                         <Component class="javax.swing.JTextField" name="txtunidades_maestros_articulos">
                         </Component>
                         <Component class="javax.swing.JTextField" name="txtmarcas_maestros_articulos">
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtcodigo_maestros_articulos">
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel85">
                           <Properties>
@@ -4538,8 +4531,6 @@
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                           </AuxValues>
                         </Component>
-                        <Component class="javax.swing.JFormattedTextField" name="txtfvencimiento_maestros_articulos">
-                        </Component>
                         <Component class="javax.swing.JComboBox" name="cboxproveedor_maestros_articulos">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -4564,6 +4555,8 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                        </Component>
+                        <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
                         </Component>
                       </SubComponents>
                     </Container>
@@ -4744,7 +4737,7 @@
                         <Component class="javax.swing.JTable" name="tabla_packs">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="4" rowCount="4">
+                              <Table columnCount="4" rowCount="0">
                                 <Column editable="true" title="Codigo Pack" type="java.lang.Object"/>
                                 <Column editable="true" title="Nombre Pack" type="java.lang.Object"/>
                                 <Column editable="true" title="Cantidad" type="java.lang.Object"/>
@@ -5041,9 +5034,9 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="161" max="-2" attributes="0"/>
                                       <Component id="jLabel16" min="-2" pref="170" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
-                                      <Component id="btnbuscar_maestros_rrss" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
+                                      <Component id="jLabel141" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="txtbusqueda_maestros_rrss" min="-2" pref="117" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -5073,11 +5066,11 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="txtbusqueda_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel16" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                                  <Component id="btnbuscar_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel141" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jScrollPane4" min="-2" pref="79" max="-2" attributes="0"/>
-                              <EmptySpace pref="38" max="32767" attributes="0"/>
+                              <EmptySpace pref="24" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btneditar_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btndesactivar_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -5101,25 +5094,26 @@
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                  <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                                  <Component id="txtnrrss_maestros_rrss" min="-2" pref="120" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
-                                  <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <Component id="btncancelar_maestros_rrss" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
-                                          <Component id="btnguardar_maestros_rrss" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                          <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                                          <Component id="txtnrrss_maestros_rrss" min="-2" pref="120" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="220" max="-2" attributes="0"/>
+                                          <Component id="jLabel142" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
+                                          <Component id="cbrrss_maestros_rrss" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace pref="299" max="32767" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                                          <Component id="txtcodigo_maestros_rrss" min="-2" pref="170" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="btncancelar_maestros_rrss" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="btnguardar_maestros_rrss" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="143" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -5130,15 +5124,18 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtnrrss_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtcodigo_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cbrrss_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel142" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="30" max="32767" attributes="0"/>
+                                  <EmptySpace min="24" pref="79" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="btncancelar_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="btnguardar_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btncancelar_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -5151,21 +5148,38 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="txtnrrss_maestros_rrss">
                         </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel20">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Codigo RRSS"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtcodigo_maestros_rrss">
-                        </Component>
                         <Component class="javax.swing.JButton" name="btncancelar_maestros_rrss">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncancelar_maestros_rrssActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="btnguardar_maestros_rrss">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardar_maestros_rrssActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="cbrrss_maestros_rrss">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="2">
+                                <StringItem index="0" value="Activado"/>
+                                <StringItem index="1" value="Desactivado"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel142">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Estado:"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -5180,35 +5194,18 @@
                         <Component class="javax.swing.JTable" name="redessociales">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="4">
-                                <Column editable="true" title="Codigo RRSS" type="java.lang.Object"/>
-                                <Column editable="true" title="Nombre RRSS" type="java.lang.Object"/>
-                                <Column editable="true" title="accion" type="java.lang.Boolean"/>
-                              </Table>
+                              <Table columnCount="0" rowCount="4"/>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="0">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
+                              <TableColumnModel selectionModel="0"/>
                             </Property>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="redessocialesMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -5226,20 +5223,29 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtbusqueda_maestros_rrss">
-                    </Component>
-                    <Component class="javax.swing.JButton" name="btnbuscar_maestros_rrss">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Buscar"/>
-                      </Properties>
+                      <Events>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtbusqueda_maestros_rrssKeyReleased"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btneditar_maestros_rrss">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Editar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneditar_maestros_rrssActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btndesactivar_maestros_rrss">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Desactivar"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesactivar_maestros_rrssActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel141">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Buscar por nombre:"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -5278,7 +5284,7 @@
                                       <EmptySpace min="-2" pref="431" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="jScrollPane9" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane9" pref="1167" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -5314,7 +5320,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="51" max="32767" attributes="0"/>
+                              <EmptySpace pref="46" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -5342,19 +5348,20 @@
                                   <Component id="jLabel25" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                   <Component id="txtcategoria_maestros_catarticulos" min="-2" pref="247" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                                  <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="txtcodigo_maestros_catarticulos" min="-2" pref="185" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace max="32767" attributes="0"/>
                                           <Component id="btncancelar_maestros_catarticulos" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
                                           <Component id="btnguardar_maestros_catarticulos" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="161" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
+                                          <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="cbcategoria_maestros_catarticulos" min="-2" pref="93" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -5369,7 +5376,7 @@
                                       <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtcategoria_maestros_catarticulos" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtcodigo_maestros_catarticulos" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cbcategoria_maestros_catarticulos" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -5396,20 +5403,37 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel28">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="C&#xf3;digo Categoria"/>
+                            <Property name="text" type="java.lang.String" value="Estado:"/>
                           </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtcodigo_maestros_catarticulos">
                         </Component>
                         <Component class="javax.swing.JButton" name="btncancelar_maestros_catarticulos">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncancelar_maestros_catarticulosActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="btnguardar_maestros_catarticulos">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardar_maestros_catarticulosActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="cbcategoria_maestros_catarticulos">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="2">
+                                <StringItem index="0" value="Activado"/>
+                                <StringItem index="1" value="Desactivado"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -5426,7 +5450,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -5440,6 +5464,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Editar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneditar_maestros_catarticulosActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane9">
                       <AuxValues>
@@ -5451,39 +5478,25 @@
                         <Component class="javax.swing.JTable" name="categoriaarticulos">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="10">
-                                <Column editable="true" title="C&#xf3;digo categoria" type="java.lang.Object"/>
-                                <Column editable="true" title="Categoria articulo" type="java.lang.Object"/>
-                                <Column editable="true" title="Accion" type="java.lang.Object"/>
-                              </Table>
+                              <Table columnCount="0" rowCount="10"/>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="0">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
+                              <TableColumnModel selectionModel="0"/>
                             </Property>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="categoriaarticulosMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
                     <Component class="javax.swing.JTextField" name="txtbusqueda_maestros_catarticulos">
+                      <Events>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtbusqueda_maestros_catarticulosKeyReleased"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btndesactivar_maestros_catarticulos">
                       <Properties>
@@ -5512,11 +5525,11 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="215" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="214" max="-2" attributes="0"/>
                                       <Component id="jLabel62" min="-2" pref="160" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="242" max="-2" attributes="0"/>
-                                      <Component id="btnbuscar_maestros_comunas" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="253" max="-2" attributes="0"/>
+                                      <Component id="jLabel52" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="txtbusqueda_maestros_comunas" min="-2" pref="84" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -5537,13 +5550,13 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                               <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel62" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtbusqueda_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnbuscar_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="txtbusqueda_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel52" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel62" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="jScrollPane14" min="-2" pref="90" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -5578,21 +5591,21 @@
                                           <Component id="jLabel45" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                           <Component id="txtncomuna_maestros_comunas" min="-2" pref="193" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
-                                          <Component id="jLabel61" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                          <Component id="txtcodigo_maestros_comunas" min="-2" pref="169" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="188" max="-2" attributes="0"/>
+                                          <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                                          <Component id="cbcomuna_maestros_comunas" min="-2" pref="108" max="-2" attributes="0"/>
                                       </Group>
                                       <Component id="jLabel44" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="387" max="32767" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="btnguardar_maestros_comunas" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                                   <Component id="btncancelar_maestros_comunas" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="228" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="233" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -5605,15 +5618,15 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel45" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtncomuna_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel61" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtcodigo_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cbcomuna_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel41" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                                  <EmptySpace pref="39" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="btncancelar_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="btnguardar_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btncancelar_maestros_comunas" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -5631,16 +5644,6 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="txtncomuna_maestros_comunas">
                         </Component>
-                        <Component class="javax.swing.JTextField" name="txtcodigo_maestros_comunas">
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtcodigo_maestros_comunasActionPerformed"/>
-                          </Events>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel61">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="C&#xf3;digo de comuna"/>
-                          </Properties>
-                        </Component>
                         <Component class="javax.swing.JButton" name="btnguardar_maestros_comunas">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
@@ -5652,6 +5655,27 @@
                         <Component class="javax.swing.JButton" name="btncancelar_maestros_comunas">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncancelar_maestros_comunasActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="cbcomuna_maestros_comunas">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="2">
+                                <StringItem index="0" value="Activado"/>
+                                <StringItem index="1" value="Desactivado"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel41">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Estado:"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -5665,6 +5689,9 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtbusqueda_maestros_comunas">
+                      <Events>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtbusqueda_maestros_comunasKeyReleased"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JPanel" name="jPanel20">
 
@@ -5682,7 +5709,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="btneditar_maestros_comunas" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="23" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -5708,46 +5735,32 @@
                         <Component class="javax.swing.JTable" name="comunasregistradas">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="10">
-                                <Column editable="true" title="C&#xf3;digo comuna" type="java.lang.Object"/>
-                                <Column editable="true" title="Nombre de comuna" type="java.lang.Object"/>
-                                <Column editable="true" title="Accion" type="java.lang.Object"/>
-                              </Table>
+                              <Table columnCount="0" rowCount="10"/>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="0">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
+                              <TableColumnModel selectionModel="0"/>
                             </Property>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="comunasregistradasMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JButton" name="btnbuscar_maestros_comunas">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Buscar"/>
-                      </Properties>
-                    </Component>
                     <Component class="javax.swing.JButton" name="btndesactivar_maestros_comunas">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Desactivar"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesactivar_maestros_comunasActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel52">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Buscar por nombre:"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -5767,9 +5780,9 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="256" max="-2" attributes="0"/>
                               <Component id="jLabel140" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="253" max="32767" attributes="0"/>
-                              <Component id="btnbuscar_maestros_bancos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jLabel61" min="-2" pref="125" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="txtbusqueda_maestros_bancos" min="-2" pref="130" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="301" max="-2" attributes="0"/>
                           </Group>
@@ -5793,7 +5806,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="txtbusqueda_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnbuscar_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel61" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jLabel140" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -5804,7 +5817,7 @@
                                   <Component id="btneditar_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btndesactivar_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="37" max="32767" attributes="0"/>
+                              <EmptySpace pref="27" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -5822,20 +5835,24 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                  <Component id="jLabel40" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
-                                  <Component id="txtnbanco_maestros_bancos" min="-2" pref="160" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="147" max="-2" attributes="0"/>
-                                  <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
-                                  <Component id="txtcodigo_maestros_bancos" min="-2" pref="160" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="btnguardar_maestros_bancos" min="-2" pref="95" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                          <Component id="jLabel40" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
+                                          <Component id="txtnbanco_maestros_bancos" min="-2" pref="160" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="248" max="-2" attributes="0"/>
+                                          <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="cbbanco_maestros_bancos" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace pref="738" max="32767" attributes="0"/>
+                                          <Component id="btnguardar_maestros_bancos" min="-2" pref="95" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                                   <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
                                   <Component id="btncancelar_maestros_bancos" min="-2" pref="95" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="190" max="-2" attributes="0"/>
@@ -5849,8 +5866,8 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel40" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtnbanco_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel41" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtcodigo_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cbbanco_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -5873,34 +5890,47 @@
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtnbanco_maestros_bancosActionPerformed"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel41">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Codigo Banco:"/>
-                          </Properties>
-                        </Component>
                         <Component class="javax.swing.JButton" name="btnguardar_maestros_bancos">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardar_maestros_bancosActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="btncancelar_maestros_bancos">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtcodigo_maestros_bancos">
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtcodigo_maestros_bancosActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncancelar_maestros_bancosActionPerformed"/>
                           </Events>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="cbbanco_maestros_bancos">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="2">
+                                <StringItem index="0" value="Activado"/>
+                                <StringItem index="1" value="Desactivado"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel20">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Estado:"/>
+                          </Properties>
                         </Component>
                       </SubComponents>
                     </Container>
                     <Component class="javax.swing.JTextField" name="txtbusqueda_maestros_bancos">
-                    </Component>
-                    <Component class="javax.swing.JButton" name="btnbuscar_maestros_bancos">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Buscar"/>
-                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtbusqueda_maestros_bancosActionPerformed"/>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtbusqueda_maestros_bancosKeyReleased"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane8">
                       <AuxValues>
@@ -5912,11 +5942,10 @@
                         <Component class="javax.swing.JTable" name="bancosregistrados">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="10">
-                                <Column editable="true" title="Codigo Banco" type="java.lang.Object"/>
-                                <Column editable="true" title="Nombre Banco" type="java.lang.Object"/>
-                                <Column editable="true" title="Accion" type="java.lang.Boolean"/>
-                              </Table>
+                              <Table columnCount="0" rowCount="10"/>
+                            </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="0"/>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[200, 64]"/>
@@ -5925,6 +5954,9 @@
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bancosregistradosMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -5932,15 +5964,26 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Editar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneditar_maestros_bancosActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btndesactivar_maestros_bancos">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Desactivar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesactivar_maestros_bancosActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel140">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="bancos registrados"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel61">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Buscar por nombre:"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -5991,7 +6034,7 @@
                                   <Component id="btnbuscar_maestros_catventas" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel42" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="23" max="32767" attributes="0"/>
+                              <EmptySpace pref="11" max="32767" attributes="0"/>
                               <Component id="jScrollPane10" min="-2" pref="100" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -6174,9 +6217,9 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="350" max="-2" attributes="0"/>
-                              <Component id="btnbuscar_maestros_usuarios" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="381" max="-2" attributes="0"/>
+                              <Component id="jLabel84" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtbusqueda_maestros_usuarios" min="-2" pref="102" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="605" max="32767" attributes="0"/>
                           </Group>
@@ -6192,12 +6235,12 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace pref="14" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="jPanel15" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="txtbusqueda_maestros_usuarios" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnbuscar_maestros_usuarios" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel84" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane11" min="-2" pref="85" max="-2" attributes="0"/>
@@ -6225,30 +6268,10 @@
                         <Component class="javax.swing.JTable" name="tablaUsuarios">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="10">
-                                <Column editable="true" title="ID" type="java.lang.Object"/>
-                                <Column editable="true" title="Nombre" type="java.lang.Object"/>
-                                <Column editable="true" title="Usuario" type="java.lang.Object"/>
-                              </Table>
+                              <Table columnCount="0" rowCount="10"/>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="0">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
+                              <TableColumnModel selectionModel="0"/>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[200, 64]"/>
@@ -6381,9 +6404,9 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JButton" name="btnbuscar_maestros_usuarios">
+                    <Component class="javax.swing.JLabel" name="jLabel84">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="buscar"/>
+                        <Property name="text" type="java.lang.String" value="Buscar por nombre:"/>
                       </Properties>
                     </Component>
                   </SubComponents>

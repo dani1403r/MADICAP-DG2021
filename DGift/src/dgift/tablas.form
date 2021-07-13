@@ -3692,8 +3692,6 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="btndesactivar_maestros_clientes" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
                               <Component id="btneditar_maestros_clientes" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
                               <Component id="btnventas_maestros_clientes" min="-2" max="-2" attributes="0"/>
@@ -3738,7 +3736,6 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btneditar_maestros_clientes" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btndesactivar_maestros_clientes" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnventas_maestros_clientes" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
@@ -3783,14 +3780,6 @@
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneditar_maestros_clientesActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="btndesactivar_maestros_clientes">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Desactivar"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesactivar_maestros_clientesActionPerformed"/>
                       </Events>
                     </Component>
                     <Container class="javax.swing.JPanel" name="jPanel16">
@@ -4225,6 +4214,9 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardar_maestros_proveedoresActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -5049,9 +5041,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="btneditar_maestros_rrss" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                              <Component id="btndesactivar_maestros_rrss" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="200" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -5071,10 +5061,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jScrollPane4" min="-2" pref="79" max="-2" attributes="0"/>
                               <EmptySpace pref="24" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="btneditar_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btndesactivar_maestros_rrss" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="btneditar_maestros_rrss" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -5235,14 +5222,6 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneditar_maestros_rrssActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="btndesactivar_maestros_rrss">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Desactivar"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesactivar_maestros_rrssActionPerformed"/>
-                      </Events>
-                    </Component>
                     <Component class="javax.swing.JLabel" name="jLabel141">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Buscar por nombre:"/>
@@ -5268,9 +5247,9 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="337" max="-2" attributes="0"/>
                               <Component id="jLabel43" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
-                              <Component id="btnbuscar_maestros_catarticulos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
+                              <Component id="jLabel143" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                               <Component id="txtbusqueda_maestros_catarticulos" min="-2" pref="77" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
@@ -5279,9 +5258,7 @@
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="-2" pref="526" max="-2" attributes="0"/>
                                       <Component id="btneditar_maestros_catarticulos" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                                      <Component id="btndesactivar_maestros_catarticulos" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="431" max="-2" attributes="0"/>
+                                      <EmptySpace min="431" pref="583" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Component id="jScrollPane9" pref="1167" max="32767" attributes="0"/>
@@ -5302,8 +5279,8 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel43" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnbuscar_maestros_catarticulos" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtbusqueda_maestros_catarticulos" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel143" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
@@ -5314,13 +5291,10 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="jScrollPane9" min="-2" pref="92" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="btneditar_maestros_catarticulos" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="btndesactivar_maestros_catarticulos" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="btneditar_maestros_catarticulos" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="46" max="32767" attributes="0"/>
+                              <EmptySpace pref="48" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -5498,14 +5472,9 @@
                         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtbusqueda_maestros_catarticulosKeyReleased"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="btndesactivar_maestros_catarticulos">
+                    <Component class="javax.swing.JLabel" name="jLabel143">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Desactivar"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="btnbuscar_maestros_catarticulos">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Buscar"/>
+                        <Property name="text" type="java.lang.String" value="Buscar por nombre:"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -5535,11 +5504,9 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jPanel20" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="btndesactivar_maestros_comunas" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="188" max="32767" attributes="0"/>
+                              <EmptySpace pref="326" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jPanel11" max="32767" attributes="0"/>
                           <Component id="jScrollPane14" alignment="0" max="32767" attributes="0"/>
@@ -5559,13 +5526,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jScrollPane14" min="-2" pref="90" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jPanel20" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="btndesactivar_maestros_comunas" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <Component id="jPanel20" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -5750,14 +5711,6 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JButton" name="btndesactivar_maestros_comunas">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Desactivar"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesactivar_maestros_comunasActionPerformed"/>
-                      </Events>
-                    </Component>
                     <Component class="javax.swing.JLabel" name="jLabel52">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Buscar por nombre:"/>
@@ -5791,9 +5744,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btneditar_maestros_bancos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
-                              <Component id="btndesactivar_maestros_bancos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="172" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="383" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -5813,10 +5764,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jScrollPane8" min="-2" pref="100" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="btneditar_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btndesactivar_maestros_bancos" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="btneditar_maestros_bancos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="27" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -5966,14 +5914,6 @@
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneditar_maestros_bancosActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="btndesactivar_maestros_bancos">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Desactivar"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndesactivar_maestros_bancosActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel140">

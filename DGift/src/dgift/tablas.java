@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import javax.swing.DefaultComboBoxModel;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
@@ -879,6 +879,17 @@ public class tablas extends javax.swing.JFrame {
   } 
  
  //ARTICULOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public static ArrayList<String> llenar_combo(){
+ ArrayList<String> lista = new ArrayList<String>();
+ String q ="SELECT * FROM categoria_articulo";
+     try {
+        // resultado= cboxcategoria_maestros_articulos.executeQuery(q);
+         
+         
+     } catch (Exception e) {
+     }
+ return lista;
+ }
  public void insertarDatosArticulos(){
  
  try{
@@ -887,13 +898,8 @@ public class tablas extends javax.swing.JFrame {
     
     PreparedStatement pst= con.prepareStatement(SQL);
    
-    int i;
-    DefaultComboBoxModel modelo= new DefaultComboBoxModel();
-    for(i=0;i<=10;i++)
-    {
-        modelo.addElement(i);
-        
-    }
+    
+   
     //pst.setString(1,cboxcategoria_maestros_articulos.getItemAt(CAT_DESCRIPCION));
     
     pst.setString(2,txtnarticulo_maestros_articulo.getText());
@@ -1170,7 +1176,6 @@ public class tablas extends javax.swing.JFrame {
         listadeclientes_maestros = new javax.swing.JTable();
         btnventas_maestros_clientes = new javax.swing.JButton();
         btneditar_maestros_clientes = new javax.swing.JButton();
-        btndesactivar_maestros_clientes = new javax.swing.JButton();
         jPanel16 = new javax.swing.JPanel();
         jLabel65 = new javax.swing.JLabel();
         jLabel69 = new javax.swing.JLabel();
@@ -1279,7 +1284,6 @@ public class tablas extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         txtbusqueda_maestros_rrss = new javax.swing.JTextField();
         btneditar_maestros_rrss = new javax.swing.JButton();
-        btndesactivar_maestros_rrss = new javax.swing.JButton();
         jLabel141 = new javax.swing.JLabel();
         categoria_articulos = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -1296,8 +1300,7 @@ public class tablas extends javax.swing.JFrame {
         jScrollPane9 = new javax.swing.JScrollPane();
         categoriaarticulos = new javax.swing.JTable();
         txtbusqueda_maestros_catarticulos = new javax.swing.JTextField();
-        btndesactivar_maestros_catarticulos = new javax.swing.JButton();
-        btnbuscar_maestros_catarticulos = new javax.swing.JButton();
+        jLabel143 = new javax.swing.JLabel();
         comunas = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
@@ -1313,7 +1316,6 @@ public class tablas extends javax.swing.JFrame {
         btneditar_maestros_comunas = new javax.swing.JButton();
         jScrollPane14 = new javax.swing.JScrollPane();
         comunasregistradas = new javax.swing.JTable();
-        btndesactivar_maestros_comunas = new javax.swing.JButton();
         jLabel52 = new javax.swing.JLabel();
         bancos = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
@@ -1327,7 +1329,6 @@ public class tablas extends javax.swing.JFrame {
         jScrollPane8 = new javax.swing.JScrollPane();
         bancosregistrados = new javax.swing.JTable();
         btneditar_maestros_bancos = new javax.swing.JButton();
-        btndesactivar_maestros_bancos = new javax.swing.JButton();
         jLabel140 = new javax.swing.JLabel();
         jLabel61 = new javax.swing.JLabel();
         categoria_ventas = new javax.swing.JPanel();
@@ -1777,7 +1778,7 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(btnbuscar_ventas_confirmacion)
                         .addGap(18, 18, 18)
                         .addComponent(txtbusqueda_ventas_confirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(657, Short.MAX_VALUE))
+                .addContainerGap(662, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirmacionLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnseleccionar_ventas_confirmacion)
@@ -1900,7 +1901,7 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(lista_destinoLayout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(jLabel63)))
-                .addContainerGap(375, Short.MAX_VALUE))
+                .addContainerGap(390, Short.MAX_VALUE))
             .addComponent(jPanel21, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         lista_destinoLayout.setVerticalGroup(
@@ -2004,7 +2005,7 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(confirmacion_despachoLayout.createSequentialGroup()
                         .addGap(420, 420, 420)
                         .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(456, Short.MAX_VALUE))
+                .addContainerGap(491, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirmacion_despachoLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnseleccionar_ventas_adespacho)
@@ -3051,7 +3052,7 @@ public class tablas extends javax.swing.JFrame {
             .addGroup(informe_clientesLayout.createSequentialGroup()
                 .addGap(302, 302, 302)
                 .addComponent(jLabel99, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 284, Short.MAX_VALUE)
                 .addComponent(btnbuscar_informes_clientes)
                 .addGap(18, 18, 18)
                 .addComponent(txtbusqueda_informes_infoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3238,7 +3239,7 @@ public class tablas extends javax.swing.JFrame {
                             .addGroup(informe_dev_y_cambiosLayout.createSequentialGroup()
                                 .addGap(30, 30, 30)
                                 .addComponent(txtbusqueda_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addContainerGap(159, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, informe_dev_y_cambiosLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btndescargar_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3332,13 +3333,6 @@ public class tablas extends javax.swing.JFrame {
         btneditar_maestros_clientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btneditar_maestros_clientesActionPerformed(evt);
-            }
-        });
-
-        btndesactivar_maestros_clientes.setText("Desactivar");
-        btndesactivar_maestros_clientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btndesactivar_maestros_clientesActionPerformed(evt);
             }
         });
 
@@ -3476,8 +3470,6 @@ public class tablas extends javax.swing.JFrame {
             clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(clientesLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btndesactivar_maestros_clientes)
-                .addGap(62, 62, 62)
                 .addComponent(btneditar_maestros_clientes)
                 .addGap(81, 81, 81)
                 .addComponent(btnventas_maestros_clientes)
@@ -3515,7 +3507,6 @@ public class tablas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btneditar_maestros_clientes)
-                    .addComponent(btndesactivar_maestros_clientes)
                     .addComponent(btnventas_maestros_clientes))
                 .addGap(29, 29, 29))
         );
@@ -3539,6 +3530,11 @@ public class tablas extends javax.swing.JFrame {
         btncancelar_maestros_proveedores.setText("Cancelar");
 
         btnguardar_maestros_proveedores.setText("Guardar");
+        btnguardar_maestros_proveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardar_maestros_proveedoresActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout proveedores1Layout = new javax.swing.GroupLayout(proveedores1);
         proveedores1.setLayout(proveedores1Layout);
@@ -4175,13 +4171,6 @@ public class tablas extends javax.swing.JFrame {
             }
         });
 
-        btndesactivar_maestros_rrss.setText("Desactivar");
-        btndesactivar_maestros_rrss.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btndesactivar_maestros_rrssActionPerformed(evt);
-            }
-        });
-
         jLabel141.setText("Buscar por nombre:");
 
         javax.swing.GroupLayout RRSSLayout = new javax.swing.GroupLayout(RRSS);
@@ -4206,9 +4195,7 @@ public class tablas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RRSSLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btneditar_maestros_rrss)
-                .addGap(40, 40, 40)
-                .addComponent(btndesactivar_maestros_rrss)
-                .addGap(69, 69, 69))
+                .addGap(200, 200, 200))
         );
         RRSSLayout.setVerticalGroup(
             RRSSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4224,10 +4211,8 @@ public class tablas extends javax.swing.JFrame {
                     .addComponent(jLabel141))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addGroup(RRSSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btneditar_maestros_rrss)
-                    .addComponent(btndesactivar_maestros_rrss))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(btneditar_maestros_rrss)
                 .addContainerGap())
         );
 
@@ -4354,9 +4339,7 @@ public class tablas extends javax.swing.JFrame {
             }
         });
 
-        btndesactivar_maestros_catarticulos.setText("Desactivar");
-
-        btnbuscar_maestros_catarticulos.setText("Buscar");
+        jLabel143.setText("Buscar por nombre:");
 
         javax.swing.GroupLayout categoria_articulosLayout = new javax.swing.GroupLayout(categoria_articulos);
         categoria_articulos.setLayout(categoria_articulosLayout);
@@ -4365,9 +4348,9 @@ public class tablas extends javax.swing.JFrame {
             .addGroup(categoria_articulosLayout.createSequentialGroup()
                 .addGap(337, 337, 337)
                 .addComponent(jLabel43)
-                .addGap(144, 144, 144)
-                .addComponent(btnbuscar_maestros_catarticulos)
-                .addGap(18, 18, 18)
+                .addGap(140, 140, 140)
+                .addComponent(jLabel143)
+                .addGap(38, 38, 38)
                 .addComponent(txtbusqueda_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(categoria_articulosLayout.createSequentialGroup()
@@ -4375,9 +4358,7 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(categoria_articulosLayout.createSequentialGroup()
                         .addGap(526, 526, 526)
                         .addComponent(btneditar_maestros_catarticulos)
-                        .addGap(41, 41, 41)
-                        .addComponent(btndesactivar_maestros_catarticulos)
-                        .addGap(431, 431, 431))
+                        .addGap(431, 583, Short.MAX_VALUE))
                     .addGroup(categoria_articulosLayout.createSequentialGroup()
                         .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 1167, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
@@ -4393,8 +4374,8 @@ public class tablas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(categoria_articulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel43)
-                    .addComponent(btnbuscar_maestros_catarticulos)
-                    .addComponent(txtbusqueda_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtbusqueda_maestros_catarticulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel143))
                 .addGroup(categoria_articulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(categoria_articulosLayout.createSequentialGroup()
                         .addGap(31, 31, 31)
@@ -4403,10 +4384,8 @@ public class tablas extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(categoria_articulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btneditar_maestros_catarticulos)
-                            .addComponent(btndesactivar_maestros_catarticulos))))
-                .addContainerGap(71, Short.MAX_VALUE))
+                        .addComponent(btneditar_maestros_catarticulos)))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         panel_maestros.addTab("categoria articulos", categoria_articulos);
@@ -4507,7 +4486,7 @@ public class tablas extends javax.swing.JFrame {
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel20Layout.createSequentialGroup()
                 .addComponent(btneditar_maestros_comunas)
-                .addGap(0, 36, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         comunasregistradas.setModel(new javax.swing.table.DefaultTableModel(
@@ -4534,13 +4513,6 @@ public class tablas extends javax.swing.JFrame {
         });
         jScrollPane14.setViewportView(comunasregistradas);
 
-        btndesactivar_maestros_comunas.setText("Desactivar");
-        btndesactivar_maestros_comunas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btndesactivar_maestros_comunasActionPerformed(evt);
-            }
-        });
-
         jLabel52.setText("Buscar por nombre:");
 
         javax.swing.GroupLayout comunasLayout = new javax.swing.GroupLayout(comunas);
@@ -4558,10 +4530,8 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(txtbusqueda_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(comunasLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btndesactivar_maestros_comunas)))
-                .addContainerGap(188, Short.MAX_VALUE))
+                        .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(326, Short.MAX_VALUE))
             .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane14)
         );
@@ -4578,11 +4548,7 @@ public class tablas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(comunasLayout.createSequentialGroup()
-                        .addComponent(btndesactivar_maestros_comunas)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panel_maestros.addTab("comunas", comunas);
@@ -4697,13 +4663,6 @@ public class tablas extends javax.swing.JFrame {
             }
         });
 
-        btndesactivar_maestros_bancos.setText("Desactivar");
-        btndesactivar_maestros_bancos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btndesactivar_maestros_bancosActionPerformed(evt);
-            }
-        });
-
         jLabel140.setText("bancos registrados");
 
         jLabel61.setText("Buscar por nombre:");
@@ -4725,9 +4684,7 @@ public class tablas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bancosLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btneditar_maestros_bancos)
-                .addGap(120, 120, 120)
-                .addComponent(btndesactivar_maestros_bancos)
-                .addGap(172, 172, 172))
+                .addGap(383, 383, 383))
         );
         bancosLayout.setVerticalGroup(
             bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4743,10 +4700,8 @@ public class tablas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btneditar_maestros_bancos)
-                    .addComponent(btndesactivar_maestros_bancos))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addComponent(btneditar_maestros_bancos)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         panel_maestros.addTab("bancos", bancos);
@@ -4883,7 +4838,7 @@ public class tablas extends javax.swing.JFrame {
                     .addComponent(txtbusqueda_maestros_catventas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnbuscar_maestros_catventas)
                     .addComponent(jLabel42))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addGroup(categoria_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -5281,14 +5236,6 @@ limpiarCajasClientes();
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_clientesActionPerformed
 
-    private void btndesactivar_maestros_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesactivar_maestros_clientesActionPerformed
-eliminarRegistrosClientes();
-limpiarCajasClientes();
-mostrarDatosClientes();
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btndesactivar_maestros_clientesActionPerformed
-
     private void listadeclientes_maestrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listadeclientes_maestrosMouseClicked
 int filaSeleccionadoo= listadeclientes_maestros.rowAtPoint(evt.getPoint());
 
@@ -5342,15 +5289,6 @@ mostrarDatosBanco();
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_bancosActionPerformed
 
-    private void btndesactivar_maestros_bancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesactivar_maestros_bancosActionPerformed
-eliminarRegistrosBanco();
-mostrarDatosBanco();
-limpiarCajasBanco();
-
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btndesactivar_maestros_bancosActionPerformed
-
     private void txtbusqueda_maestros_bancosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_bancosKeyReleased
         filtrarDatosBanco(txtbusqueda_maestros_bancos.getText());        // TODO add your handling code here:
     }//GEN-LAST:event_txtbusqueda_maestros_bancosKeyReleased
@@ -5369,14 +5307,6 @@ limpiarCajasComunas();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btncancelar_maestros_comunasActionPerformed
-
-    private void btndesactivar_maestros_comunasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesactivar_maestros_comunasActionPerformed
-eliminarRegistrosComunas();
-mostrarDatosComunas();
-limpiarCajasComunas();
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btndesactivar_maestros_comunasActionPerformed
 
     private void comunasregistradasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comunasregistradasMouseClicked
 int filaSeleccionadoo= comunasregistradas.rowAtPoint(evt.getPoint());
@@ -5407,14 +5337,6 @@ mostrarDatosRrss();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_rrssActionPerformed
-
-    private void btndesactivar_maestros_rrssActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesactivar_maestros_rrssActionPerformed
-eliminarRegistrosRrss();
-mostrarDatosRrss();
-limpiarCajasRrss();
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btndesactivar_maestros_rrssActionPerformed
 
     private void txtbusqueda_maestros_rrssKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_rrssKeyReleased
         filtrarDatosRrss(txtbusqueda_maestros_rrss.getText());
@@ -5482,6 +5404,10 @@ limpiarCajasCategoriaArt();
         // TODO add your handling code here:
     }//GEN-LAST:event_txtbusqueda_maestros_catarticulosKeyReleased
 
+    private void btnguardar_maestros_proveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_maestros_proveedoresActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnguardar_maestros_proveedoresActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -5534,7 +5460,6 @@ limpiarCajasCategoriaArt();
     private javax.swing.JButton btnbuscar_informes_infoinventarios;
     private javax.swing.JButton btnbuscar_informes_infoventas;
     private javax.swing.JButton btnbuscar_maestros_articulos;
-    private javax.swing.JButton btnbuscar_maestros_catarticulos;
     private javax.swing.JButton btnbuscar_maestros_catventas;
     private javax.swing.JButton btnbuscar_maestros_packs;
     private javax.swing.JButton btnbuscar_maestros_proveedores;
@@ -5563,14 +5488,9 @@ limpiarCajasCategoriaArt();
     private javax.swing.JButton btnconfirmar_ventas_confirmacion;
     private javax.swing.JButton btncrearpack_maestros_packs;
     private javax.swing.JButton btndesactivar_maestros_articulos;
-    private javax.swing.JButton btndesactivar_maestros_bancos;
-    private javax.swing.JButton btndesactivar_maestros_catarticulos;
     private javax.swing.JButton btndesactivar_maestros_catventas;
-    private javax.swing.JButton btndesactivar_maestros_clientes;
-    private javax.swing.JButton btndesactivar_maestros_comunas;
     private javax.swing.JButton btndesactivar_maestros_packs;
     private javax.swing.JButton btndesactivar_maestros_proveedores;
-    private javax.swing.JButton btndesactivar_maestros_rrss;
     private javax.swing.JButton btndescarga_ventas_listadestino;
     private javax.swing.JButton btndescargar_informes_infodevycambios;
     private javax.swing.JButton btndescargar_informes_infoinventarios;
@@ -5702,6 +5622,7 @@ limpiarCajasCategoriaArt();
     private javax.swing.JLabel jLabel140;
     private javax.swing.JLabel jLabel141;
     private javax.swing.JLabel jLabel142;
+    private javax.swing.JLabel jLabel143;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;

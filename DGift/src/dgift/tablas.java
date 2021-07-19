@@ -10,21 +10,26 @@ import ConexionSQL.ConexionUsuarios;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
+import java.util.Collections;
+
 
 /**
  *
- * @author Usuario
+ * @author Brian
  */
 public class tablas extends javax.swing.JFrame {
 
     ConexionUsuarios cc=new ConexionUsuarios();
     Connection con=cc.conexion();
+    static ResultSet resultado;
+    static Statement sentencia;
     
     
     
@@ -38,7 +43,12 @@ public class tablas extends javax.swing.JFrame {
         mostrarDatosComunas();
         mostrarDatosRrss();
         mostrarDatosCategoriaArt();
-        
+        ArrayList<String> lista =new ArrayList<String>();
+        llenar_comboArticulos();       
+        mostrarDatosArticulos();
+        llenar_TablaArticulos();
+        MostrarDatosPack();
+        MostrarDatosProveedores();
     }
 //USUARIOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void filtrarDatos(String valor){
@@ -879,36 +889,42 @@ public class tablas extends javax.swing.JFrame {
   } 
  
  //ARTICULOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
- public static ArrayList<String> llenar_combo(){
- ArrayList<String> lista = new ArrayList<String>();
- String q ="SELECT * FROM categoria_articulo";
-     try {
-        // resultado= cboxcategoria_maestros_articulos.executeQuery(q);
-         
-         
+ public void llenar_comboArticulos(){
+ 
+ try {
+   String q ="SELECT * FROM categoria_articulo";
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(q);
+    
+         while(rs.next()){
+             
+          cboxcategoria_maestros_articulos.addItem(rs.getString("ID_CATEGORIA"));   
+          cboxcategoria_maestros_articulos1.addItem(rs.getString("CAT_DESCRIPCION"));
+         //cboxcategoria_maestros_articulos1.addItem(rs.getString("ID_CATEGORIA"));
+         }
      } catch (Exception e) {
+         System.out.println("Incorrector asd "+e.getMessage());
      }
- return lista;
+    
+ 
  }
  public void insertarDatosArticulos(){
  
  try{
     
-    String SQL ="insert into articulo (CAT_ID_CATEGORIA,ART_DESCRIPCION,ART_Unidades,ART_FECHA_VENCIMIENTO,ART_MARCAS) values(?,?,?,?,?)";
+    String SQL ="insert into articulo (ID_CATEGORIA,ART_DESCRIPCION,ART_UNIDADES,ART_FECHA_VENCIMIENTO,ART_MARCAS,ART_ACTIVADO_DESACTIVADO) values((select ID_CATEGORIA from categoria_articulo where CAT_DESCRIPCION=? ),?,?,?,?,?)";
+                 
     
     PreparedStatement pst= con.prepareStatement(SQL);
-   
-    
-   
-    //pst.setString(1,cboxcategoria_maestros_articulos.getItemAt(CAT_DESCRIPCION));
-    
+
+    int seleccionadoo=cboxcategoria_maestros_articulos.getSelectedIndex();
+    pst.setString(1,cboxcategoria_maestros_articulos.getItemAt(seleccionadoo) );
     pst.setString(2,txtnarticulo_maestros_articulo.getText());
     pst.setString(3,txtunidades_maestros_articulos.getText());
-   
-    
-     pst.setString(4,((JTextField)txtfnac_maestros_clientes.getDateEditor().getUiComponent()).getText());
-    
+    pst.setString(4,((JTextField)jDvencimiento_maestros_articulos.getDateEditor().getUiComponent()).getText());
     pst.setString(5,txtmarcas_maestros_articulos.getText());
+    int seleccionado=cboxproveedor_maestros_articulos.getSelectedIndex();
+    pst.setString(6,cboxproveedor_maestros_articulos.getItemAt(seleccionado));
     
    pst.execute();
    
@@ -918,10 +934,554 @@ public class tablas extends javax.swing.JFrame {
       
     JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
 }
+ } 
+ public void limpiarCajasArticulos(){
+    txtnarticulo_maestros_articulo.setText("");
+    txtunidades_maestros_articulos.setText("");
+    txtmarcas_maestros_articulos.setText("");
+    cboxcategoria_maestros_articulos.setSelectedItem(null);
+    jDvencimiento_maestros_articulos.setCalendar(null);
+    cboxcategoria_maestros_articulos.setSelectedItem(null);
+    cboxproveedor_maestros_articulos.setSelectedItem(null);
+}  
+ public void actualizarDatosArticulos(){
+     
+try{
+    
+    //    String SQL ="update articulo set (select CAT_DESCRIPCION from categoria_articulo where ID_CATEGORIA =? ),ART_DESCRIPCION=?,ART_UNIDADES=?,ART_FECHA_VENCIMIENTO=?,ART_MARCAS=?,ART_ACTIVADO_DESACTIVADO=? where ART_ID_ARTICULO=? ";
+    //     String SQL ="UPDATE categoria_articulo SET CAT_DESCRIPCION = ? WHERE categoria_articulo.ID_Categoria =?" + "update articulo set ART_DESCRIPCION=?,ART_UNIDADES=?,ART_FECHA_VENCIMIENTO=?,ART_MARCAS=?,ART_ACTIVADO_DESACTIVADO=? where ART_ID_ARTICULO=? ";
+    String SQL="update articulo set  ID_CATEGORIA=?,ART_DESCRIPCION=?,ART_UNIDADES=?,ART_FECHA_VENCIMIENTO=?,ART_MARCAS=?,ART_ACTIVADO_DESACTIVADO=? where ART_ID_ARTICULO=?";
+    
+    //(select CAT_DESCRIPCION from cate/goria_articulo where ID_CATEGORIA =? )
+    //(select ID_CATEGORIA=? from categoria_articulo where CAT_DESCRIPCION=? )
+     int filaSeleccionado=listaarticulos.getSelectedRow();
+    String dao=(String)listaarticulos.getValueAt(filaSeleccionado, 0);
+
+    PreparedStatement pst= con.prepareStatement(SQL);
+//JOptionPane.showMessageDialog(null,pst );
+    int seleccionadoo=cboxcategoria_maestros_articulos.getSelectedIndex();
+    pst.setString(1,cboxcategoria_maestros_articulos.getItemAt(seleccionadoo) );
+    pst.setString(2,txtnarticulo_maestros_articulo.getText());
+    pst.setString(3,txtunidades_maestros_articulos.getText());
+    pst.setString(4,((JTextField)jDvencimiento_maestros_articulos.getDateEditor().getUiComponent()).getText());
+    pst.setString(5,txtmarcas_maestros_articulos.getText());
+    int seleccionado=cboxproveedor_maestros_articulos.getSelectedIndex();
+    pst.setString(6,cboxproveedor_maestros_articulos.getItemAt(seleccionado));
+    pst.setString(7,dao);
+    pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Exitoso");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+}
+ }  
+ public void mostrarDatosArticulos(){
+  
+      String[] titulos={"ID Articulo","ID Categoría","Articulo","Cantidad","Fecha de vencimiento","Marca","Estado"};
+      String[] registros =new String[7];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *,articulo.ID_CATEGORIA \n" +
+                "from articulo\n" +
+                "JOIN categoria_articulo ON articulo.ID_CATEGORIA = categoria_articulo.ID_Categoria";
+     //"CAT_DESCRIPCION"
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("ART_ID_ARTICULO");
+             registros[1]=rs.getString("ID_CATEGORIA"); 
+             registros[2]=rs.getString("ART_DESCRIPCION");
+             registros[3]=rs.getString("ART_UNIDADES");
+             registros[4]=rs.getString("ART_FECHA_VENCIMIENTO"); 
+             registros[5]=rs.getString("ART_MARCAS");
+             registros[6]=rs.getString("ART_ACTIVADO_DESACTIVADO");
+             modelo.addRow(registros);
+             
+         }
+         
+         listaarticulos.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     }
+     
+     
+     
+  } 
+ public void eliminarRegistrosArticulos(){
+     
+ int filaSeleccionada=listaarticulos.getSelectedRow();
+ 
+ try{
+    String SQL="delete from articulo where ART_ID_ARTICULO="+listaarticulos.getValueAt(filaSeleccionada,0);
+    
+    Statement st=con.createStatement();
+    
+    int n = st.executeUpdate(SQL);
+  if(n>=0){
+  JOptionPane.showMessageDialog(null,"Registro Eliminado");
+  }
+    
+ }catch(Exception e){
+  JOptionPane.showMessageDialog(null,"Error al eliminar Registros"+e.getMessage());   
+ }
+     
+ } 
+ public void filtrarDatosArticulos(String valor){
+  
+      String[] titulos={"ID Articulo","ID Categoría","Articulo","Cantidad","Fecha de vencimiento","Marca","Estado"};
+      String[] registros =new String[7];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from articulo where ART_DESCRIPCION like '%"+valor+"%' ";
+     //"CAT_DESCRIPCION"
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("ART_ID_ARTICULO");
+             registros[1]=rs.getString("ID_CATEGORIA"); 
+             registros[2]=rs.getString("ART_DESCRIPCION");
+             registros[3]=rs.getString("ART_UNIDADES");
+             registros[4]=rs.getString("ART_FECHA_VENCIMIENTO"); 
+             registros[5]=rs.getString("ART_MARCAS");
+             registros[6]=rs.getString("ART_ACTIVADO_DESACTIVADO");
+             modelo.addRow(registros);
+             
+         }
+         
+         listaarticulos.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     }
+     
+     
+     
+  } 
+ 
+ //PROVEEDORESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void InsertarDatosProveedores(){
+ 
+ try {
+    String SQL ="insert into proveedor (PRO_RUT_PROVEEDOR,PRO_NOMBRE,PRO_TELEFONO,PRO_CORREO,PRO_DIRECCION,PRO_RAZON) values(?,?,?,?,?,?)";
+    
+    PreparedStatement Pst= con.prepareStatement(SQL);
+    
+    Pst.setString(1,txtrut_maestros_proveedores.getText());
+    Pst.setString(2,txtncontacto_maestros_proveedores.getText());
+    Pst.setString(3,txtfono_maestros_proveedores.getText());
+    Pst.setString(4,txtemail_maestros_proveedores.getText());
+    Pst.setString(5,txtdireccion_maestros_proveedores.getText());
+    Pst.setString(6,txtrazon_maestros_proveedores.getText());
+    
+    Pst.execute();
+        JOptionPane.showMessageDialog(null,"Registro Exitoso");
+     
+ }catch (Exception e) {
+     
+     JOptionPane.showMessageDialog(null,"Registro Fallido"+e.getMessage());
+     
+ }       
+  }
+ public void limpiarCajasProveedores(){
+     txtrut_maestros_proveedores.setText("");
+     txtncontacto_maestros_proveedores.setText("");
+     txtdireccion_maestros_proveedores.setText("");
+     txtrazon_maestros_proveedores.setText("");
+     txtfono_maestros_proveedores.setText("");
+     txtemail_maestros_proveedores.setText("");
+     
+     
+ } 
+ public void ActualizarDatosProveedores(){
+     try {
+         
+         String SQL ="update proveedor set PRO_RUT_PROVEEDOR=?,PRO_NOMBRE=?,PRO_TELEFONO=?,PRO_CORREO=?,PRO_DIRECCION=?,PRO_RAZON_SOCIAL=? where PRO_RUT_PROVEEDOR=?";
+         
+         int filaSeleccionado=proveedores_maestros.getSelectedRow();
+         String dao=(String)proveedores_maestros.getValueAt(filaSeleccionado, 0);
+         PreparedStatement pst= con.prepareStatement(SQL);
+         
+         pst.setString(1,txtrut_maestros_proveedores.getText());
+         pst.setString(2,txtncontacto_maestros_proveedores.getText());
+         pst.setString(3,txtdireccion_maestros_proveedores.getText());
+         pst.setString(4,txtrazon_maestros_proveedores.getText());
+         pst.setString(5,txtfono_maestros_proveedores.getText());
+         pst.setString(6,txtemail_maestros_proveedores.getText());
+         
+         pst.setString(7, dao);
+        pst.execute();
+        
+        
+         JOptionPane.showMessageDialog(null,"Registro Editado");
+         
+     }catch (Exception e) {
+         
+         JOptionPane.showMessageDialog(null,"Error en Edicion"+e.getMessage());
+         
+         
+     }
+ }
+ public void MostrarDatosProveedores(){
+     
+     String[] Titulos={"Rut Proveedor","Nombre","Telefono","Correo","direccion","Razon Social"};
+     String[] Registros= new String[6];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="select * from proveedor";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("PRO_RUT_PROVEEDOR");
+             Registros[1]=rs.getString("PRO_NOMBRE");
+             Registros[2]=rs.getString("PRO_TELEFONO");
+             Registros[3]=rs.getString("PRO_CORREO");
+             Registros[4]=rs.getString("PRO_DIRECCION");
+             Registros[5]=rs.getString("PRO_RAZON");
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         proveedores_maestros.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }
+ public void FiltarDatosProveedores (String valor){
+    String[] titulos={"Rut Proveedor","Nombre","Telefono","Correo","direccion","Razon Social"};
+      String[] registros =new String[6];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="select * from proveedor where PRO_RUT_PROVEEDOR like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("PRO_RUT_PROVEEDOR");
+             registros[1]=rs.getString("PRO_NOMBRE"); 
+             registros[2]=rs.getString("PRO_TELEFONO");
+             registros[3]=rs.getString("PRO_CORREO");
+             registros[4]=rs.getString("PRO_DIRECCION");
+             registros[5]=rs.getString("PRO_RAZON");
+             
+             modelo.addRow(registros);
+             
+         }
+         
+          proveedores_maestros.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar RRSS "+e.getMessage());
+     }
+      
+ }
+ 
+ //PACKSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void llenar_TablaArticulos(){
+  String[] Titulos={"ID Articulo","Articulo","Stock Articulos"};
+     String[] Registros= new String[3];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     String q ="SELECT * FROM articulo";
+     
+ try {
+   
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(q);
+    
+         while(rs.next()){
+          Registros[0]=rs.getString("ART_ID_ARTICULO");   
+          Registros[1]=rs.getString("ART_DESCRIPCION");     
+          Registros[2]=rs.getString("ART_UNIDADES");
+          Modelo.addRow(Registros);
+         }
+           listaarticulos_maestros_packs.setModel (Modelo);
+          
+     } catch (Exception e) {
+         System.out.println("Problemas al mostrar datos "+e.getMessage());
+     }
+    
+ 
+ }
+ public void limpiar_TablaPacks() {
+ 
+ DefaultTableModel modelo;
+ modelo=(DefaultTableModel)articuloselegidos_maestros_packs.getModel();
+  modelo.removeRow(articuloselegidos_maestros_packs.getSelectedRow());
+  
+     
+ }
+ public void limpiar_TablaPacksCompleta() {
+ 
+ DefaultTableModel modelo;
+ modelo=(DefaultTableModel)articuloselegidos_maestros_packs.getModel();
+  modelo.getDataVector().removeAllElements();
+   
+ }
+ public void limpiarCajasPack (){
+ 
+     txtprecio_maestros_packs.setText("");
+     txtnombre_maestros_packs.setText("");
+     txtunidades_maestros_packs.setText("");
+     
+ } 
+ public void insertarDatosPacks(){
+ try{
+   
+    String SQL ="insert into pack (PCK_NOMBRE,PCK_COSTO,PCK_STOCK) values(?,?,?)";
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1,txtnombre_maestros_packs.getText());
+    
+    pst.setString(2,txtprecio_maestros_packs.getText());
+   
+    pst.setString(3,Integer.toString(valorMenor()));
+    
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Exitoso");
+   
+}catch(Exception e) {
+      
+   JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+}
+ }   
+ public int valorMenor(){
+ 
+   ArrayList<Integer> list =new ArrayList<Integer>();
+     for (int i = 0; i < articuloselegidos_maestros_packs.getRowCount(); i++) {
+        list.add(Integer.parseInt(articuloselegidos_maestros_packs.getValueAt(i, 4).toString()));
+         
+     }
+     int min=Collections.min(list);
+     System.out.println("  "+min);
+     
+     return min;
+ } 
+ public void MostrarDatosPack(){
+     
+     String[] Titulos={"ID Pack","Nombre","Costo","Stock_packs"};
+     String[] Registros= new String[4];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="select * from pack ";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("PCK_ID_PACK");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("PCK_COSTO");
+             Registros[3]=rs.getString("PCK_STOCK");
+
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         tabla_packs.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }    
+ public void FiltrarDatosPack(String valor){
+     
+     String[] Titulos={"ID Pack","Nombre","Costo","Stock_packs"};
+     String[] Registros= new String[4];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="select * from pack where PCK_NOMBRE like '%"+valor+"%' ";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("PCK_ID_PACK");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("PCK_COSTO");
+             Registros[3]=rs.getString("PCK_STOCK");
+
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         tabla_packs.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }       
+ public void actualizarDatosPack(){
+     
+ try{
+      
+    String SQL ="update pack set PCK_NOMBRE=?,PCK_COSTO=?,PCK_STOCK=? where PCK_ID_PACK=? ";
+    
+     int filaSeleccionado=tabla_packs.getSelectedRow();
+    String dao=(String)tabla_packs.getValueAt(filaSeleccionado, 0);
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1, txtnombre_maestros_packs.getText());
+    pst.setString(2, txtprecio_maestros_packs.getText());
+   pst.setString(3,Integer.toString(valorMenor()));
+    pst.setString(4, dao);
+    
+   pst.execute();
+
+ 
+    JOptionPane.showMessageDialog(null," Registro Editado ");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error de Edicion "+e.getMessage());
+}
  }   
  
+ //PACK_HAS_ARTICULOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void insertarDatosHasArticuloasdasd (){
  
+           DefaultTableModel modelo;
+      String id_articulo,cantidad,id_pack;
+     
+     
+     
+     for (int i = 0; i <= articuloselegidos_maestros_packs.getRowCount(); i++) {
+         try {
+           String SQL ="insert into pack_has_articulo (ART_ID_ARTICULO,Pack_ID_PACK,CANTIDAD) values(?,?,?)";
+           PreparedStatement pst= con.prepareStatement(SQL);  
+  
+            
+            modelo=(DefaultTableModel)articuloselegidos_maestros_packs.getModel();
+            id_articulo=articuloselegidos_maestros_packs.getValueAt(i,0).toString();
+            cantidad=articuloselegidos_maestros_packs.getValueAt(i,2).toString();
+            
+            int filaSeleccionado=tabla_packs.getSelectedRow();
+            
+            id_pack=tabla_packs.getValueAt(filaSeleccionado,0).toString();
+            
+            
+            pst.setString(1,id_articulo);
+            pst.setString(2,id_pack);
+            pst.setString(3,cantidad);
+          
+            
+         } catch (SQLException e)
+         {
+             JOptionPane.showMessageDialog(null,"Error al ingresar has_articulo"+e.getMessage());
+             
+         }
+ }
+ }
+ public void insertarDatosHasArticulo (){
+     try {
+     for (int i = 0; i <= articuloselegidos_maestros_packs.getRowCount(); i++) {
+         String cantidad;
+         int id_articulo =  Integer.parseInt(articuloselegidos_maestros_packs.getValueAt(i,0).toString());
+           
+         String SQL ="insert into pack_has_articulo (ART_ID_ARTICULO,Pack_ID_PACK,CANTIDAD) values(?,?,?)";
+        PreparedStatement pst= con.prepareStatement(SQL);
+            
+             
+             cantidad= articuloselegidos_maestros_packs.getValueAt(i,2).toString();
+            // System.out.println("id_articulo "+id_articulo);
+            // System.out.println("cantidad "+cantidad);
+             
+            int filaSeleccionado=tabla_packs.getSelectedRow();
+            
+            String dao= tabla_packs.getValueAt(filaSeleccionado, 0).toString();
+          //  id_pack=(int) tabla_packs.getValueAt(filaSeleccionado,0);
+            //System.out.println("id_pack "+dao);
+            
+        
+            pst.setInt(1,id_articulo);
+            pst.setString(2,dao);
+            pst.setString(3,cantidad);
+          //  pst.setString(4, dao);
+            pst.execute();
+          
+          }//JOptionPane.showMessageDialog(null,"Registros de articulo exitoso");
+              }catch (SQLException e){
+           //System.out.println("Error al ingresar has_articulo" + e.getMessage());  
+          }
  
+ }
+ public void insertarDatosHasArticulodadsads (int id_articulo,int id_pack,int cantidad){
+ 
+           DefaultTableModel modelo;
+      
+         try {
+           String SQL ="insert into pack_has_articulo (ART_ID_ARTICULO,Pack_ID_PACK,CANTIDAD) values(?,?,?)";
+           PreparedStatement pst= con.prepareStatement(SQL);  
+  
+   
+            pst.setInt(1,id_articulo);
+            pst.setInt(2,id_pack);
+            pst.setInt(3,cantidad);
+          
+            pst.execute();
+            
+         } catch (SQLException e)
+         {
+             JOptionPane.showMessageDialog(null,"Error al ingresar has_articulo"+e.getMessage());
+             
+         }
+
+ }
+ public void pruebaaa(){
+       
+      int id_articulo,cantidad,id_pack;
+      DefaultTableModel modelo;
+    
+     for (int i = 0; i <= articuloselegidos_maestros_packs.getRowCount(); i++) {
+                 modelo=(DefaultTableModel)articuloselegidos_maestros_packs.getModel();
+            id_articulo= (int) articuloselegidos_maestros_packs.getValueAt(i,0);
+            cantidad= (int) articuloselegidos_maestros_packs.getValueAt(i,2);
+         System.out.println(""+id_articulo);
+         System.out.println(""+cantidad);
+            int filaSeleccionado=tabla_packs.getSelectedRow();
+            int dao=(int) tabla_packs.getValueAt(filaSeleccionado, 0);
+            insertarDatosHasArticulodadsads (id_articulo,dao,cantidad);
+ 
+     }
+ }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -1237,15 +1797,16 @@ public class tablas extends javax.swing.JFrame {
         cboxproveedor_maestros_articulos = new javax.swing.JComboBox<>();
         btncancelar_maestros_articulos = new javax.swing.JButton();
         btnguardar_maestros_articulos = new javax.swing.JButton();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jDvencimiento_maestros_articulos = new com.toedter.calendar.JDateChooser();
+        cboxcategoria_maestros_articulos1 = new javax.swing.JComboBox<>();
+        txtMula = new javax.swing.JTextField();
         jScrollPane18 = new javax.swing.JScrollPane();
         listaarticulos = new javax.swing.JTable();
         btneditar_maestros_articulos = new javax.swing.JButton();
-        btndesactivar_maestros_articulos = new javax.swing.JButton();
         jLabel138 = new javax.swing.JLabel();
         jLabel139 = new javax.swing.JLabel();
         txtbusqueda_maestros_articulos = new javax.swing.JTextField();
-        btnbuscar_maestros_articulos = new javax.swing.JButton();
+        jLabel144 = new javax.swing.JLabel();
         packs = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         tabla_packs = new javax.swing.JTable();
@@ -1264,6 +1825,7 @@ public class tablas extends javax.swing.JFrame {
         btncrearpack_maestros_packs = new javax.swing.JButton();
         jScrollPane20 = new javax.swing.JScrollPane();
         listaarticulos_maestros_packs = new javax.swing.JTable();
+        btningresararticulo_maestros_packs = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         txtbusqueda_maestros_packs = new javax.swing.JTextField();
@@ -1541,7 +2103,7 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(btncancelardestinatario_ventas_venta)))
                 .addGap(81, 81, 81)
                 .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(162, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1778,7 +2340,7 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(btnbuscar_ventas_confirmacion)
                         .addGap(18, 18, 18)
                         .addComponent(txtbusqueda_ventas_confirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(662, Short.MAX_VALUE))
+                .addContainerGap(712, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirmacionLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnseleccionar_ventas_confirmacion)
@@ -1901,7 +2463,7 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(lista_destinoLayout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(jLabel63)))
-                .addContainerGap(390, Short.MAX_VALUE))
+                .addContainerGap(440, Short.MAX_VALUE))
             .addComponent(jPanel21, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         lista_destinoLayout.setVerticalGroup(
@@ -2005,7 +2567,7 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(confirmacion_despachoLayout.createSequentialGroup()
                         .addGap(420, 420, 420)
                         .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(491, Short.MAX_VALUE))
+                .addContainerGap(541, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirmacion_despachoLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnseleccionar_ventas_adespacho)
@@ -2256,7 +2818,7 @@ public class tablas extends javax.swing.JFrame {
                     .addComponent(jLabel104, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(122, 122, 122)
                 .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtnfactura_compras_registro, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(txtnfactura_compras_registro, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
                     .addComponent(txtrut_compras_registro))
                 .addGap(133, 133, 133)
                 .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2341,7 +2903,7 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(jLabel107)
                         .addGap(18, 18, 18)
                         .addComponent(txtcodigo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                         .addComponent(jLabel108)
                         .addGap(18, 18, 18)
                         .addComponent(cboxarticulo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2542,7 +3104,7 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(btncancelar_compras_revision)
                         .addGap(148, 148, 148)
                         .addComponent(btnbuscar_compras_revision)))
-                .addContainerGap(277, Short.MAX_VALUE))
+                .addContainerGap(344, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2869,7 +3431,7 @@ public class tablas extends javax.swing.JFrame {
                     .addComponent(cboxcategoria_informes_infoinventarios, 0, 118, Short.MAX_VALUE)
                     .addComponent(txtvencimiento_informes_infoinventarios)
                     .addComponent(cboxrut_informes_infoinventarios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 497, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 569, Short.MAX_VALUE)
                 .addComponent(btnbuscar_informes_infoinventarios)
                 .addGap(33, 33, 33))
         );
@@ -3052,7 +3614,7 @@ public class tablas extends javax.swing.JFrame {
             .addGroup(informe_clientesLayout.createSequentialGroup()
                 .addGap(302, 302, 302)
                 .addComponent(jLabel99, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 284, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 356, Short.MAX_VALUE)
                 .addComponent(btnbuscar_informes_clientes)
                 .addGap(18, 18, 18)
                 .addComponent(txtbusqueda_informes_infoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3239,7 +3801,7 @@ public class tablas extends javax.swing.JFrame {
                             .addGroup(informe_dev_y_cambiosLayout.createSequentialGroup()
                                 .addGap(30, 30, 30)
                                 .addComponent(txtbusqueda_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addContainerGap(231, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, informe_dev_y_cambiosLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btndescargar_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3405,7 +3967,7 @@ public class tablas extends javax.swing.JFrame {
                             .addComponent(txtrut_maestros_clientes, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                             .addComponent(txtcel_maestros_clientes)
                             .addComponent(txtfnac_maestros_clientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(390, Short.MAX_VALUE))
+                        .addContainerGap(420, Short.MAX_VALUE))
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addComponent(jLabel68, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -3488,7 +4050,7 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(jLabel48)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtBuscarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(312, Short.MAX_VALUE))
+                .addContainerGap(342, Short.MAX_VALUE))
         );
         clientesLayout.setVerticalGroup(
             clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3528,6 +4090,11 @@ public class tablas extends javax.swing.JFrame {
         jLabel79.setText("E-mail");
 
         btncancelar_maestros_proveedores.setText("Cancelar");
+        btncancelar_maestros_proveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_maestros_proveedoresActionPerformed(evt);
+            }
+        });
 
         btnguardar_maestros_proveedores.setText("Guardar");
         btnguardar_maestros_proveedores.addActionListener(new java.awt.event.ActionListener() {
@@ -3576,7 +4143,7 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(proveedores1Layout.createSequentialGroup()
                         .addGap(54, 54, 54)
                         .addComponent(btnguardar_maestros_proveedores)))
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
         proveedores1Layout.setVerticalGroup(
             proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3626,6 +4193,11 @@ public class tablas extends javax.swing.JFrame {
         btncompra_maestros_proveedores.setText("Compra");
 
         btneditar_maestros_proveedores.setText("Editar");
+        btneditar_maestros_proveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditar_maestros_proveedoresActionPerformed(evt);
+            }
+        });
 
         btndesactivar_maestros_proveedores.setText("Desactivar");
 
@@ -3634,6 +4206,12 @@ public class tablas extends javax.swing.JFrame {
         btnbuscar_maestros_proveedores.setText("Buscar");
 
         jLabel126.setText("Proveedor");
+
+        txtbusqueda_maestros_proveedores.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbusqueda_maestros_proveedoresKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout proveedoresLayout = new javax.swing.GroupLayout(proveedores);
         proveedores.setLayout(proveedoresLayout);
@@ -3698,15 +4276,45 @@ public class tablas extends javax.swing.JFrame {
 
         jLabel86.setText("Fecha Vencimiento");
 
-        jLabel87.setText("Proveedor");
+        jLabel87.setText("Estado:");
 
-        cboxcategoria_maestros_articulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboxcategoria_maestros_articulos.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                cboxcategoria_maestros_articulosInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+        });
+        cboxcategoria_maestros_articulos.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                cboxcategoria_maestros_articulosPropertyChange(evt);
+            }
+        });
 
-        cboxproveedor_maestros_articulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboxproveedor_maestros_articulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
+        cboxproveedor_maestros_articulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboxproveedor_maestros_articulosActionPerformed(evt);
+            }
+        });
 
         btncancelar_maestros_articulos.setText("Cancelar");
+        btncancelar_maestros_articulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_maestros_articulosActionPerformed(evt);
+            }
+        });
 
         btnguardar_maestros_articulos.setText("Guardar");
+        btnguardar_maestros_articulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardar_maestros_articulosActionPerformed(evt);
+            }
+        });
+
+        jDvencimiento_maestros_articulos.setDateFormatString("yyyy-MM-dd");
+
+        txtMula.setEditable(false);
 
         javax.swing.GroupLayout articulos1Layout = new javax.swing.GroupLayout(articulos1);
         articulos1.setLayout(articulos1Layout);
@@ -3723,25 +4331,29 @@ public class tablas extends javax.swing.JFrame {
                     .addComponent(txtnarticulo_maestros_articulo, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                     .addComponent(txtunidades_maestros_articulos)
                     .addComponent(txtmarcas_maestros_articulos))
+                .addGap(139, 139, 139)
+                .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel87)
+                    .addComponent(jLabel85, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46)
+                .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cboxproveedor_maestros_articulos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jDvencimiento_maestros_articulos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(articulos1Layout.createSequentialGroup()
+                        .addComponent(cboxcategoria_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(cboxcategoria_maestros_articulos1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(articulos1Layout.createSequentialGroup()
-                        .addGap(139, 139, 139)
-                        .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel87)
-                            .addComponent(jLabel85, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(46, 46, 46)
-                        .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cboxcategoria_maestros_articulos, 0, 134, Short.MAX_VALUE)
-                            .addComponent(cboxproveedor_maestros_articulos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, articulos1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                         .addComponent(btncancelar_maestros_articulos)
                         .addGap(72, 72, 72)
-                        .addComponent(btnguardar_maestros_articulos)
-                        .addGap(137, 137, 137))))
+                        .addComponent(btnguardar_maestros_articulos))
+                    .addGroup(articulos1Layout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addComponent(txtMula, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(137, 137, 137))
         );
         articulos1Layout.setVerticalGroup(
             articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3751,14 +4363,16 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel81)
                         .addComponent(txtnarticulo_maestros_articulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cboxcategoria_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cboxcategoria_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cboxcategoria_maestros_articulos1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel85, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(articulos1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel86)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jDvencimiento_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel87)
@@ -3781,32 +4395,47 @@ public class tablas extends javax.swing.JFrame {
 
         listaarticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Codigo", "Articulo", "Tipo Articulo", "Unidades", "F. Vencimiento", "Marca", "Proveedor", "Accion"
+
             }
         ));
+        listaarticulos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listaarticulosMouseClicked(evt);
+            }
+        });
         jScrollPane18.setViewportView(listaarticulos);
 
         btneditar_maestros_articulos.setText("Editar");
-
-        btndesactivar_maestros_articulos.setText("Desactivar");
+        btneditar_maestros_articulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditar_maestros_articulosActionPerformed(evt);
+            }
+        });
 
         jLabel138.setText("Articulos");
 
         jLabel139.setText("Articulos");
 
-        btnbuscar_maestros_articulos.setText("Buscar");
+        txtbusqueda_maestros_articulos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbusqueda_maestros_articulosKeyReleased(evt);
+            }
+        });
+
+        jLabel144.setText("Buscar por Nombre:");
 
         javax.swing.GroupLayout articulosLayout = new javax.swing.GroupLayout(articulos);
         articulos.setLayout(articulosLayout);
@@ -3815,9 +4444,7 @@ public class tablas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, articulosLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btneditar_maestros_articulos)
-                .addGap(85, 85, 85)
-                .addComponent(btndesactivar_maestros_articulos)
-                .addGap(128, 128, 128))
+                .addGap(304, 304, 304))
             .addComponent(articulos1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane18)
             .addGroup(articulosLayout.createSequentialGroup()
@@ -3827,9 +4454,9 @@ public class tablas extends javax.swing.JFrame {
             .addGroup(articulosLayout.createSequentialGroup()
                 .addGap(471, 471, 471)
                 .addComponent(jLabel139)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 379, Short.MAX_VALUE)
-                .addComponent(btnbuscar_maestros_articulos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 322, Short.MAX_VALUE)
+                .addComponent(jLabel144)
+                .addGap(50, 50, 50)
                 .addComponent(txtbusqueda_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(81, 81, 81))
         );
@@ -3840,17 +4467,15 @@ public class tablas extends javax.swing.JFrame {
                 .addComponent(jLabel138)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(articulos1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addGap(13, 13, 13)
                 .addGroup(articulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel139)
                     .addComponent(txtbusqueda_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnbuscar_maestros_articulos))
+                    .addComponent(jLabel144))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(articulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btneditar_maestros_articulos)
-                    .addComponent(btndesactivar_maestros_articulos))
+                .addComponent(btneditar_maestros_articulos)
                 .addGap(29, 29, 29))
         );
 
@@ -3861,36 +4486,19 @@ public class tablas extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo Pack", "Nombre Pack", "Cantidad", "Seleccion"
+                "Codigo Pack", "Nombre Pack", "Cantidad", "Costo"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        ));
         jScrollPane6.setViewportView(tabla_packs);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         articuloselegidos_maestros_packs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null}
+
             },
             new String [] {
-                "Nuevo pack"
+                "ID Articulo", "Articulo", "Cantidad", "Stock Articulos", "Stock Pack"
             }
         ));
         jScrollPane5.setViewportView(articuloselegidos_maestros_packs);
@@ -3908,6 +4516,11 @@ public class tablas extends javax.swing.JFrame {
         });
 
         btnmas_maestros_packs.setText(">");
+        btnmas_maestros_packs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmas_maestros_packsActionPerformed(evt);
+            }
+        });
 
         btnmenos_maestros_packs.setText("<");
         btnmenos_maestros_packs.addActionListener(new java.awt.event.ActionListener() {
@@ -3917,63 +4530,89 @@ public class tablas extends javax.swing.JFrame {
         });
 
         btncancelar_maestros_packs.setText("Cancelar");
+        btncancelar_maestros_packs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_maestros_packsActionPerformed(evt);
+            }
+        });
 
         btncrearpack_maestros_packs.setText("Crear Pack");
+        btncrearpack_maestros_packs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncrearpack_maestros_packsActionPerformed(evt);
+            }
+        });
 
         listaarticulos_maestros_packs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Articulos"
+
             }
         ));
         jScrollPane20.setViewportView(listaarticulos_maestros_packs);
+
+        btningresararticulo_maestros_packs.setText("Ingresar Articulos");
+        btningresararticulo_maestros_packs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btningresararticulo_maestros_packsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
                         .addComponent(jLabel21)
                         .addGap(57, 57, 57)
                         .addComponent(txtnombre_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(72, 72, 72)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                            .addComponent(jLabel26)
+                            .addGap(31, 31, 31)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnmenos_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtunidades_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnmas_maestros_packs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(70, 70, 70)
+                        .addGap(22, 22, 22)
                         .addComponent(txtprecio_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel26)
-                                .addGap(31, 31, 31)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnmenos_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtunidades_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(btnmas_maestros_packs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(94, 94, 94)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btncrearpack_maestros_packs)
-                        .addGap(78, 78, 78)
-                        .addComponent(btncancelar_maestros_packs)
-                        .addGap(63, 63, 63))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btningresararticulo_maestros_packs)
+                                .addGap(126, 126, 126))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(btncrearpack_maestros_packs)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btncancelar_maestros_packs)
+                                .addContainerGap())))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3984,16 +4623,17 @@ public class tablas extends javax.swing.JFrame {
                     .addComponent(jLabel23)
                     .addComponent(txtnombre_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21))
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
+                        .addGap(44, 44, 44)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btncancelar_maestros_packs)
-                            .addComponent(btncrearpack_maestros_packs)))
+                            .addComponent(btncrearpack_maestros_packs)
+                            .addComponent(btncancelar_maestros_packs))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btningresararticulo_maestros_packs))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(btnmas_maestros_packs)
                                 .addGap(11, 11, 11)
@@ -4002,8 +4642,9 @@ public class tablas extends javax.swing.JFrame {
                                     .addComponent(jLabel26))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnmenos_maestros_packs))
-                            .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(88, 88, 88))
+                            .addComponent(jScrollPane20, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                .addGap(79, 79, 79))
         );
 
         jLabel22.setText("Packs");
@@ -4016,8 +4657,18 @@ public class tablas extends javax.swing.JFrame {
                 txtbusqueda_maestros_packsActionPerformed(evt);
             }
         });
+        txtbusqueda_maestros_packs.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbusqueda_maestros_packsKeyReleased(evt);
+            }
+        });
 
         btneditar_maestros_packs.setText("Editar");
+        btneditar_maestros_packs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditar_maestros_packsActionPerformed(evt);
+            }
+        });
 
         btndesactivar_maestros_packs.setText("Desactivar");
 
@@ -4032,15 +4683,15 @@ public class tablas extends javax.swing.JFrame {
             .addGroup(packsLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jLabel22)
-                .addContainerGap(1103, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, packsLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(packsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, packsLayout.createSequentialGroup()
                         .addComponent(btneditar_maestros_packs)
-                        .addGap(60, 60, 60)
+                        .addGap(51, 51, 51)
                         .addComponent(btndesactivar_maestros_packs)
-                        .addGap(88, 88, 88))
+                        .addGap(93, 93, 93))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, packsLayout.createSequentialGroup()
                         .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(95, 95, 95)
@@ -4065,8 +4716,8 @@ public class tablas extends javax.swing.JFrame {
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(packsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btneditar_maestros_packs)
-                    .addComponent(btndesactivar_maestros_packs))
+                    .addComponent(btndesactivar_maestros_packs)
+                    .addComponent(btneditar_maestros_packs))
                 .addContainerGap())
         );
 
@@ -4109,7 +4760,7 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(jLabel142)
                         .addGap(58, 58, 58)
                         .addComponent(cbrrss_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 329, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btncancelar_maestros_rrss)
@@ -4295,7 +4946,7 @@ public class tablas extends javax.swing.JFrame {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 21, Short.MAX_VALUE)
+            .addGap(0, 36, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4358,9 +5009,9 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(categoria_articulosLayout.createSequentialGroup()
                         .addGap(526, 526, 526)
                         .addComponent(btneditar_maestros_catarticulos)
-                        .addGap(431, 583, Short.MAX_VALUE))
+                        .addGap(431, 598, Short.MAX_VALUE))
                     .addGroup(categoria_articulosLayout.createSequentialGroup()
-                        .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 1167, Short.MAX_VALUE)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 1182, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -4431,7 +5082,7 @@ public class tablas extends javax.swing.JFrame {
                         .addGap(44, 44, 44)
                         .addComponent(cbcomuna_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel44))
-                .addContainerGap(387, Short.MAX_VALUE))
+                .addContainerGap(417, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnguardar_maestros_comunas)
@@ -4531,7 +5182,7 @@ public class tablas extends javax.swing.JFrame {
                     .addGroup(comunasLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(326, Short.MAX_VALUE))
+                .addContainerGap(356, Short.MAX_VALUE))
             .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane14)
         );
@@ -4598,7 +5249,7 @@ public class tablas extends javax.swing.JFrame {
                         .addComponent(cbbanco_maestros_bancos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(38, 38, 38))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
-                        .addContainerGap(738, Short.MAX_VALUE)
+                        .addContainerGap(768, Short.MAX_VALUE)
                         .addComponent(btnguardar_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(87, 87, 87)
                 .addComponent(btncancelar_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4746,7 +5397,7 @@ public class tablas extends javax.swing.JFrame {
                 .addComponent(jLabel47)
                 .addGap(104, 104, 104)
                 .addComponent(txtcodigo_maestros_catventas, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(187, Short.MAX_VALUE))
+                .addContainerGap(235, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnguardar_maestros_catventas, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4985,7 +5636,7 @@ public class tablas extends javax.swing.JFrame {
                 .addComponent(jLabel84)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtbusqueda_maestros_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 605, Short.MAX_VALUE))
+                .addGap(0, 635, Short.MAX_VALUE))
             .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane11)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, usuariosLayout.createSequentialGroup()
@@ -5039,7 +5690,7 @@ public class tablas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tablas)
+            .addComponent(tablas, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5122,6 +5773,8 @@ public class tablas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtunidades_maestros_packsActionPerformed
 
     private void btnmenos_maestros_packsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmenos_maestros_packsActionPerformed
+limpiar_TablaPacks();
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnmenos_maestros_packsActionPerformed
 
@@ -5369,6 +6022,8 @@ cbbanco_maestros_bancos.setSelectedItem(bancosregistrados.getValueAt(filaSelecci
 insertarDatosCategoriaArt();
 mostrarDatosCategoriaArt();
 limpiarCajasCategoriaArt();
+llenar_comboArticulos();
+
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btnguardar_maestros_catarticulosActionPerformed
@@ -5405,8 +6060,165 @@ limpiarCajasCategoriaArt();
     }//GEN-LAST:event_txtbusqueda_maestros_catarticulosKeyReleased
 
     private void btnguardar_maestros_proveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_maestros_proveedoresActionPerformed
+InsertarDatosProveedores();
+limpiarCajasProveedores();
+MostrarDatosProveedores();
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnguardar_maestros_proveedoresActionPerformed
+
+    private void cboxproveedor_maestros_articulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxproveedor_maestros_articulosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboxproveedor_maestros_articulosActionPerformed
+
+    private void btnguardar_maestros_articulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_maestros_articulosActionPerformed
+        insertarDatosArticulos();
+        limpiarCajasArticulos();
+        mostrarDatosArticulos();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnguardar_maestros_articulosActionPerformed
+
+    private void btncancelar_maestros_proveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_maestros_proveedoresActionPerformed
+limpiarCajasProveedores();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelar_maestros_proveedoresActionPerformed
+
+    private void btncancelar_maestros_articulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_maestros_articulosActionPerformed
+limpiarCajasArticulos();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelar_maestros_articulosActionPerformed
+
+    private void btneditar_maestros_articulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_maestros_articulosActionPerformed
+actualizarDatosArticulos();
+limpiarCajasArticulos();
+mostrarDatosArticulos();
+llenar_comboArticulos();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btneditar_maestros_articulosActionPerformed
+
+    private void listaarticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaarticulosMouseClicked
+int filaSeleccionadoo= listaarticulos.rowAtPoint(evt.getPoint());
+
+cboxcategoria_maestros_articulos.setSelectedItem(listaarticulos.getValueAt(filaSeleccionadoo,1));
+
+
+txtnarticulo_maestros_articulo.setText(listaarticulos.getValueAt(filaSeleccionadoo,2).toString());
+txtunidades_maestros_articulos.setText(listaarticulos.getValueAt(filaSeleccionadoo,3).toString());
+
+try{
+
+Date date=(Date) new SimpleDateFormat("yyyy-MM-dd").parse((String)listaarticulos.getValueAt(filaSeleccionadoo,4));
+jDvencimiento_maestros_articulos.setDate(date);
+}catch(Exception e){
+    JOptionPane.showMessageDialog(null, "Error al editar la fecha "+e.getMessage());    
+}
+
+
+txtmarcas_maestros_articulos.setText(listaarticulos.getValueAt(filaSeleccionadoo,5).toString());
+
+
+cboxproveedor_maestros_articulos.setSelectedItem(listaarticulos.getValueAt(filaSeleccionadoo,6));   
+
+        
+    }//GEN-LAST:event_listaarticulosMouseClicked
+
+    private void cboxcategoria_maestros_articulosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cboxcategoria_maestros_articulosPropertyChange
+ 
+    }//GEN-LAST:event_cboxcategoria_maestros_articulosPropertyChange
+
+    private void cboxcategoria_maestros_articulosInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_cboxcategoria_maestros_articulosInputMethodTextChanged
+ System.out.println("HOLa");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboxcategoria_maestros_articulosInputMethodTextChanged
+
+    private void txtbusqueda_maestros_articulosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_articulosKeyReleased
+        filtrarDatosArticulos(txtbusqueda_maestros_articulos.getText());
+        
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_maestros_articulosKeyReleased
+
+    private void btnmas_maestros_packsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmas_maestros_packsActionPerformed
+      DefaultTableModel modelo;
+      String id_articulo,articulo,cantidad,Stock_articulo,stock_pack;
+      double valor;
+        int fila=listaarticulos_maestros_packs.getSelectedRow();
+        
+        try {
+            
+            modelo=(DefaultTableModel)listaarticulos_maestros_packs.getModel();
+            id_articulo=listaarticulos_maestros_packs.getValueAt(fila,0).toString();
+            articulo=listaarticulos_maestros_packs.getValueAt(fila,1).toString();
+            cantidad= txtunidades_maestros_packs.getText();
+            Stock_articulo=listaarticulos_maestros_packs.getValueAt(fila,2).toString();
+            valor=(Integer.parseInt(Stock_articulo))/ (Integer.parseInt(cantidad));
+          modelo=(DefaultTableModel)articuloselegidos_maestros_packs.getModel();
+          stock_pack=Integer.toString((int) valor);
+          String filamodelo[]={id_articulo,articulo,cantidad,Stock_articulo,stock_pack};
+          
+          modelo.addRow(filamodelo);
+          
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Error al traspasar datos"+e.getMessage());
+        }
+  
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnmas_maestros_packsActionPerformed
+
+    private void btncancelar_maestros_packsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_maestros_packsActionPerformed
+limpiar_TablaPacksCompleta();
+limpiarCajasPack();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelar_maestros_packsActionPerformed
+
+    private void btncrearpack_maestros_packsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncrearpack_maestros_packsActionPerformed
+
+insertarDatosPacks();
+MostrarDatosPack();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncrearpack_maestros_packsActionPerformed
+
+    private void txtbusqueda_maestros_packsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_packsKeyReleased
+        FiltrarDatosPack(txtbusqueda_maestros_packs.getText());
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_maestros_packsKeyReleased
+
+    private void btneditar_maestros_packsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_maestros_packsActionPerformed
+insertarDatosHasArticulodadsads (1,1,6);
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btneditar_maestros_packsActionPerformed
+
+    private void btningresararticulo_maestros_packsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btningresararticulo_maestros_packsActionPerformed
+insertarDatosHasArticulo();
+//pruebaaa();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btningresararticulo_maestros_packsActionPerformed
+
+    private void txtbusqueda_maestros_proveedoresKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_proveedoresKeyReleased
+        FiltarDatosProveedores(txtbusqueda_maestros_proveedores.getText());
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_maestros_proveedoresKeyReleased
+
+    private void btneditar_maestros_proveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_maestros_proveedoresActionPerformed
+ActualizarDatosProveedores();
+limpiarCajasProveedores();
+MostrarDatosProveedores();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btneditar_maestros_proveedoresActionPerformed
 
     /**
      * @param args the command line arguments
@@ -5459,7 +6271,6 @@ limpiarCajasCategoriaArt();
     private javax.swing.JButton btnbuscar_informes_infodevycambios;
     private javax.swing.JButton btnbuscar_informes_infoinventarios;
     private javax.swing.JButton btnbuscar_informes_infoventas;
-    private javax.swing.JButton btnbuscar_maestros_articulos;
     private javax.swing.JButton btnbuscar_maestros_catventas;
     private javax.swing.JButton btnbuscar_maestros_packs;
     private javax.swing.JButton btnbuscar_maestros_proveedores;
@@ -5487,7 +6298,6 @@ limpiarCajasCategoriaArt();
     private javax.swing.JButton btncompra_maestros_proveedores;
     private javax.swing.JButton btnconfirmar_ventas_confirmacion;
     private javax.swing.JButton btncrearpack_maestros_packs;
-    private javax.swing.JButton btndesactivar_maestros_articulos;
     private javax.swing.JButton btndesactivar_maestros_catventas;
     private javax.swing.JButton btndesactivar_maestros_packs;
     private javax.swing.JButton btndesactivar_maestros_proveedores;
@@ -5525,6 +6335,7 @@ limpiarCajasCategoriaArt();
     private javax.swing.JButton btnguardar_ventas_adespacho;
     private javax.swing.JButton btnguardardestinatario_ventas_venta;
     private javax.swing.JButton btnimprimir_ventas_listadestino;
+    private javax.swing.JButton btningresararticulo_maestros_packs;
     private javax.swing.JButton btnmas_compras_solicitudes;
     private javax.swing.JButton btnmas_maestros_packs;
     private javax.swing.JButton btnmenos_compras_solicitudes;
@@ -5546,6 +6357,7 @@ limpiarCajasCategoriaArt();
     private javax.swing.JComboBox<String> cboxbanco_ventas_confirmacion;
     private javax.swing.JComboBox<String> cboxcategoria_informes_infoinventarios;
     private javax.swing.JComboBox<String> cboxcategoria_maestros_articulos;
+    private javax.swing.JComboBox<String> cboxcategoria_maestros_articulos1;
     private javax.swing.JComboBox<String> cboxestado_ventas_adespacho;
     private javax.swing.JComboBox<String> cboxproveedor_maestros_articulos;
     private javax.swing.JComboBox<String> cboxrazonsocial_compras_registro;
@@ -5572,7 +6384,7 @@ limpiarCajasCategoriaArt();
     private javax.swing.JPanel informe_ventas;
     private javax.swing.JPanel informes;
     private javax.swing.JCheckBox jCheckBox1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDvencimiento_maestros_articulos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
@@ -5623,6 +6435,7 @@ limpiarCajasCategoriaArt();
     private javax.swing.JLabel jLabel141;
     private javax.swing.JLabel jLabel142;
     private javax.swing.JLabel jLabel143;
+    private javax.swing.JLabel jLabel144;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -5789,6 +6602,7 @@ limpiarCajasCategoriaArt();
     private javax.swing.JTable tabla_packs;
     private javax.swing.JTabbedPane tablas;
     private javax.swing.JTextField txtBuscarClientes;
+    private javax.swing.JTextField txtMula;
     private javax.swing.JTextField txt_ncliente_maestros_clientes;
     private javax.swing.JTextField txtbuscarut_informes_infoventas;
     private javax.swing.JTextField txtbusqueda_informes_infoclientes;

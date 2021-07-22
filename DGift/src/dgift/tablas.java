@@ -1073,7 +1073,7 @@ try{
  public void InsertarDatosProveedores(){
  
  try {
-    String SQL ="insert into proveedor (PRO_RUT_PROVEEDOR,PRO_NOMBRE,PRO_TELEFONO,PRO_CORREO,PRO_DIRECCION,PRO_RAZON) values(?,?,?,?,?,?)";
+    String SQL ="insert into proveedor (PRO_RUT_PROVEEDOR,PRO_NOMBRE,PRO_TELEFONO,PRO_CORREO,PRO_DIRECCION,PRO_RAZON,PRO_ACTIVADO_DESACTIVADO) values(?,?,?,?,?,?,?)";
     
     PreparedStatement Pst= con.prepareStatement(SQL);
     
@@ -1083,6 +1083,8 @@ try{
     Pst.setString(4,txtemail_maestros_proveedores.getText());
     Pst.setString(5,txtdireccion_maestros_proveedores.getText());
     Pst.setString(6,txtrazon_maestros_proveedores.getText());
+    int seleccionado=cbactdes_maestros_proveedores.getSelectedIndex();
+    Pst.setString(7,cbactdes_maestros_proveedores.getItemAt(seleccionado));
     
     Pst.execute();
         JOptionPane.showMessageDialog(null,"Registro Exitoso");
@@ -1096,17 +1098,18 @@ try{
  public void limpiarCajasProveedores(){
      txtrut_maestros_proveedores.setText("");
      txtncontacto_maestros_proveedores.setText("");
-     txtdireccion_maestros_proveedores.setText("");
-     txtrazon_maestros_proveedores.setText("");
      txtfono_maestros_proveedores.setText("");
      txtemail_maestros_proveedores.setText("");
+     txtdireccion_maestros_proveedores.setText("");
+     txtrazon_maestros_proveedores.setText("");
+     cbactdes_maestros_proveedores.setSelectedItem(null);
      
      
- } 
+ }
  public void ActualizarDatosProveedores(){
      try {
          
-         String SQL ="update proveedor set PRO_RUT_PROVEEDOR=?,PRO_NOMBRE=?,PRO_TELEFONO=?,PRO_CORREO=?,PRO_DIRECCION=?,PRO_RAZON_SOCIAL=? where PRO_RUT_PROVEEDOR=?";
+         String SQL ="update proveedor set  PRO_RUT_PROVEEDOR=?,PRO_NOMBRE=?,PRO_TELEFONO=?,PRO_CORREO=?,PRO_DIRECCION=?,PRO_RAZON=?,PRO_ACTIVADO_DESACTIVADO=? where PRO_RUT_PROVEEDOR=?";
          
          int filaSeleccionado=proveedores_maestros.getSelectedRow();
          String dao=(String)proveedores_maestros.getValueAt(filaSeleccionado, 0);
@@ -1114,12 +1117,14 @@ try{
          
          pst.setString(1,txtrut_maestros_proveedores.getText());
          pst.setString(2,txtncontacto_maestros_proveedores.getText());
-         pst.setString(3,txtdireccion_maestros_proveedores.getText());
-         pst.setString(4,txtrazon_maestros_proveedores.getText());
-         pst.setString(5,txtfono_maestros_proveedores.getText());
-         pst.setString(6,txtemail_maestros_proveedores.getText());
+         pst.setString(3,txtfono_maestros_proveedores.getText());
+         pst.setString(4,txtemail_maestros_proveedores.getText());
+         pst.setString(5,txtdireccion_maestros_proveedores.getText());
+         pst.setString(6,txtrazon_maestros_proveedores.getText());
+         int seleccionado=cbactdes_maestros_proveedores.getSelectedIndex();
+         pst.setString(7,cbactdes_maestros_proveedores.getItemAt(seleccionado));
          
-         pst.setString(7, dao);
+         pst.setString(8, dao);
         pst.execute();
         
         
@@ -1134,8 +1139,8 @@ try{
  }
  public void MostrarDatosProveedores(){
      
-     String[] Titulos={"Rut Proveedor","Nombre","Telefono","Correo","direccion","Razon Social"};
-     String[] Registros= new String[6];
+     String[] Titulos={"Rut Proveedor","Nombre","Telefono","Correo","direccion","Razon Social","Estado"};
+     String[] Registros= new String[7];
      DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
      
      String SQL ="select * from proveedor";
@@ -1153,6 +1158,7 @@ try{
              Registros[3]=rs.getString("PRO_CORREO");
              Registros[4]=rs.getString("PRO_DIRECCION");
              Registros[5]=rs.getString("PRO_RAZON");
+             Registros[6]=rs.getString("PRO_ACTIVADO_DESACTIVADO");
              
              Modelo.addRow(Registros);
              
@@ -1168,8 +1174,8 @@ try{
      }
  }
  public void FiltarDatosProveedores (String valor){
-    String[] titulos={"Rut Proveedor","Nombre","Telefono","Correo","direccion","Razon Social"};
-      String[] registros =new String[6];
+    String[] titulos={"Rut Proveedor","Nombre","Telefono","Correo","direccion","Razon Social","Estado"};
+      String[] registros =new String[7];
       DefaultTableModel modelo=new DefaultTableModel(null,titulos);
       
      String SQL="select * from proveedor where PRO_RUT_PROVEEDOR like '%"+valor+"%' ";
@@ -1186,6 +1192,7 @@ try{
              registros[3]=rs.getString("PRO_CORREO");
              registros[4]=rs.getString("PRO_DIRECCION");
              registros[5]=rs.getString("PRO_RAZON");
+             registros[6]=rs.getString("PRO_ACTIVADO_DESACTIVADO");
              
              modelo.addRow(registros);
              
@@ -1198,7 +1205,6 @@ try{
      }
       
  }
- 
  //PACKSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void llenar_TablaArticulos(){
   String[] Titulos={"ID Articulo","Articulo","Stock Articulos"};
@@ -1416,7 +1422,7 @@ try{
          String cantidad;
          int id_articulo =  Integer.parseInt(articuloselegidos_maestros_packs.getValueAt(i,0).toString());
            
-         String SQL ="insert into pack_has_articulo (ART_ID_ARTICULO,Pack_ID_PACK,CANTIDAD) values(?,?,?)";
+         String SQL ="insert into pack_has_articulo (ART_ID_ARTICULO,Pack_ID_PACK,CANTIDAD) values(?,?)";
         PreparedStatement pst= con.prepareStatement(SQL);
             
              
@@ -1773,15 +1779,16 @@ try{
         txtemail_maestros_proveedores = new javax.swing.JTextField();
         btncancelar_maestros_proveedores = new javax.swing.JButton();
         btnguardar_maestros_proveedores = new javax.swing.JButton();
+        cbactdes_maestros_proveedores = new javax.swing.JComboBox<>();
+        jLabel145 = new javax.swing.JLabel();
         jScrollPane17 = new javax.swing.JScrollPane();
         proveedores_maestros = new javax.swing.JTable();
         btncompra_maestros_proveedores = new javax.swing.JButton();
         btneditar_maestros_proveedores = new javax.swing.JButton();
-        btndesactivar_maestros_proveedores = new javax.swing.JButton();
         jLabel80 = new javax.swing.JLabel();
-        btnbuscar_maestros_proveedores = new javax.swing.JButton();
         jLabel126 = new javax.swing.JLabel();
         txtbusqueda_maestros_proveedores = new javax.swing.JTextField();
+        jLabel146 = new javax.swing.JLabel();
         articulos = new javax.swing.JPanel();
         articulos1 = new javax.swing.JPanel();
         jLabel81 = new javax.swing.JLabel();
@@ -2672,7 +2679,7 @@ try{
                         .addComponent(btnguardar_compras_solicitudes)
                         .addGap(66, 66, 66)
                         .addComponent(btncancelar_compras_solicitudes)
-                        .addContainerGap(24, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
                         .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(62, 62, 62)
@@ -4103,6 +4110,10 @@ try{
             }
         });
 
+        cbactdes_maestros_proveedores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
+
+        jLabel145.setText("Estado");
+
         javax.swing.GroupLayout proveedores1Layout = new javax.swing.GroupLayout(proveedores1);
         proveedores1.setLayout(proveedores1Layout);
         proveedores1Layout.setHorizontalGroup(
@@ -4137,13 +4148,20 @@ try{
                         .addGap(71, 71, 71)))
                 .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(proveedores1Layout.createSequentialGroup()
-                        .addComponent(jLabel79)
-                        .addGap(35, 35, 35)
-                        .addComponent(txtemail_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(proveedores1Layout.createSequentialGroup()
                         .addGap(54, 54, 54)
-                        .addComponent(btnguardar_maestros_proveedores)))
-                .addContainerGap(170, Short.MAX_VALUE))
+                        .addComponent(btnguardar_maestros_proveedores))
+                    .addGroup(proveedores1Layout.createSequentialGroup()
+                        .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(proveedores1Layout.createSequentialGroup()
+                                .addComponent(jLabel79)
+                                .addGap(35, 35, 35))
+                            .addGroup(proveedores1Layout.createSequentialGroup()
+                                .addComponent(jLabel145, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)))
+                        .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtemail_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbactdes_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(180, Short.MAX_VALUE))
         );
         proveedores1Layout.setVerticalGroup(
             proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4156,12 +4174,19 @@ try{
                     .addComponent(txtrazon_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel79)
                     .addComponent(txtemail_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel75)
-                    .addComponent(txtncontacto_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel78)
-                    .addComponent(txtfono_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(proveedores1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel75)
+                            .addComponent(txtncontacto_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel78)
+                            .addComponent(txtfono_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(proveedores1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbactdes_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel145))))
                 .addGap(23, 23, 23)
                 .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel76)
@@ -4188,9 +4213,19 @@ try{
                 "Razon Social", "Nombre Contacto", "Telefono", "E-mail", "Acciones"
             }
         ));
+        proveedores_maestros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                proveedores_maestrosMouseClicked(evt);
+            }
+        });
         jScrollPane17.setViewportView(proveedores_maestros);
 
         btncompra_maestros_proveedores.setText("Compra");
+        btncompra_maestros_proveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncompra_maestros_proveedoresActionPerformed(evt);
+            }
+        });
 
         btneditar_maestros_proveedores.setText("Editar");
         btneditar_maestros_proveedores.addActionListener(new java.awt.event.ActionListener() {
@@ -4199,11 +4234,7 @@ try{
             }
         });
 
-        btndesactivar_maestros_proveedores.setText("Desactivar");
-
         jLabel80.setText("Proveedores");
-
-        btnbuscar_maestros_proveedores.setText("Buscar");
 
         jLabel126.setText("Proveedor");
 
@@ -4212,6 +4243,8 @@ try{
                 txtbusqueda_maestros_proveedoresKeyReleased(evt);
             }
         });
+
+        jLabel146.setText("Busqueda por RUT:");
 
         javax.swing.GroupLayout proveedoresLayout = new javax.swing.GroupLayout(proveedores);
         proveedores.setLayout(proveedoresLayout);
@@ -4224,18 +4257,16 @@ try{
                 .addGroup(proveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, proveedoresLayout.createSequentialGroup()
                         .addComponent(jLabel80)
-                        .addGap(179, 179, 179)
-                        .addComponent(btnbuscar_maestros_proveedores)
-                        .addGap(18, 18, 18)
+                        .addGap(85, 85, 85)
+                        .addComponent(jLabel146, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
                         .addComponent(txtbusqueda_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(311, 311, 311))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, proveedoresLayout.createSequentialGroup()
                         .addComponent(btncompra_maestros_proveedores)
                         .addGap(74, 74, 74)
                         .addComponent(btneditar_maestros_proveedores)
-                        .addGap(58, 58, 58)
-                        .addComponent(btndesactivar_maestros_proveedores)
-                        .addGap(148, 148, 148))))
+                        .addGap(289, 289, 289))))
             .addGroup(proveedoresLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addComponent(jLabel126)
@@ -4247,16 +4278,15 @@ try{
                 .addComponent(jLabel126)
                 .addGap(8, 8, 8)
                 .addComponent(proveedores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(proveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnbuscar_maestros_proveedores)
                     .addComponent(jLabel80)
-                    .addComponent(txtbusqueda_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtbusqueda_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel146))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(proveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btndesactivar_maestros_proveedores)
                     .addComponent(btneditar_maestros_proveedores)
                     .addComponent(btncompra_maestros_proveedores))
                 .addGap(38, 38, 38))
@@ -4279,10 +4309,10 @@ try{
         jLabel87.setText("Estado:");
 
         cboxcategoria_maestros_articulos.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 cboxcategoria_maestros_articulosInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         cboxcategoria_maestros_articulos.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -4629,7 +4659,7 @@ try{
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btncrearpack_maestros_packs)
                             .addComponent(btncancelar_maestros_packs))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addComponent(btningresararticulo_maestros_packs))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -6220,6 +6250,25 @@ MostrarDatosProveedores();
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_proveedoresActionPerformed
 
+    private void proveedores_maestrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_proveedores_maestrosMouseClicked
+int filaSeleccionado= proveedores_maestros.rowAtPoint(evt.getPoint());
+
+      txtrut_maestros_proveedores.setText(proveedores_maestros.getValueAt(filaSeleccionado, 0).toString());
+      txtncontacto_maestros_proveedores.setText(proveedores_maestros.getValueAt(filaSeleccionado, 1).toString());
+      txtfono_maestros_proveedores.setText(proveedores_maestros.getValueAt(filaSeleccionado, 2).toString());
+      txtemail_maestros_proveedores.setText(proveedores_maestros.getValueAt(filaSeleccionado, 3).toString());
+      txtdireccion_maestros_proveedores.setText(proveedores_maestros.getValueAt(filaSeleccionado, 4).toString());
+      txtrazon_maestros_proveedores.setText(proveedores_maestros.getValueAt(filaSeleccionado, 5).toString());
+      cbactdes_maestros_proveedores.setSelectedItem(proveedores_maestros.getValueAt(filaSeleccionado,6)); 
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_proveedores_maestrosMouseClicked
+
+    private void btncompra_maestros_proveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncompra_maestros_proveedoresActionPerformed
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncompra_maestros_proveedoresActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -6273,7 +6322,6 @@ MostrarDatosProveedores();
     private javax.swing.JButton btnbuscar_informes_infoventas;
     private javax.swing.JButton btnbuscar_maestros_catventas;
     private javax.swing.JButton btnbuscar_maestros_packs;
-    private javax.swing.JButton btnbuscar_maestros_proveedores;
     private javax.swing.JButton btnbuscar_ventas_confirmacion;
     private javax.swing.JButton btnbuscar_ventas_listadestino;
     private javax.swing.JButton btnbuscarinfo_informes_infoclientes;
@@ -6300,7 +6348,6 @@ MostrarDatosProveedores();
     private javax.swing.JButton btncrearpack_maestros_packs;
     private javax.swing.JButton btndesactivar_maestros_catventas;
     private javax.swing.JButton btndesactivar_maestros_packs;
-    private javax.swing.JButton btndesactivar_maestros_proveedores;
     private javax.swing.JButton btndescarga_ventas_listadestino;
     private javax.swing.JButton btndescargar_informes_infodevycambios;
     private javax.swing.JButton btndescargar_informes_infoinventarios;
@@ -6349,6 +6396,7 @@ MostrarDatosProveedores();
     private javax.swing.JPanel categoria_ventas;
     private javax.swing.JTable categoriaarticulos;
     private javax.swing.JTable categorias_ventas_registradas;
+    private javax.swing.JComboBox<String> cbactdes_maestros_proveedores;
     private javax.swing.JComboBox<String> cbbanco_maestros_bancos;
     private javax.swing.JComboBox<String> cbcategoria_maestros_catarticulos;
     private javax.swing.JComboBox<String> cbcomuna_maestros_comunas;
@@ -6400,7 +6448,7 @@ MostrarDatosProveedores();
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel110;
     private javax.swing.JLabel jLabel111;
-    private javax.swing.JLabel jLabel112;
+    public static javax.swing.JLabel jLabel112;
     private javax.swing.JLabel jLabel113;
     private javax.swing.JLabel jLabel114;
     private javax.swing.JLabel jLabel115;
@@ -6427,7 +6475,7 @@ MostrarDatosProveedores();
     private javax.swing.JLabel jLabel134;
     private javax.swing.JLabel jLabel135;
     private javax.swing.JLabel jLabel136;
-    private javax.swing.JLabel jLabel137;
+    public javax.swing.JLabel jLabel137;
     private javax.swing.JLabel jLabel138;
     private javax.swing.JLabel jLabel139;
     private javax.swing.JLabel jLabel14;
@@ -6436,6 +6484,8 @@ MostrarDatosProveedores();
     private javax.swing.JLabel jLabel142;
     private javax.swing.JLabel jLabel143;
     private javax.swing.JLabel jLabel144;
+    private javax.swing.JLabel jLabel145;
+    private javax.swing.JLabel jLabel146;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;

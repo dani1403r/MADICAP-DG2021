@@ -284,6 +284,9 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Numero Pedido"/>
                           </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel113">
                           <Properties>
@@ -301,6 +304,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Datos Cliente Solicitante"/>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel117">
                       <Properties>
@@ -1460,7 +1466,7 @@
                                           <Component id="btnguardar_compras_solicitudes" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
                                           <Component id="btncancelar_compras_solicitudes" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="24" max="32767" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel101" min="-2" pref="75" max="-2" attributes="0"/>
@@ -4019,9 +4025,9 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="jLabel80" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="179" max="-2" attributes="0"/>
-                                      <Component id="btnbuscar_maestros_proveedores" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
+                                      <Component id="jLabel146" min="-2" pref="113" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
                                       <Component id="txtbusqueda_maestros_proveedores" min="-2" pref="145" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="311" max="-2" attributes="0"/>
                                   </Group>
@@ -4029,9 +4035,7 @@
                                       <Component id="btncompra_maestros_proveedores" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
                                       <Component id="btneditar_maestros_proveedores" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-                                      <Component id="btndesactivar_maestros_proveedores" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="289" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -4048,17 +4052,16 @@
                               <Component id="jLabel126" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                               <Component id="proveedores1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="23" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="btnbuscar_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel80" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtbusqueda_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel146" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane17" min="-2" pref="76" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="btndesactivar_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btneditar_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btncompra_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -4117,17 +4120,28 @@
                                       </Group>
                                   </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Component id="jLabel79" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                                          <Component id="txtemail_maestros_proveedores" min="-2" pref="196" max="-2" attributes="0"/>
-                                      </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                                           <Component id="btnguardar_maestros_proveedores" min="-2" max="-2" attributes="0"/>
                                       </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Component id="jLabel79" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="jLabel145" max="32767" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="txtemail_maestros_proveedores" min="-2" pref="196" max="-2" attributes="0"/>
+                                              <Component id="cbactdes_maestros_proveedores" min="-2" pref="115" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
-                                  <EmptySpace pref="170" max="32767" attributes="0"/>
+                                  <EmptySpace pref="180" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -4143,12 +4157,23 @@
                                       <Component id="jLabel79" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtemail_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel75" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtncontacto_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel78" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtfono_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="jLabel75" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txtncontacto_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel78" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txtfono_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="cbactdes_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel145" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -4221,6 +4246,24 @@
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardar_maestros_proveedoresActionPerformed"/>
                           </Events>
                         </Component>
+                        <Component class="javax.swing.JComboBox" name="cbactdes_maestros_proveedores">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="2">
+                                <StringItem index="0" value="Activado"/>
+                                <StringItem index="1" value="Desactivado"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel145">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Estado"/>
+                          </Properties>
+                        </Component>
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane17">
@@ -4274,6 +4317,9 @@
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="proveedores_maestrosMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -4281,6 +4327,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Compra"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncompra_maestros_proveedoresActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btneditar_maestros_proveedores">
                       <Properties>
@@ -4290,19 +4339,9 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneditar_maestros_proveedoresActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="btndesactivar_maestros_proveedores">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Desactivar"/>
-                      </Properties>
-                    </Component>
                     <Component class="javax.swing.JLabel" name="jLabel80">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Proveedores"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="btnbuscar_maestros_proveedores">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel126">
@@ -4314,6 +4353,11 @@
                       <Events>
                         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtbusqueda_maestros_proveedoresKeyReleased"/>
                       </Events>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel146">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Busqueda por RUT:"/>
+                      </Properties>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -4841,7 +4885,7 @@
                                               <Component id="btncrearpack_maestros_packs" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="btncancelar_maestros_packs" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace pref="20" max="32767" attributes="0"/>
                                           <Component id="btningresararticulo_maestros_packs" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">

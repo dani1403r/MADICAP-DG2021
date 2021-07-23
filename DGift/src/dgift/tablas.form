@@ -150,7 +150,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel117" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jPanel26" min="-2" max="-2" attributes="0"/>
+                              <Component id="jPanel26" min="-2" pref="189" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -333,51 +333,61 @@
                                           <EmptySpace pref="37" max="32767" attributes="0"/>
                                           <Component id="txtdestinatario_ventas_venta" min="-2" pref="171" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <Component id="jLabel119" min="-2" pref="98" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="txtfentrega_ventas_venta" min="-2" pref="171" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <Component id="jLabel120" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="txtdireccion_ventas_venta" min="-2" pref="171" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="1" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel122" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="32767" attributes="0"/>
                                           <Component id="txtsaludo_ventas_venta" min="-2" pref="171" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" attributes="0">
-                                          <Component id="jLabel121" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="txtcomunas_ventas_venta" min="-2" pref="171" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel120" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel121" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel119" alignment="0" min="-2" pref="98" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="56" max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="txtdireccion_ventas_venta" pref="171" max="32767" attributes="0"/>
+                                              <Component id="jComboBox2" max="32767" attributes="0"/>
+                                              <Component id="jDateChooser1" max="32767" attributes="0"/>
+                                          </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="213" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="213" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="jLabel123" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel124" alignment="0" min="-2" pref="68" max="-2" attributes="0"/>
                                               <Component id="jLabel125" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel147" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="txtpacks_ventas_venta" alignment="0" pref="168" max="32767" attributes="0"/>
-                                              <Component id="txthorai_ventas_venta" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="txthoraf_ventas_venta" alignment="0" max="32767" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                          <Component id="txthorai_ventas_venta" alignment="0" pref="204" max="32767" attributes="0"/>
+                                                          <Component id="txthoraf_ventas_venta" alignment="0" max="32767" attributes="0"/>
+                                                      </Group>
+                                                      <Component id="jComboBox3" min="-2" pref="148" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="jComboBox1" max="32767" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="138" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
+                                          <Component id="jPanel22" min="-2" pref="128" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="223" max="-2" attributes="0"/>
                                           <Component id="btnguardardestinatario_ventas_venta" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="139" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
                                           <Component id="btncancelardestinatario_ventas_venta" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
-                                  <Component id="jPanel22" min="-2" pref="128" max="-2" attributes="0"/>
-                                  <EmptySpace pref="162" max="32767" attributes="0"/>
+                                  <EmptySpace pref="152" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -391,51 +401,56 @@
                                               <Component id="txtdestinatario_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel118" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel123" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="txtpacks_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jComboBox3" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="txtfentrega_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel119" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel124" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="txthorai_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="jLabel119" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="jLabel124" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="txthorai_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Component id="jDateChooser1" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" attributes="0">
+                                                  <Component id="jLabel125" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="txtdireccion_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jLabel120" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jLabel125" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="txtcomunas_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jLabel121" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="txtsaludo_ventas_venta" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                                                      <Component id="jLabel122" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="btnguardardestinatario_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="btncancelardestinatario_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="txthoraf_ventas_venta" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="txthoraf_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="txtdireccion_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jLabel120" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jLabel147" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="btncancelardestinatario_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="btnguardardestinatario_ventas_venta" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="txtsaludo_ventas_venta" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                                                      <Component id="jLabel122" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
                                               </Group>
                                           </Group>
                                       </Group>
                                       <Component id="jPanel22" alignment="0" min="-2" pref="117" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Component class="javax.swing.JTextField" name="txtfentrega_ventas_venta">
-                        </Component>
                         <Component class="javax.swing.JTextField" name="txtdireccion_ventas_venta">
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel123">
@@ -536,8 +551,6 @@
                             <Property name="text" type="java.lang.String" value="Saludo"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="txtcomunas_ventas_venta">
-                        </Component>
                         <Component class="javax.swing.JTextField" name="txtsaludo_ventas_venta">
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel124">
@@ -549,8 +562,6 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Hora Fin"/>
                           </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="txtpacks_ventas_venta">
                         </Component>
                         <Component class="javax.swing.JTextField" name="txthorai_ventas_venta">
                         </Component>
@@ -565,6 +576,58 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel147">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="RRSS:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="jComboBox1">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="4">
+                                <StringItem index="0" value="Item 1"/>
+                                <StringItem index="1" value="Item 2"/>
+                                <StringItem index="2" value="Item 3"/>
+                                <StringItem index="3" value="Item 4"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="jComboBox2">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="4">
+                                <StringItem index="0" value="Item 1"/>
+                                <StringItem index="1" value="Item 2"/>
+                                <StringItem index="2" value="Item 3"/>
+                                <StringItem index="3" value="Item 4"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="jComboBox3">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="4">
+                                <StringItem index="0" value="Item 1"/>
+                                <StringItem index="1" value="Item 2"/>
+                                <StringItem index="2" value="Item 3"/>
+                                <StringItem index="3" value="Item 4"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
                         </Component>
                       </SubComponents>
                     </Container>
@@ -1466,7 +1529,7 @@
                                           <Component id="btnguardar_compras_solicitudes" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
                                           <Component id="btncancelar_compras_solicitudes" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace pref="24" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel101" min="-2" pref="75" max="-2" attributes="0"/>
@@ -4052,7 +4115,7 @@
                               <Component id="jLabel126" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                               <Component id="proveedores1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="23" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel80" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtbusqueda_maestros_proveedores" alignment="3" min="-2" max="-2" attributes="0"/>

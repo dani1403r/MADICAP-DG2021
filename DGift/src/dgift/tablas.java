@@ -7,10 +7,24 @@ package dgift;
 
 import java.util.Date;
 import ConexionSQL.ConexionUsuarios;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.HeadlessException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import static java.lang.Integer.parseInt;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +32,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 import java.util.Collections;
+
 
 
 /**
@@ -57,7 +72,8 @@ public class tablas extends javax.swing.JFrame {
         llenar_comboBanco();
         MostrarDatosVentas();
         numeroMayor();
-        
+        MostrarDatosListaDestino();
+        MostrarDatosActualizacionDespachos();
     }
 //USUARIOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void filtrarDatos(String valor){
@@ -209,7 +225,6 @@ public class tablas extends javax.swing.JFrame {
     pst.setString(4,txtfono_maestros_clientes.getText());
     pst.setString(5,txtemaill_maestros_clientes.getText());
     pst.setString(6,((JTextField)txtfnac_maestros_clientes.getDateEditor().getUiComponent()).getText());
-    
     int seleccionado=cboxatcdes_maestros_clientes.getSelectedIndex();
     pst.setString(7,cboxatcdes_maestros_clientes.getItemAt(seleccionado));
     
@@ -1707,6 +1722,8 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
              
           cboxEstados_ventas_venta.addItem(rs.getString("EST_DESCRIPCION"));   
           cbonestados_ventas_confirmacion.addItem(rs.getString("EST_DESCRIPCION"));
+          cboxestado_ventas_adespacho.addItem(rs.getString("EST_DESCRIPCION"));
+          
          }
      } catch (Exception e) {
          System.out.println("Incorrecto  "+e.getMessage());
@@ -1923,16 +1940,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
     txtestados_ventas_confirmacion.setText("");
     
 }  
- 
- //SOLICITUDES_DE_PEDIDOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 
- public void limpiar_Tabla_proveedores_compras() {
- 
- DefaultTableModel modelo;
- modelo=(DefaultTableModel)proveedores_compra.getModel();
-  modelo.removeRow(proveedores_compra.getSelectedRow());
- 
- }
- public void numeroMayor(){
+  public void numeroMayor(){
  
   ArrayList<Integer> list =new ArrayList<Integer>();
      for (int i = 0; i < ventas_pendientes_pago.getRowCount(); i++) {
@@ -1944,13 +1952,250 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
      String suma= max+"";
    txtnpedido_ventas_venta.setText(suma);
      
- }   
+ }  
+ //SOLICITUDES_DE_PEDIDOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 
+ public void limpiar_Tabla_proveedores_compras() {
+ 
+ DefaultTableModel modelo;
+ modelo=(DefaultTableModel)proveedores_compra.getModel();
+  modelo.removeRow(proveedores_compra.getSelectedRow());
+ 
+ }
+  
      
- //return (valor+1);
+//LISTA DESTINOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  
+ public void PDFListaDestino() {
+
+ }
+ public void MostrarDatosListaDestino(){
+     
+     String[] Titulos={"ID Venta","Pack","Destinatario","Fecha entrega","Comuna","Dirección","Hora entrega inicial","Hora entrega Final"};
+     String[] Registros= new String[8];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,venta.PCK_ID_PACK,venta.Comunas_COM_ID_COMUNA\n" +
+                 "FROM venta\n" +
+                 "JOIN pack ON pack.PCK_ID_PACK=venta.PCK_ID_PACK\n" +
+                 "JOIN comunas ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("VTA_ID_VENTA");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("VTA_NOMBRE_DESTINATARIO");
+             Registros[3]=rs.getString("VTA_FECHA_ENTREGA");
+             Registros[4]=rs.getString("COM_DESCRIPCION");
+             Registros[5]=rs.getString("VTA_DIRECCION_DESTINATARIO");
+             Registros[6]=rs.getString("VTA_HORA_ENTREGA_INICIAL");
+             Registros[7]=rs.getString("VTA_HORA_ENTREGA_FINAL");
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         listadestino_despacho.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }   
+ public void filtrarDatosListaDestino(String valor){
+  
+      String[] Titulos={"ID Venta","Pack","Destinatario","Fecha entrega","Comuna","Dirección","Hora entrega inicial","Hora entrega Final"};
+     String[] Registros= new String[8];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,venta.PCK_ID_PACK,venta.Comunas_COM_ID_COMUNA\n" +
+                 "FROM venta\n" +
+                 "JOIN pack ON pack.PCK_ID_PACK=venta.PCK_ID_PACK\n" +
+                 "JOIN comunas ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA"+
+                 " where VTA_FECHA_ENTREGA like '%"+valor+"%' ";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("VTA_ID_VENTA");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("VTA_NOMBRE_DESTINATARIO");
+             Registros[3]=rs.getString("VTA_FECHA_ENTREGA");
+             Registros[4]=rs.getString("COM_DESCRIPCION");
+             Registros[5]=rs.getString("VTA_DIRECCION_DESTINATARIO");
+             Registros[6]=rs.getString("VTA_HORA_ENTREGA_INICIAL");
+             Registros[7]=rs.getString("VTA_HORA_ENTREGA_FINAL");
+             
+             Modelo.addRow(Registros);
+         }
+         
+          listadestino_despacho.setModel(Modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar bancos "+e.getMessage());
+     }
+      
+  } 
  
+ //ACTUALIZACION DESPACHOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  
- 
+ public void MostrarDatosActualizacionDespachos(){
+     
+     String[] Titulos={"ID Venta","Pack","Destinatario","Fecha entrega","Comuna","Hora entrega inicial","Hora entrega Final","Estado"};
+     String[] Registros= new String[8];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,venta.PCK_ID_PACK,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA \n" +
+                 "FROM venta\n" +
+                 "JOIN pack ON pack.PCK_ID_PACK=venta.PCK_ID_PACK \n" +
+                 "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                 "JOIN comunas ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("VTA_ID_VENTA");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("VTA_NOMBRE_DESTINATARIO");
+             Registros[3]=rs.getString("VTA_FECHA_ENTREGA");
+             Registros[4]=rs.getString("COM_DESCRIPCION");
+             Registros[5]=rs.getString("VTA_HORA_ENTREGA_INICIAL");
+             Registros[6]=rs.getString("VTA_HORA_ENTREGA_FINAL");
+             Registros[7]=rs.getString("EST_DESCRIPCION");
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         detalle_dev_cambios.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }   
+ public void ActualizarDatosActualizacionDespacho(){
+     try {
+         
+         String SQL ="update venta set  ESTADOS_VENTA_EST_ID_ESTADO=? where VTA_ID_VENTA=?";
+         
+         int filaSeleccionado=detalle_dev_cambios.getSelectedRow();
+         String dao=(String)detalle_dev_cambios.getValueAt(filaSeleccionado, 0);
+         PreparedStatement pst= con.prepareStatement(SQL);
+         
+         pst.setString(1,txtestado_ventas_adespacho.getText());
+         
+         pst.setString(2, dao);
+        pst.execute();
+        
+        
+         JOptionPane.showMessageDialog(null,"Estado editado correctamente");
+         
+     }catch (Exception e) {
+         
+         JOptionPane.showMessageDialog(null,"Error en Edicion"+e.getMessage());
+         
+         
+     }
+ }
+ public void filtrarDatosActualizacionDespachoFecha(String valor){
+     
+     String[] Titulos={"ID Venta","Pack","Destinatario","Fecha entrega","Comuna","Hora entrega inicial","Hora entrega Final","Estado"};
+     String[] Registros= new String[8];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,venta.PCK_ID_PACK,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA \n" +
+                 "FROM venta\n" +
+                 "JOIN pack ON pack.PCK_ID_PACK=venta.PCK_ID_PACK \n" +
+                 "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                 "JOIN comunas ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA\n"+
+                 " where VTA_FECHA_ENTREGA like '%"+valor+"%' ";
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("VTA_ID_VENTA");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("VTA_NOMBRE_DESTINATARIO");
+             Registros[3]=rs.getString("VTA_FECHA_ENTREGA");
+             Registros[4]=rs.getString("COM_DESCRIPCION");
+             Registros[5]=rs.getString("VTA_HORA_ENTREGA_INICIAL");
+             Registros[6]=rs.getString("VTA_HORA_ENTREGA_FINAL");
+             Registros[7]=rs.getString("EST_DESCRIPCION");
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         detalle_dev_cambios.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }   
+ public void filtrarDatosActualizacionDespachoID (String valor){
+     
+     String[] Titulos={"ID Venta","Pack","Destinatario","Fecha entrega","Comuna","Hora entrega inicial","Hora entrega Final","Estado"};
+     String[] Registros= new String[8];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,venta.PCK_ID_PACK,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA \n" +
+                 "FROM venta\n" +
+                 "JOIN pack ON pack.PCK_ID_PACK=venta.PCK_ID_PACK \n" +
+                 "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                 "JOIN comunas ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA\n"+
+                 " where VTA_ID_VENTA like '%"+valor+"%' ";
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("VTA_ID_VENTA");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("VTA_NOMBRE_DESTINATARIO");
+             Registros[3]=rs.getString("VTA_FECHA_ENTREGA");
+             Registros[4]=rs.getString("COM_DESCRIPCION");
+             Registros[5]=rs.getString("VTA_HORA_ENTREGA_INICIAL");
+             Registros[6]=rs.getString("VTA_HORA_ENTREGA_FINAL");
+             Registros[7]=rs.getString("EST_DESCRIPCION");
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         detalle_dev_cambios.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }   
  
  
  
@@ -2052,6 +2297,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         jLabel58 = new javax.swing.JLabel();
         cboxestado_ventas_adespacho = new javax.swing.JComboBox<>();
         btnguardar_ventas_adespacho = new javax.swing.JButton();
+        txtestado_ventas_adespacho = new javax.swing.JTextField();
         jScrollPane13 = new javax.swing.JScrollPane();
         detalle_dev_cambios = new javax.swing.JTable();
         jLabel152 = new javax.swing.JLabel();
@@ -2968,27 +3214,10 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
 
         listadestino_despacho.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Registro venta", "Pack", "Destinatario", "Fecha de entregal", "Comuna", "Direccion", "Hora de entrega"
+
             }
         ));
         jScrollPane15.setViewportView(listadestino_despacho);
@@ -2999,6 +3228,11 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         txtbusqueda_ventas_llistadestino.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtbusqueda_ventas_llistadestinoActionPerformed(evt);
+            }
+        });
+        txtbusqueda_ventas_llistadestino.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbusqueda_ventas_llistadestinoKeyReleased(evt);
             }
         });
 
@@ -3026,12 +3260,17 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                     .addComponent(jLabel64)
                     .addComponent(txtbusqueda_ventas_llistadestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel151))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                 .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addContainerGap())
         );
 
         btndescarga_ventas_listadestino.setText("Descargar PDF");
+        btndescarga_ventas_listadestino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndescarga_ventas_listadestinoActionPerformed(evt);
+            }
+        });
 
         btnimprimir_ventas_listadestino.setText("Descargar Excel");
         btnimprimir_ventas_listadestino.addActionListener(new java.awt.event.ActionListener() {
@@ -3047,17 +3286,16 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         lista_destinoLayout.setHorizontalGroup(
             lista_destinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(lista_destinoLayout.createSequentialGroup()
-                .addGroup(lista_destinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(lista_destinoLayout.createSequentialGroup()
-                        .addGap(469, 469, 469)
-                        .addComponent(btndescarga_ventas_listadestino)
-                        .addGap(150, 150, 150)
-                        .addComponent(btnimprimir_ventas_listadestino))
-                    .addGroup(lista_destinoLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jLabel63)))
-                .addContainerGap(391, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(jLabel63)
+                .addContainerGap(1169, Short.MAX_VALUE))
             .addComponent(jPanel21, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lista_destinoLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btndescarga_ventas_listadestino)
+                .addGap(152, 152, 152)
+                .addComponent(btnimprimir_ventas_listadestino)
+                .addGap(394, 394, 394))
         );
         lista_destinoLayout.setVerticalGroup(
             lista_destinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3066,11 +3304,11 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                 .addComponent(jLabel63)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(lista_destinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btndescarga_ventas_listadestino)
-                    .addComponent(btnimprimir_ventas_listadestino))
-                .addGap(48, 48, 48))
+                    .addComponent(btnimprimir_ventas_listadestino)
+                    .addComponent(btndescarga_ventas_listadestino))
+                .addContainerGap())
         );
 
         panel_ventas.addTab("lista destino", lista_destino);
@@ -3085,7 +3323,11 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
 
         jLabel58.setText("Estado de entrega:");
 
-        cboxestado_ventas_adespacho.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entregado", "Anulado", "Rechazado", "No entregado" }));
+        cboxestado_ventas_adespacho.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxestado_ventas_adespachoItemStateChanged(evt);
+            }
+        });
 
         btnguardar_ventas_adespacho.setText("Guardar");
         btnguardar_ventas_adespacho.addActionListener(new java.awt.event.ActionListener() {
@@ -3102,8 +3344,10 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                 .addGap(194, 194, 194)
                 .addComponent(jLabel58)
                 .addGap(87, 87, 87)
-                .addComponent(cboxestado_ventas_adespacho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(264, 264, 264)
+                .addComponent(cboxestado_ventas_adespacho, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtestado_ventas_adespacho, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
                 .addComponent(btnguardar_ventas_adespacho, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -3114,43 +3358,43 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel58)
                     .addComponent(cboxestado_ventas_adespacho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnguardar_ventas_adespacho))
+                    .addComponent(btnguardar_ventas_adespacho)
+                    .addComponent(txtestado_ventas_adespacho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
         detalle_dev_cambios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Número de pedido", "Pack", "Destinatario", "Fecha entrega", "Comuna", "Hora entrega", "Estado de entrega ", "Editar"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            }
+        ));
+        detalle_dev_cambios.setMaximumSize(new java.awt.Dimension(200, 64));
+        detalle_dev_cambios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                detalle_dev_cambiosMouseClicked(evt);
             }
         });
-        detalle_dev_cambios.setMaximumSize(new java.awt.Dimension(200, 64));
         jScrollPane13.setViewportView(detalle_dev_cambios);
 
         jLabel152.setText("Buscar por Código:");
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
+            }
+        });
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
             }
         });
 
@@ -3335,15 +3579,15 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, solicitudes_pedido1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, solicitudes_pedido1Layout.createSequentialGroup()
                         .addGap(0, 10, Short.MAX_VALUE)
                         .addComponent(jScrollPane28, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21)
                         .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnguardar_compras_solicitudes)
-                            .addComponent(btncancelar_compras_solicitudes))
-                        .addContainerGap())))
+                            .addComponent(btncancelar_compras_solicitudes))))
+                .addContainerGap())
         );
 
         detalle_pedidos_realizados.setModel(new javax.swing.table.DefaultTableModel(
@@ -6395,7 +6639,10 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
     }//GEN-LAST:event_txttransaccion_ventas_confirmacionActionPerformed
 
     private void btnguardar_ventas_adespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_ventas_adespachoActionPerformed
-        // TODO add your handling code here:
+   ActualizarDatosActualizacionDespacho();
+   MostrarDatosActualizacionDespachos();
+   MostrarDatosVentas();
+   MostrarDatosListaDestino();
     }//GEN-LAST:event_btnguardar_ventas_adespachoActionPerformed
 
     private void txtnbanco_maestros_bancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnbanco_maestros_bancosActionPerformed
@@ -6434,6 +6681,8 @@ mostrarDatosCatVentas();
         actualizarDatosVentas();
         MostrarDatosVentas();
         limpiarCajasConfirmacion();
+        MostrarDatosActualizacionDespachos();
+        MostrarDatosListaDestino();
     }//GEN-LAST:event_btnconfirmar_ventas_confirmacionActionPerformed
 
     private void btnver_compras_revisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnver_compras_revisionActionPerformed
@@ -7015,6 +7264,10 @@ limpiarCajasVentas();
 limpiarCajasVentasCl();
 MostrarDatosVentas();
 numeroMayor();
+MostrarDatosListaDestino();
+MostrarDatosActualizacionDespachos();
+MostrarDatosVentas();
+   
         // TODO add your handling code here:
     }//GEN-LAST:event_btnguardardestinatario_ventas_ventaActionPerformed
 
@@ -7218,6 +7471,64 @@ limpiarCajasConfirmacion();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btncancelar_compras_solicitudesActionPerformed
+
+    private void txtbusqueda_ventas_llistadestinoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_ventas_llistadestinoKeyReleased
+        filtrarDatosListaDestino(txtbusqueda_ventas_llistadestino.getText());
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbusqueda_ventas_llistadestinoKeyReleased
+
+    private void detalle_dev_cambiosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_detalle_dev_cambiosMouseClicked
+    int filaSeleccionadoo= detalle_dev_cambios.rowAtPoint(evt.getPoint());
+
+
+cboxestado_ventas_adespacho.setSelectedItem(detalle_dev_cambios.getValueAt(filaSeleccionadoo,7).toString());
+    }//GEN-LAST:event_detalle_dev_cambiosMouseClicked
+
+    private void cboxestado_ventas_adespachoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxestado_ventas_adespachoItemStateChanged
+     int seleccionado= cboxestado_ventas_adespacho.getSelectedIndex();
+ String packs=cboxestado_ventas_adespacho.getItemAt(seleccionado);
+ 
+ String[] registros= new String[2];
+ String SQL="select * from estados_venta";
+ 
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("EST_ID_ESTADO");
+             registros[1]=rs.getString("EST_DESCRIPCION"); 
+             
+            if (packs.equals(registros[1])) {
+            
+          String  valor= registros[0];
+          txtestado_ventas_adespacho.setText(valor);
+          } 
+         } 
+       }catch(Exception e){
+           
+           } 
+    }//GEN-LAST:event_cboxestado_ventas_adespachoItemStateChanged
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+        filtrarDatosActualizacionDespachoFecha(jTextField2.getText());
+     
+    }//GEN-LAST:event_jTextField2KeyReleased
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        filtrarDatosActualizacionDespachoID(jTextField1.getText());
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void btndescarga_ventas_listadestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndescarga_ventas_listadestinoActionPerformed
+PDFListaDestino();
+
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btndescarga_ventas_listadestinoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -7651,6 +7962,7 @@ limpiarCajasConfirmacion();
     private javax.swing.JTextField txtemail_ventas_venta;
     private javax.swing.JTextField txtemaill_maestros_clientes;
     private javax.swing.JTextField txtenvio_ventas_venta;
+    private javax.swing.JTextField txtestado_ventas_adespacho;
     private javax.swing.JTextField txtestados_ventas_confirmacion;
     private com.toedter.calendar.JDateChooser txtfnac_maestros_clientes;
     private javax.swing.JTextField txtfono_maestros_clientes;

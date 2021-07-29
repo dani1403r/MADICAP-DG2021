@@ -1047,21 +1047,18 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="469" max="-2" attributes="0"/>
-                                      <Component id="btndescarga_ventas_listadestino" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
-                                      <Component id="btnimprimir_ventas_listadestino" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                      <Component id="jLabel63" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace pref="391" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Component id="jLabel63" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="1169" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jPanel21" alignment="1" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="btndescarga_ventas_listadestino" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="152" max="-2" attributes="0"/>
+                              <Component id="btnimprimir_ventas_listadestino" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="394" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -1071,12 +1068,12 @@
                               <Component id="jLabel63" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel21" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="26" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="btndescarga_ventas_listadestino" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnimprimir_ventas_listadestino" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btndescarga_ventas_listadestino" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1115,9 +1112,9 @@
                                       <Component id="txtbusqueda_ventas_llistadestino" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel151" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="23" max="32767" attributes="0"/>
+                                  <EmptySpace pref="71" max="32767" attributes="0"/>
                                   <Component id="jScrollPane15" min="-2" pref="132" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1133,54 +1130,10 @@
                             <Component class="javax.swing.JTable" name="listadestino_despacho">
                               <Properties>
                                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                  <Table columnCount="7" rowCount="18">
-                                    <Column editable="true" title="Registro venta" type="java.lang.Object"/>
-                                    <Column editable="true" title="Pack" type="java.lang.Object"/>
-                                    <Column editable="true" title="Destinatario" type="java.lang.Object"/>
-                                    <Column editable="true" title="Fecha de entregal" type="java.lang.Object"/>
-                                    <Column editable="true" title="Comuna" type="java.lang.Object"/>
-                                    <Column editable="true" title="Direccion" type="java.lang.Object"/>
-                                    <Column editable="true" title="Hora de entrega" type="java.lang.Object"/>
-                                  </Table>
+                                  <Table columnCount="0" rowCount="0"/>
                                 </Property>
                                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                                  <TableColumnModel selectionModel="0">
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                  </TableColumnModel>
+                                  <TableColumnModel selectionModel="0"/>
                                 </Property>
                                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
@@ -1200,6 +1153,7 @@
                         <Component class="javax.swing.JTextField" name="txtbusqueda_ventas_llistadestino">
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtbusqueda_ventas_llistadestinoActionPerformed"/>
+                            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtbusqueda_ventas_llistadestinoKeyReleased"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel151">
@@ -1213,6 +1167,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Descargar PDF"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btndescarga_ventas_listadestinoActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnimprimir_ventas_listadestino">
                       <Properties>
@@ -1321,8 +1278,10 @@
                                   <EmptySpace min="-2" pref="194" max="-2" attributes="0"/>
                                   <Component id="jLabel58" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
-                                  <Component id="cboxestado_ventas_adespacho" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="264" max="-2" attributes="0"/>
+                                  <Component id="cboxestado_ventas_adespacho" min="-2" pref="146" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="txtestado_ventas_adespacho" min="-2" pref="27" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                   <Component id="btnguardar_ventas_adespacho" min="-2" pref="95" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                               </Group>
@@ -1336,6 +1295,7 @@
                                       <Component id="jLabel58" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="cboxestado_ventas_adespacho" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="btnguardar_ventas_adespacho" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtestado_ventas_adespacho" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="45" max="32767" attributes="0"/>
                               </Group>
@@ -1351,14 +1311,12 @@
                         <Component class="javax.swing.JComboBox" name="cboxestado_ventas_adespacho">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="Entregado"/>
-                                <StringItem index="1" value="Anulado"/>
-                                <StringItem index="2" value="Rechazado"/>
-                                <StringItem index="3" value="No entregado"/>
-                              </StringArray>
+                              <StringArray count="0"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cboxestado_ventas_adespachoItemStateChanged"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                           </AuxValues>
@@ -1370,6 +1328,8 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardar_ventas_adespachoActionPerformed"/>
                           </Events>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="txtestado_ventas_adespacho">
                         </Component>
                       </SubComponents>
                     </Container>
@@ -1383,16 +1343,10 @@
                         <Component class="javax.swing.JTable" name="detalle_dev_cambios">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="8" rowCount="10">
-                                <Column editable="true" title="N&#xfa;mero de pedido" type="java.lang.Object"/>
-                                <Column editable="true" title="Pack" type="java.lang.Object"/>
-                                <Column editable="true" title="Destinatario" type="java.lang.Object"/>
-                                <Column editable="true" title="Fecha entrega" type="java.lang.Object"/>
-                                <Column editable="true" title="Comuna" type="java.lang.Object"/>
-                                <Column editable="true" title="Hora entrega" type="java.lang.Object"/>
-                                <Column editable="true" title="Estado de entrega " type="java.lang.Object"/>
-                                <Column editable="true" title="Editar" type="java.lang.Boolean"/>
-                              </Table>
+                              <Table columnCount="0" rowCount="0"/>
+                            </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="0"/>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[200, 64]"/>
@@ -1401,6 +1355,9 @@
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="detalle_dev_cambiosMouseClicked"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -1410,10 +1367,14 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextField1">
+                      <Events>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField1KeyReleased"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextField2">
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField2ActionPerformed"/>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField2KeyReleased"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel153">
@@ -1656,7 +1617,7 @@
                                                   <Component id="jScrollPane23" min="-2" pref="74" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
@@ -1666,9 +1627,9 @@
                                               <Component id="btnguardar_compras_solicitudes" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="btncancelar_compras_solicitudes" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>

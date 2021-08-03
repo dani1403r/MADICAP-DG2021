@@ -13,7 +13,10 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.HeadlessException;
@@ -74,6 +77,7 @@ public class tablas extends javax.swing.JFrame {
         numeroMayor();
         MostrarDatosListaDestino();
         MostrarDatosActualizacionDespachos();
+        
     }
 //USUARIOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void filtrarDatos(String valor){
@@ -914,16 +918,18 @@ public class tablas extends javax.swing.JFrame {
  
  //ARTICULOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void llenar_comboArticulos(){
- 
+  cboxcategoria_maestros_articulos1.removeAllItems();
+     
  try {
-   String q ="SELECT * FROM categoria_articulo";
+   String q ="SELECT * FROM categoria_articulo where CAT_ACTIVADO_DESACTIVADO='Activado'";
          Statement st=con.createStatement();
          ResultSet rs=st.executeQuery(q);
     
          while(rs.next()){
              
-          cboxcategoria_maestros_articulos.addItem(rs.getString("ID_CATEGORIA"));   
+             
           cboxcategoria_maestros_articulos1.addItem(rs.getString("CAT_DESCRIPCION"));
+          
          //cboxcategoria_maestros_articulos1.addItem(rs.getString("ID_CATEGORIA"));
          }
      } catch (Exception e) {
@@ -936,13 +942,13 @@ public class tablas extends javax.swing.JFrame {
  
  try{
     
-    String SQL ="insert into articulo (ID_CATEGORIA,ART_DESCRIPCION,ART_UNIDADES,ART_FECHA_VENCIMIENTO,ART_MARCAS,ART_ACTIVADO_DESACTIVADO) values((select ID_CATEGORIA from categoria_articulo where CAT_DESCRIPCION=? ),?,?,?,?,?)";
+    String SQL ="insert into articulo (ID_CATEGORIA,ART_DESCRIPCION,ART_UNIDADES,ART_FECHA_VENCIMIENTO,ART_MARCAS,ART_ACTIVADO_DESACTIVADO) values(?,?,?,?,?,?)";
                  
     
     PreparedStatement pst= con.prepareStatement(SQL);
 
-    int seleccionadoo=cboxcategoria_maestros_articulos.getSelectedIndex();
-    pst.setString(1,cboxcategoria_maestros_articulos.getItemAt(seleccionadoo) );
+    pst.setString(1,txtcategoria_maestros_articulos1.getText());
+    
     pst.setString(2,txtnarticulo_maestros_articulo.getText());
     pst.setString(3,txtunidades_maestros_articulos.getText());
     pst.setString(4,((JTextField)jDvencimiento_maestros_articulos.getDateEditor().getUiComponent()).getText());
@@ -963,10 +969,10 @@ public class tablas extends javax.swing.JFrame {
     txtnarticulo_maestros_articulo.setText("");
     txtunidades_maestros_articulos.setText("");
     txtmarcas_maestros_articulos.setText("");
-    cboxcategoria_maestros_articulos.setSelectedItem(null);
+    txtcategoria_maestros_articulos1.setText("");
     jDvencimiento_maestros_articulos.setCalendar(null);
-    cboxcategoria_maestros_articulos.setSelectedItem(null);
     cboxproveedor_maestros_articulos.setSelectedItem(null);
+    cboxcategoria_maestros_articulos1.setSelectedItem(null);
 }  
  public void actualizarDatosArticulos(){
      
@@ -1100,7 +1106,6 @@ try{
      
      
   } 
- 
  //PROVEEDORESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void InsertarDatosProveedores(){
  
@@ -1240,13 +1245,22 @@ try{
  
  //PACKSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void llenar_TablaArticulos(){
+    
+    DefaultTableModel modelo;
+ modelo=(DefaultTableModel)listaarticulos_maestros_packs.getModel();
+  modelo.getDataVector().removeAllElements();  
+     
   String[] Titulos={"ID Articulo","Articulo","Stock Articulos"};
      String[] Registros= new String[3];
      DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
-     String q ="SELECT * FROM articulo";
+     DefaultTableModel Modeloo=new DefaultTableModel (null,Titulos);
+     String q ="SELECT * FROM articulo where ART_ACTIVADO_DESACTIVADO='Activado'";
      
  try {
    
+    
+     
+     
          Statement st=con.createStatement();
          ResultSet rs=st.executeQuery(q);
     
@@ -1289,7 +1303,7 @@ try{
  public void insertarDatosPacks(){
  try{
    
-    String SQL ="insert into pack (PCK_NOMBRE,PCK_COSTO,PCK_STOCK) values(?,?,?)";
+    String SQL ="insert into pack (PCK_NOMBRE,PCK_COSTO,PCK_STOCK,PCK_ACTIVADO_DESACTIVADO) values(?,?,?,?)";
     
     PreparedStatement pst= con.prepareStatement(SQL);
     
@@ -1298,6 +1312,9 @@ try{
     pst.setString(2,txtprecio_maestros_packs.getText());
    
     pst.setString(3,Integer.toString(valorMenor()));
+    
+    int seleccionado=cboxEstados_maestros_packs.getSelectedIndex();
+    pst.setString(4,cboxEstados_maestros_packs.getItemAt(seleccionado));
     
    pst.execute();
    
@@ -1322,8 +1339,8 @@ try{
  } 
  public void MostrarDatosPack(){
      
-     String[] Titulos={"ID Pack","Nombre","Costo","Stock_packs"};
-     String[] Registros= new String[4];
+     String[] Titulos={"ID Pack","Nombre","Costo","Stock_packs","Estados"};
+     String[] Registros= new String[5];
      DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
      
      String SQL ="select * from pack ";
@@ -1339,7 +1356,7 @@ try{
              Registros[1]=rs.getString("PCK_NOMBRE");
              Registros[2]=rs.getString("PCK_COSTO");
              Registros[3]=rs.getString("PCK_STOCK");
-
+             Registros[4]=rs.getString("PCK_ACTIVADO_DESACTIVADO");
              
              Modelo.addRow(Registros);
              
@@ -1392,7 +1409,7 @@ try{
      
  try{
       
-    String SQL ="update pack set PCK_NOMBRE=?,PCK_COSTO=?,PCK_STOCK=? where PCK_ID_PACK=? ";
+    String SQL ="update pack set PCK_NOMBRE=?,PCK_COSTO=?,PCK_STOCK=?,PCK_ACTIVADO_DESACTIVADO=? where PCK_ID_PACK=? ";
     
      int filaSeleccionado=tabla_packs.getSelectedRow();
     String dao=(String)tabla_packs.getValueAt(filaSeleccionado, 0);
@@ -1401,7 +1418,9 @@ try{
     pst.setString(1, txtnombre_maestros_packs.getText());
     pst.setString(2, txtprecio_maestros_packs.getText());
    pst.setString(3,Integer.toString(valorMenor()));
-    pst.setString(4, dao);
+   int seleccionado=cboxEstados_maestros_packs.getSelectedIndex();
+    pst.setString(4,cboxEstados_maestros_packs.getItemAt(seleccionado));
+    pst.setString(5, dao);
     
    pst.execute();
 JOptionPane.showMessageDialog(null," Registro Editado ");
@@ -1471,7 +1490,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
           
           }JOptionPane.showMessageDialog(null,"Registros de articulo exitoso");
               }catch (Exception e){
-         System.out.println("Error al ingresar has_articulo" + e.getMessage());  
+         //System.out.println("Error al ingresar has_articulo" + e.getMessage());  
           }
  
  }
@@ -1662,25 +1681,28 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
      
  } 
  public void llenar_comboPacks(){
+ cboxpacks_ventas_venta.removeAllItems();
  
  try {
-   String q ="SELECT * FROM pack";
+     
+     
+   String q ="SELECT * FROM pack where PCK_ACTIVADO_DESACTIVADO='Activado'";
          Statement st=con.createStatement();
          ResultSet rs=st.executeQuery(q);
     
          while(rs.next()){
-             
+         
           cboxpacks_ventas_venta.addItem(rs.getString("PCK_NOMBRE"));   
-          
+         
          }
      } catch (Exception e) {
          System.out.println("Incorrecto  "+e.getMessage());
      }
   }
  public void llenar_comboComunas(){
- 
+ cboxcomunas_ventas_venta.removeAllItems();
  try {
-   String q ="SELECT * FROM comunas";
+   String q ="SELECT * FROM comunas where COM_ACTIVADO_DESACTIVADO='Activado'";
          Statement st=con.createStatement();
          ResultSet rs=st.executeQuery(q);
     
@@ -1696,25 +1718,27 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
  
  }
  public void llenar_comboRRSS(){
- 
+ cboxRRSS_ventas_venta.removeAllItems();
  try {
-   String q ="SELECT * FROM rrss";
+   String q ="SELECT * FROM rrss where RRS_ACTIVADO_DESACTIVADO='Activado'";
          Statement st=con.createStatement();
          ResultSet rs=st.executeQuery(q);
     
          while(rs.next()){
              
-          cboxRRSS_ventas_venta.addItem(rs.getString("RRS_NOMBRE"));   
-          
+          cboxRRSS_ventas_venta.addItem(rs.getString("RRS_NOMBRE"));    
          }
      } catch (Exception e) {
          System.out.println("Incorrecto  "+e.getMessage());
      }
   }
  public void llenar_comboEstado(){
+ cboxEstados_ventas_venta.removeAllItems();
+ cbonestados_ventas_confirmacion.removeAllItems();
+ cboxestado_ventas_adespacho.removeAllItems();
  
  try {
-   String q ="SELECT * FROM estados_venta";
+   String q ="SELECT * FROM estados_venta ";
          Statement st=con.createStatement();
          ResultSet rs=st.executeQuery(q);
     
@@ -1733,7 +1757,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
  
  try {
     //String SQL ="insert into venta (VTA_NOMBRE_DESTINATARIO,VTA_FECHA_ENTREGA,VTA_DIRECCION_DESTINATARIO,Comunas_COM_ID_COMUNA,VTA_SALUDO,PCK_ID_PACK,VTA_HORA_ENTREGA_INICIAL,VTA_HORA_ENTREGA_FINAL,RRSS_RRS_ID_RRSS,ESTADOS_VENTA_EST_ID_ESTADO,VTA_TOTAL,cliente_CLI_RUT_CLIENTE,VTA_TELEFONO,VTA_CORREO) values(?,?,?,(select COM_ID_COMUNA from comunas where COM_DESCRIPCION=? ),?,(select PCK_ID_PACK from pack where PCK_NOMBRE=? ),?,?,(select RRS_ID_RRSS from rrss where RRS_NOMBRE=? ),(select EST_ID_ESTADO from estados_venta where EST_DESCRIPCION=? ),?,?,?,?)";
-    String SQL ="insert into venta (cliente_CLI_RUT_CLIENTE,PCK_ID_PACK,BAN_ID_BANCO,RRSS_RRS_ID_RRSS,ESTADOS_VENTA_EST_ID_ESTADO,Comunas_COM_ID_COMUNA,VTA_TOTAL,VTA_FECHA_VENTA,VTA_FECHA_TRANSFERENCIA,VTA_CODIGO_TRANSFERENCIA,VTA_NOMBRE_DESTINATARIO,VTA_DIRECCION_DESTINATARIO,VTA_TELEFONO,VTA_CORREO,VTA_FECHA_ENTREGA,VTA_HORA_ENTREGA_INICIAL,VTA_HORA_ENTREGA_FINAL,VTA_SALUDO) values(?,(select PCK_ID_PACK from pack where PCK_NOMBRE=? ),(select BAN_ID_BANCO from bancos where BAN_DESCRIPCION=? ),(select RRS_ID_RRSS from rrss where RRS_NOMBRE=? ),(select EST_ID_ESTADO from estados_venta where EST_DESCRIPCION=? ),(select COM_ID_COMUNA from comunas where COM_DESCRIPCION=? ),?,?,?,?,?,?,?,?,?,?,?,?)";	
+    String SQL ="insert into venta (cliente_CLI_RUT_CLIENTE,PCK_ID_PACK,BAN_ID_BANCO,RRSS_RRS_ID_RRSS,ESTADOS_VENTA_EST_ID_ESTADO,Comunas_COM_ID_COMUNA,VTA_TOTAL,VTA_FECHA_VENTA,VTA_FECHA_TRANSFERENCIA,VTA_CODIGO_TRANSFERENCIA,VTA_NOMBRE_DESTINATARIO,VTA_DIRECCION_DESTINATARIO,VTA_TELEFONO,VTA_CORREO,VTA_FECHA_ENTREGA,VTA_HORA_ENTREGA_INICIAL,VTA_HORA_ENTREGA_FINAL,VTA_SALUDO,VTA_NOMBRE_CLIENTE) values(?,(select PCK_ID_PACK from pack where PCK_NOMBRE=? ),(select BAN_ID_BANCO from bancos where BAN_DESCRIPCION=? ),(select RRS_ID_RRSS from rrss where RRS_NOMBRE=? ),(select EST_ID_ESTADO from estados_venta where EST_DESCRIPCION=? ),(select COM_ID_COMUNA from comunas where COM_DESCRIPCION=? ),?,?,?,?,?,?,?,?,?,?,?,?,?)";	
     PreparedStatement Pst= con.prepareStatement(SQL);
     
     Pst.setString(1,txtrut_ventas_venta.getText());
@@ -1766,7 +1790,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
     Pst.setString(16,txthorai_ventas_venta.getText());
     Pst.setString(17,txthoraf_ventas_venta.getText());
     Pst.setString(18,txtsaludo_ventas_venta.getText());
-
+    Pst.setString(19,txtncliente_ventas_venta.getText());
     Pst.execute();
         JOptionPane.showMessageDialog(null,"Datos de venta ingresados correctamente");
      
@@ -1777,7 +1801,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
  }   
   }
  public void llenar_comboBanco(){
- 
+ cboxbanco_ventas_confirmacion.removeAllItems();
  try {
    String q ="SELECT * FROM bancos";
          Statement st=con.createStatement();
@@ -1953,6 +1977,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
    txtnpedido_ventas_venta.setText(suma);
      
  }  
+  
  //SOLICITUDES_DE_PEDIDOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 
  public void limpiar_Tabla_proveedores_compras() {
  
@@ -1961,12 +1986,72 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
   modelo.removeRow(proveedores_compra.getSelectedRow());
  
  }
-  
      
 //LISTA DESTINOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
- 
  public void PDFListaDestino() {
+try {
+         FileOutputStream archivo;
+         File file= new File("src/pdf/venta.pdf");
+         archivo = new FileOutputStream(file);
+         Document doc = new Document();
+         PdfWriter.getInstance(doc,archivo);
+         doc.open();
+         
+         Paragraph cli =new Paragraph();
+         cli.add(Chunk.NEWLINE);
+         cli.add("                                                  Lista de Destino"+"\n\n");
+         doc.add(cli);
+ 
+         PdfPTable tablapro = new PdfPTable(8);
+         tablapro.setWidthPercentage(100);
+         tablapro .getDefaultCell().setBorder(1);
+         float[] Columnapro =new float[]{10f,10f,10f,10f,10f,10f,10f,10f};
+         tablapro .setWidths(Columnapro);
+         tablapro .setHorizontalAlignment(Element.ALIGN_LEFT);
+         PdfPCell pro1 = new PdfPCell(new Phrase("Codigo Venta"));
+         PdfPCell pro2 = new PdfPCell(new Phrase("Pack"));
+         PdfPCell pro3 = new PdfPCell(new Phrase("Destinatario"));
+         PdfPCell pro4 = new PdfPCell(new Phrase("Fecha Entrega"));
+         PdfPCell pro5 = new PdfPCell(new Phrase("Comuna"));
+         PdfPCell pro6 = new PdfPCell(new Phrase("Dirección"));
+         PdfPCell pro7 = new PdfPCell(new Phrase("H. entrega I"));
+         PdfPCell pro8 = new PdfPCell(new Phrase("H. entrega F"));
 
+         
+         for (int i = 0; i < listadestino_despacho.getRowCount(); i++) {
+        String IdVenta =listadestino_despacho.getValueAt(i,0).toString();
+        String Pack =listadestino_despacho.getValueAt(i,1).toString();
+        String Destinatario =listadestino_despacho.getValueAt(i,2).toString();
+        String FechaEntrega =listadestino_despacho.getValueAt(i,3).toString();
+        String Comuna =listadestino_despacho.getValueAt(i,4).toString();
+        String Direccion =listadestino_despacho.getValueAt(i,5).toString();
+        String horaI =listadestino_despacho.getValueAt(i,6).toString();
+        String horaF=listadestino_despacho.getValueAt(i,7).toString();
+        
+        tablapro.addCell(IdVenta);
+        tablapro.addCell(Pack);
+        tablapro.addCell(Destinatario);
+        tablapro.addCell(FechaEntrega);
+        tablapro.addCell(Comuna);
+        tablapro.addCell(Direccion);
+        tablapro.addCell(horaI);
+        tablapro.addCell(horaF);
+
+         }
+         doc.add(tablapro);
+         
+         
+         
+         
+         
+         
+         doc.close();
+         archivo.close();
+         
+         
+         
+     } catch (Exception e) {
+     }
  }
  public void MostrarDatosListaDestino(){
      
@@ -2048,7 +2133,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
   } 
  
  //ACTUALIZACION DESPACHOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
- 
  public void MostrarDatosActualizacionDespachos(){
      
      String[] Titulos={"ID Venta","Pack","Destinatario","Fecha entrega","Comuna","Hora entrega inicial","Hora entrega Final","Estado"};
@@ -2288,7 +2372,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         txtbusqueda_ventas_llistadestino = new javax.swing.JTextField();
         jLabel151 = new javax.swing.JLabel();
         btndescarga_ventas_listadestino = new javax.swing.JButton();
-        btnimprimir_ventas_listadestino = new javax.swing.JButton();
         jLabel63 = new javax.swing.JLabel();
         confirmacion_despacho = new javax.swing.JPanel();
         jLabel59 = new javax.swing.JLabel();
@@ -2381,7 +2464,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         btncancelar_compras_revision = new javax.swing.JButton();
         btnbuscar_compras_revision = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        btneditar_compras_revision = new javax.swing.JButton();
         btnver_compras_revision = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -2396,13 +2478,13 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         jLabel93 = new javax.swing.JLabel();
         jPanel23 = new javax.swing.JPanel();
         btnbuscarrango_informes_infoventas = new javax.swing.JButton();
-        txtdesde_informes_infoventas = new javax.swing.JFormattedTextField();
         jLabel91 = new javax.swing.JLabel();
         txtbuscarut_informes_infoventas = new javax.swing.JTextField();
         jLabel89 = new javax.swing.JLabel();
         jLabel90 = new javax.swing.JLabel();
         jLabel88 = new javax.swing.JLabel();
-        txthasta_informes_infoventas = new javax.swing.JFormattedTextField();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jDateChooser2 = new com.toedter.calendar.JDateChooser();
         btndescargar_informes_infoventas = new javax.swing.JButton();
         jLabel134 = new javax.swing.JLabel();
         informe_inventarios = new javax.swing.JPanel();
@@ -2412,15 +2494,13 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtdesde_informes_infoinventarios = new javax.swing.JTextField();
-        txthasta_informes_infoinventarios = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         cboxcategoria_informes_infoinventarios = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
-        txtvencimiento_informes_infoinventarios = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         cboxrut_informes_infoinventarios = new javax.swing.JComboBox<>();
         btnbuscar_informes_infoinventarios = new javax.swing.JButton();
+        jDateChooser3 = new com.toedter.calendar.JDateChooser();
+        jDateChooser4 = new com.toedter.calendar.JDateChooser();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         btndescargar_informes_infoinventarios = new javax.swing.JButton();
@@ -2526,7 +2606,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         jLabel85 = new javax.swing.JLabel();
         jLabel86 = new javax.swing.JLabel();
         jLabel87 = new javax.swing.JLabel();
-        cboxcategoria_maestros_articulos = new javax.swing.JComboBox<>();
         cboxproveedor_maestros_articulos = new javax.swing.JComboBox<>();
         btncancelar_maestros_articulos = new javax.swing.JButton();
         btnguardar_maestros_articulos = new javax.swing.JButton();
@@ -2559,6 +2638,9 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         jScrollPane20 = new javax.swing.JScrollPane();
         listaarticulos_maestros_packs = new javax.swing.JTable();
         btningresararticulo_maestros_packs = new javax.swing.JButton();
+        jLabel155 = new javax.swing.JLabel();
+        cboxEstados_maestros_packs = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         txtbusqueda_maestros_packs = new javax.swing.JTextField();
@@ -3244,13 +3326,13 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane15, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel21Layout.createSequentialGroup()
-                .addGap(360, 360, 360)
+                .addGap(330, 330, 330)
                 .addComponent(jLabel64)
                 .addGap(110, 110, 110)
                 .addComponent(jLabel151)
                 .addGap(18, 18, 18)
                 .addComponent(txtbusqueda_ventas_llistadestino, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(278, Short.MAX_VALUE))
+                .addContainerGap(308, Short.MAX_VALUE))
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3272,13 +3354,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
             }
         });
 
-        btnimprimir_ventas_listadestino.setText("Descargar Excel");
-        btnimprimir_ventas_listadestino.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnimprimir_ventas_listadestinoActionPerformed(evt);
-            }
-        });
-
         jLabel63.setText("Despacho");
 
         javax.swing.GroupLayout lista_destinoLayout = new javax.swing.GroupLayout(lista_destino);
@@ -3293,9 +3368,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lista_destinoLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btndescarga_ventas_listadestino)
-                .addGap(152, 152, 152)
-                .addComponent(btnimprimir_ventas_listadestino)
-                .addGap(394, 394, 394))
+                .addGap(669, 669, 669))
         );
         lista_destinoLayout.setVerticalGroup(
             lista_destinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3305,9 +3378,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(lista_destinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnimprimir_ventas_listadestino)
-                    .addComponent(btndescarga_ventas_listadestino))
+                .addComponent(btndescarga_ventas_listadestino)
                 .addContainerGap())
         );
 
@@ -3671,7 +3742,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
 
         jLabel104.setText("Rut");
 
-        jLabel105.setText("Fecha Recepcion");
+        jLabel105.setText("Fecha Factura");
 
         jLabel106.setText("Proveedor Razon Social");
 
@@ -3936,7 +4007,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
 
         jLabel13.setText("Rut");
 
-        jLabel14.setText("Fecha de Recepcion");
+        jLabel14.setText("Fecha de Factura");
 
         txtnfactura_compras_revision.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3978,7 +4049,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                         .addComponent(btncancelar_compras_revision)
                         .addGap(148, 148, 148)
                         .addComponent(btnbuscar_compras_revision)))
-                .addContainerGap(363, Short.MAX_VALUE))
+                .addContainerGap(367, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4004,13 +4075,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
 
         jLabel9.setText("Detalle de Factura");
 
-        btneditar_compras_revision.setText("Editar");
-        btneditar_compras_revision.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btneditar_compras_revisionActionPerformed(evt);
-            }
-        });
-
         btnver_compras_revision.setText("Ver");
         btnver_compras_revision.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -4035,8 +4099,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, revision_facturasLayout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btneditar_compras_revision)
-                        .addGap(47, 47, 47)
                         .addComponent(btnver_compras_revision)
                         .addGap(88, 88, 88))
                     .addGroup(revision_facturasLayout.createSequentialGroup()
@@ -4054,10 +4116,9 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(revision_facturasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btneditar_compras_revision)
                     .addComponent(btnver_compras_revision)
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -4146,18 +4207,18 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                         .addComponent(jLabel91)
                         .addGap(31, 31, 31)))
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtdesde_informes_infoventas, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                    .addComponent(txtbuscarut_informes_infoventas))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtbuscarut_informes_infoventas, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                    .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(184, 277, Short.MAX_VALUE)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
                         .addComponent(btnbuscarrango_informes_infoventas)
                         .addGap(252, 252, 252))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
                         .addComponent(jLabel90)
-                        .addGap(162, 162, 162)
-                        .addComponent(txthasta_informes_infoventas, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(353, 353, 353))))
+                        .addGap(44, 44, 44)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(410, 410, 410))))
             .addGroup(jPanel23Layout.createSequentialGroup()
                 .addGap(227, 227, 227)
                 .addComponent(jLabel88)
@@ -4167,12 +4228,13 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
                 .addComponent(jLabel88)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtdesde_informes_infoventas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel89)
-                    .addComponent(jLabel90)
-                    .addComponent(txthasta_informes_infoventas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel89)
+                        .addComponent(jLabel90))
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel91)
@@ -4264,14 +4326,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
 
         cboxcategoria_informes_infoinventarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel5.setText("Fecha vencimiento");
-
-        txtvencimiento_informes_infoinventarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtvencimiento_informes_infoinventariosActionPerformed(evt);
-            }
-        });
-
         jLabel6.setText("Rut proveedor");
 
         cboxrut_informes_infoinventarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -4288,24 +4342,24 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtdesde_informes_infoinventarios, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-                    .addComponent(txthasta_informes_infoinventarios))
-                .addGap(110, 110, 110)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jDateChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(94, 94, 94)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel6))
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cboxcategoria_informes_infoinventarios, 0, 118, Short.MAX_VALUE)
-                    .addComponent(txtvencimiento_informes_infoinventarios)
                     .addComponent(cboxrut_informes_infoinventarios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 588, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 580, Short.MAX_VALUE)
                 .addComponent(btnbuscar_informes_infoinventarios)
                 .addGap(33, 33, 33))
         );
@@ -4326,24 +4380,20 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
-                                    .addComponent(txtdesde_informes_infoinventarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(20, 20, 20)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(22, 22, 22)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
-                                    .addComponent(txthasta_informes_infoinventarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel5)
-                                    .addComponent(txtvencimiento_informes_infoinventarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+                                .addGap(56, 56, 56)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel6)
                                     .addComponent(cboxrut_informes_infoinventarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 4, Short.MAX_VALUE)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                        .addGap(0, 5, Short.MAX_VALUE)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jLabel7.setText("Detalle de Inventario");
@@ -5180,19 +5230,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
 
         jLabel87.setText("Estado:");
 
-        cboxcategoria_maestros_articulos.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                cboxcategoria_maestros_articulosInputMethodTextChanged(evt);
-            }
-        });
-        cboxcategoria_maestros_articulos.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                cboxcategoria_maestros_articulosPropertyChange(evt);
-            }
-        });
-
         cboxproveedor_maestros_articulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
         cboxproveedor_maestros_articulos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -5262,14 +5299,9 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                         .addComponent(btnguardar_maestros_articulos)
                         .addGap(137, 137, 137))
                     .addGroup(articulos1Layout.createSequentialGroup()
-                        .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(articulos1Layout.createSequentialGroup()
-                                .addGap(44, 44, 44)
-                                .addComponent(cboxcategoria_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(articulos1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(txtcategoria_maestros_articulos1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(txtcategoria_maestros_articulos1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(398, Short.MAX_VALUE))))
         );
         articulos1Layout.setVerticalGroup(
             articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5299,16 +5331,13 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                             .addComponent(btnguardar_maestros_articulos)))
                     .addGroup(articulos1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboxcategoria_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(articulos1Layout.createSequentialGroup()
-                                .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel86)
-                                    .addComponent(jDvencimiento_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel87)
-                                    .addComponent(cboxproveedor_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel86)
+                            .addComponent(jDvencimiento_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel87)
+                            .addComponent(cboxproveedor_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(43, 43, 43))
         );
 
@@ -5493,6 +5522,17 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
             }
         });
 
+        jLabel155.setText("Estado:");
+
+        cboxEstados_maestros_packs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activado", "Desactivado" }));
+
+        jButton1.setText("Borrar Articulos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -5522,21 +5562,28 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(txtprecio_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
+                        .addGap(109, 109, 109)
+                        .addComponent(jLabel155)
+                        .addGap(18, 18, 18)
+                        .addComponent(cboxEstados_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(169, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btningresararticulo_maestros_packs)
-                                .addGap(126, 126, 126))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btningresararticulo_maestros_packs))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(btncrearpack_maestros_packs)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btncancelar_maestros_packs)
-                                .addContainerGap())))))
+                                .addGap(28, 28, 28)
+                                .addComponent(btncrearpack_maestros_packs)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addComponent(btncancelar_maestros_packs)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5546,7 +5593,9 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                     .addComponent(txtprecio_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel23)
                     .addComponent(txtnombre_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel21))
+                    .addComponent(jLabel21)
+                    .addComponent(jLabel155)
+                    .addComponent(cboxEstados_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(44, 44, 44)
@@ -5554,7 +5603,9 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
                             .addComponent(btncrearpack_maestros_packs)
                             .addComponent(btncancelar_maestros_packs))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                        .addComponent(btningresararticulo_maestros_packs))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btningresararticulo_maestros_packs)
+                            .addComponent(jButton1)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -6618,14 +6669,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtvencimiento_informes_infoinventariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtvencimiento_informes_infoinventariosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtvencimiento_informes_infoinventariosActionPerformed
-
-    private void btneditar_compras_revisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_compras_revisionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btneditar_compras_revisionActionPerformed
-
     private void txtnfactura_compras_revisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnfactura_compras_revisionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtnfactura_compras_revisionActionPerformed
@@ -6657,6 +6700,7 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
 insertarDatosCatVentas();
 limpiarCajasCatVentas();
 mostrarDatosCatVentas();
+llenar_comboEstado();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btnguardar_maestros_catventasActionPerformed
@@ -6683,6 +6727,7 @@ mostrarDatosCatVentas();
         limpiarCajasConfirmacion();
         MostrarDatosActualizacionDespachos();
         MostrarDatosListaDestino();
+        llenar_comboEstado();
     }//GEN-LAST:event_btnconfirmar_ventas_confirmacionActionPerformed
 
     private void btnver_compras_revisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnver_compras_revisionActionPerformed
@@ -6694,7 +6739,7 @@ mostrarDatosCatVentas();
     }//GEN-LAST:event_txtunidades_maestros_packsActionPerformed
 
     private void btnmenos_maestros_packsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmenos_maestros_packsActionPerformed
-eliminarRegistrosPack1();
+//eliminarRegistrosPack1();
 limpiar_TablaPacks();
 
 
@@ -6709,13 +6754,10 @@ limpiar_TablaPacks();
 actualizarDatosComunas();
 mostrarDatosComunas();
 limpiarCajasComunas();
+llenar_comboComunas();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_comunasActionPerformed
-
-    private void btnimprimir_ventas_listadestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimir_ventas_listadestinoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnimprimir_ventas_listadestinoActionPerformed
 
     private void btnGuardar_maestros_usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar_maestros_usuariosActionPerformed
                     insertarDatos(); 
@@ -6789,6 +6831,7 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
 insertarDatosComunas();
 mostrarDatosComunas();
 limpiarCajasComunas();
+llenar_comboComunas();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btnguardar_maestros_comunasActionPerformed
@@ -6821,18 +6864,27 @@ int filaSeleccionadoo= listadeclientes_maestros.rowAtPoint(evt.getPoint());
 
 
 txtrut_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,0).toString());
-txtrut_ventas_venta.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,0).toString());
 
 txt_ncliente_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,1).toString());
-txtncliente_ventas_venta.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,1).toString());
 
 txtcel_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,2).toString());
-txtfono_ventas_venta.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,2).toString());
 
 txtfono_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,3).toString());
 
 txtemaill_maestros_clientes.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,4).toString());
-txtemail_ventas_venta.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,4).toString());
+
+String valor= listadeclientes_maestros.getValueAt(filaSeleccionadoo,6).toString();
+String cliente="Activado";
+limpiarCajasVentasCl();
+        if (cliente.equals(valor)) {
+          txtemail_ventas_venta.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,4).toString());
+          txtfono_ventas_venta.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,2).toString());
+          txtncliente_ventas_venta.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,1).toString());
+          txtrut_ventas_venta.setText(listadeclientes_maestros.getValueAt(filaSeleccionadoo,0).toString());
+          
+          
+        }
+
 
 try{
 
@@ -6873,6 +6925,7 @@ limpiarCajasBanco();
 actualizarDatosBanco();
 limpiarCajasBanco();
 mostrarDatosBanco();
+llenar_comboBanco();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_bancosActionPerformed
@@ -6922,7 +6975,7 @@ limpiarCajasRrss();
 actualizarDatosRrss();
 limpiarCajasRrss();
 mostrarDatosRrss();
-
+llenar_comboRRSS();
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_rrssActionPerformed
 
@@ -6983,6 +7036,7 @@ cbcategoria_maestros_catarticulos.setSelectedItem(categoriaarticulos.getValueAt(
 actualizarDatosCategoriaArt();
 mostrarDatosCategoriaArt();
 limpiarCajasCategoriaArt();
+llenar_comboArticulos();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_catarticulosActionPerformed
@@ -7010,7 +7064,8 @@ MostrarDatosProveedores();
         insertarDatosArticulos();
         limpiarCajasArticulos();
         mostrarDatosArticulos();
-
+        llenar_TablaArticulos();
+        
         // TODO add your handling code here:
     }//GEN-LAST:event_btnguardar_maestros_articulosActionPerformed
 
@@ -7061,15 +7116,6 @@ cboxproveedor_maestros_articulos.setSelectedItem(listaarticulos.getValueAt(filaS
         
     }//GEN-LAST:event_listaarticulosMouseClicked
 
-    private void cboxcategoria_maestros_articulosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cboxcategoria_maestros_articulosPropertyChange
- 
-    }//GEN-LAST:event_cboxcategoria_maestros_articulosPropertyChange
-
-    private void cboxcategoria_maestros_articulosInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_cboxcategoria_maestros_articulosInputMethodTextChanged
- System.out.println("HOLa");
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cboxcategoria_maestros_articulosInputMethodTextChanged
-
     private void txtbusqueda_maestros_articulosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbusqueda_maestros_articulosKeyReleased
         filtrarDatosArticulos(txtbusqueda_maestros_articulos.getText());
         
@@ -7090,7 +7136,10 @@ cboxproveedor_maestros_articulos.setSelectedItem(listaarticulos.getValueAt(filaS
             articulo=listaarticulos_maestros_packs.getValueAt(fila,1).toString();
             cantidad= txtunidades_maestros_packs.getText();
             Stock_articulo=listaarticulos_maestros_packs.getValueAt(fila,2).toString();
+            
             valor=(Integer.parseInt(Stock_articulo))/ (Integer.parseInt(cantidad));
+            
+            
           modelo=(DefaultTableModel)articuloselegidos_maestros_packs.getModel();
           stock_pack=Integer.toString((int) valor);
           String filamodelo[]={id_articulo,articulo,cantidad,Stock_articulo,stock_pack};
@@ -7132,6 +7181,8 @@ MostrarDatosPack();
 actualizarDatosPack();
 limpiarCajasPack();
 MostrarDatosPack();
+llenar_comboPacks();
+
 
 
         // TODO add your handling code here:
@@ -7175,7 +7226,10 @@ int filaSeleccionado= proveedores_maestros.rowAtPoint(evt.getPoint());
     private void btncompra_maestros_proveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncompra_maestros_proveedoresActionPerformed
 DefaultTableModel modelo;
       String rut,nombre,telefono,correo,direccion,razonSocial;
-      int fila=proveedores_maestros.getSelectedRow();
+      int fila=proveedores_maestros.getSelectedRow();  
+      
+      
+           
         
         try {
             
@@ -7191,7 +7245,7 @@ DefaultTableModel modelo;
           String filamodelo[]={rut,nombre,telefono,correo,direccion,razonSocial};
           
           modelo.addRow(filamodelo);
-          
+            
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"Error al traspasar datos"+e.getMessage());
@@ -7210,7 +7264,7 @@ limpiarCajasCatVentas();
 actualizarDatosCatVentas();
 limpiarCajasCatVentas();
 mostrarDatosCatVentas();
-
+llenar_comboEstado();
         // TODO add your handling code here:
     }//GEN-LAST:event_btneditar_maestros_catventasActionPerformed
 
@@ -7266,7 +7320,8 @@ MostrarDatosVentas();
 numeroMayor();
 MostrarDatosListaDestino();
 MostrarDatosActualizacionDespachos();
-MostrarDatosVentas();
+llenar_comboEstado();
+
    
         // TODO add your handling code here:
     }//GEN-LAST:event_btnguardardestinatario_ventas_ventaActionPerformed
@@ -7468,7 +7523,7 @@ limpiarCajasConfirmacion();
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void btncancelar_compras_solicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_compras_solicitudesActionPerformed
-
+limpiar_Tabla_proveedores_compras();
         // TODO add your handling code here:
     }//GEN-LAST:event_btncancelar_compras_solicitudesActionPerformed
 
@@ -7529,6 +7584,13 @@ PDFListaDestino();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btndescarga_ventas_listadestinoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+eliminarRegistrosPack1();
+limpiar_TablaPacks();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -7613,7 +7675,6 @@ PDFListaDestino();
     private javax.swing.JButton btndescargar_informes_infoventas;
     private javax.swing.JButton btndescargas_informes_infoclientes;
     private javax.swing.JButton btneditar_compras_registro;
-    private javax.swing.JButton btneditar_compras_revision;
     private javax.swing.JButton btneditar_compras_solicitudes;
     private javax.swing.JButton btneditar_maestros_articulos;
     private javax.swing.JButton btneditar_maestros_bancos;
@@ -7639,7 +7700,6 @@ PDFListaDestino();
     private javax.swing.JButton btnguardar_maestros_rrss;
     private javax.swing.JButton btnguardar_ventas_adespacho;
     private javax.swing.JButton btnguardardestinatario_ventas_venta;
-    private javax.swing.JButton btnimprimir_ventas_listadestino;
     private javax.swing.JButton btningresararticulo_maestros_packs;
     private javax.swing.JButton btnmas_compras_solicitudes;
     private javax.swing.JButton btnmas_maestros_packs;
@@ -7658,13 +7718,13 @@ PDFListaDestino();
     private javax.swing.JComboBox<String> cbcategoria_maestros_catventas;
     private javax.swing.JComboBox<String> cbcomuna_maestros_comunas;
     private javax.swing.JComboBox<String> cbonestados_ventas_confirmacion;
+    private javax.swing.JComboBox<String> cboxEstados_maestros_packs;
     private javax.swing.JComboBox<String> cboxEstados_ventas_venta;
     private javax.swing.JComboBox<String> cboxRRSS_ventas_venta;
     private javax.swing.JComboBox<String> cboxarticulo_compras_registro;
     private javax.swing.JComboBox<String> cboxatcdes_maestros_clientes;
     private javax.swing.JComboBox<String> cboxbanco_ventas_confirmacion;
     private javax.swing.JComboBox<String> cboxcategoria_informes_infoinventarios;
-    private javax.swing.JComboBox<String> cboxcategoria_maestros_articulos;
     private javax.swing.JComboBox<String> cboxcategoria_maestros_articulos1;
     private javax.swing.JComboBox<String> cboxcomunas_ventas_venta;
     private javax.swing.JComboBox<String> cboxestado_ventas_adespacho;
@@ -7693,7 +7753,12 @@ PDFListaDestino();
     private javax.swing.JPanel informe_inventarios;
     private javax.swing.JPanel informe_ventas;
     private javax.swing.JPanel informes;
+    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private com.toedter.calendar.JDateChooser jDateChooser3;
+    private com.toedter.calendar.JDateChooser jDateChooser4;
     private com.toedter.calendar.JDateChooser jDfentrega_ventas_venta;
     private com.toedter.calendar.JDateChooser jDfventa_ventas_venta;
     private com.toedter.calendar.JDateChooser jDvencimiento_maestros_articulos;
@@ -7758,6 +7823,7 @@ PDFListaDestino();
     private javax.swing.JLabel jLabel151;
     private javax.swing.JLabel jLabel152;
     private javax.swing.JLabel jLabel153;
+    private javax.swing.JLabel jLabel155;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -7795,7 +7861,6 @@ PDFListaDestino();
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
@@ -7953,8 +8018,6 @@ PDFListaDestino();
     private javax.swing.JTextField txtcontraseña_maestros_usuarios;
     private javax.swing.JTextField txtdesde_informes_infoclientes;
     private javax.swing.JTextField txtdesde_informes_infodevycambios;
-    private javax.swing.JTextField txtdesde_informes_infoinventarios;
-    private javax.swing.JFormattedTextField txtdesde_informes_infoventas;
     private javax.swing.JTextField txtdestinatario_ventas_venta;
     private javax.swing.JTextField txtdireccion_maestros_proveedores;
     private javax.swing.JTextField txtdireccion_ventas_venta;
@@ -7974,8 +8037,6 @@ PDFListaDestino();
     private javax.swing.JTextField txtfrecepcion_compras_revision;
     private javax.swing.JTextField txthasta_informes_infoclientes;
     private javax.swing.JTextField txthasta_informes_infodevycambios;
-    private javax.swing.JTextField txthasta_informes_infoinventarios;
-    private javax.swing.JFormattedTextField txthasta_informes_infoventas;
     private javax.swing.JTextField txthoraf_ventas_venta;
     private javax.swing.JTextField txthorai_ventas_venta;
     private javax.swing.JTextField txtmarcas_maestros_articulos;
@@ -8012,7 +8073,6 @@ PDFListaDestino();
     private javax.swing.JTextField txtusuario_maestros_usuarios;
     private javax.swing.JTextField txtvalor_compras_registro;
     private javax.swing.JFormattedTextField txtvencimiento_compras_registro;
-    private javax.swing.JTextField txtvencimiento_informes_infoinventarios;
     private javax.swing.JPanel usuarios;
     private javax.swing.JPanel venta;
     private javax.swing.JPanel ventas;

@@ -61,7 +61,6 @@ public class tablas extends javax.swing.JFrame {
         mostrarDatosComunas();
         mostrarDatosRrss();
         mostrarDatosCategoriaArt();
-        ArrayList<String> lista =new ArrayList<String>();
         llenar_comboArticulos();       
         mostrarDatosArticulos();
         llenar_TablaArticulos();
@@ -77,6 +76,14 @@ public class tablas extends javax.swing.JFrame {
         numeroMayor();
         MostrarDatosListaDestino();
         MostrarDatosActualizacionDespachos();
+        llenar_TablaProveedores();
+        MostrarDatosSolPedidos();
+        numeroMayorCompras();
+        mostrarDatoFactura();
+        mostrarDatosPack();
+        mostrarPorFechaVentas();
+        mostrarDatosPorRutDevolucion();
+        mostrarDatosPorcategoria();
         
     }
 //USUARIOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
@@ -193,7 +200,7 @@ public class tablas extends javax.swing.JFrame {
 }
  }    
  public void insertarDatos(){
- 
+     
  try{
     
     String SQL ="insert into usuarios(USU_NOMBRE,USU_CLAVE) values(?,?)";
@@ -1106,6 +1113,7 @@ try{
      
      
   } 
+ 
  //PROVEEDORESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void InsertarDatosProveedores(){
  
@@ -1485,7 +1493,6 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
             pst.setString(3,articulo);
             pst.setString(4,stockArticulo);
             pst.setString(5,cantidad);
-          //  pst.setString(4, dao);
             pst.execute();
           
           }JOptionPane.showMessageDialog(null,"Registros de articulo exitoso");
@@ -1512,10 +1519,8 @@ JOptionPane.showMessageDialog(null," Registro Editado ");
          while (rs.next()){
              cantidad=rs.getInt("CANTIDAD");
              stock=rs.getInt("HAS_STOCK_ARTICULOS");
-         int    valor =stock/cantidad;
-             
+             int    valor =stock/cantidad;
              Registros[0]=rs.getString("ART_ID_ARTICULO");
-             
              Registros[1]=rs.getString("HAS_ARTICULO");
              Registros[2]=rs.getString("CANTIDAD");
              Registros[3]=rs.getString("HAS_STOCK_ARTICULOS");
@@ -2017,7 +2022,14 @@ try {
          PdfPCell pro7 = new PdfPCell(new Phrase("H. entrega I"));
          PdfPCell pro8 = new PdfPCell(new Phrase("H. entrega F"));
 
-         
+         tablapro.addCell(pro1);
+         tablapro.addCell(pro2);
+         tablapro.addCell(pro3);
+         tablapro.addCell(pro4);
+         tablapro.addCell(pro5);
+         tablapro.addCell(pro6);
+         tablapro.addCell(pro7);
+         tablapro.addCell(pro8);
          for (int i = 0; i < listadestino_despacho.getRowCount(); i++) {
         String IdVenta =listadestino_despacho.getValueAt(i,0).toString();
         String Pack =listadestino_despacho.getValueAt(i,1).toString();
@@ -2039,11 +2051,6 @@ try {
 
          }
          doc.add(tablapro);
-         
-         
-         
-         
-         
          
          doc.close();
          archivo.close();
@@ -2281,8 +2288,1340 @@ try {
      }
  }   
  
+ //SOLICITUD DE PEDIDOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void llenar_TablaProveedores(){
+    
+    DefaultTableModel modelo;
+ modelo=(DefaultTableModel)listapedido_compras_solicitudes.getModel();
+  modelo.getDataVector().removeAllElements();  
+     
+  String[] Titulos={"ID Articulo","Articulo","Stock Articulos"};
+     String[] Registros= new String[3];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     DefaultTableModel Modeloo=new DefaultTableModel (null,Titulos);
+     String q ="SELECT * FROM articulo where ART_ACTIVADO_DESACTIVADO='Activado'";
+     
+ try {
+   
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(q);
+    
+         while(rs.next()){
+          Registros[0]=rs.getString("ART_ID_ARTICULO");   
+          Registros[1]=rs.getString("ART_DESCRIPCION");     
+          Registros[2]=rs.getString("ART_UNIDADES");
+          Modelo.addRow(Registros);
+         }
+           listapedido_compras_solicitudes.setModel (Modelo);
+          
+     } catch (Exception e) {
+         System.out.println("Problemas al mostrar datos "+e.getMessage());
+     }
+    
  
+ }
+ public void sumaCantidades (){
+    int suma=0;
+       int contar=listaCompras_solicitudes.getRowCount();
+       for (int i = 0; i < contar; i++) {
+                 suma = suma+Integer.parseInt( listaCompras_solicitudes.getValueAt(i,2).toString());
+               }
+       
+     String sumaa=suma+"";
+ txtcantidad_compras_solicitudes.setText(sumaa);
+ }
+ public void InsertarDatosCompras(){
+   DefaultTableModel modelo;
+   String id_proveedor;
+   
+              
+ try {
+   
+    String SQL ="insert into orden_compra (ORC_ID_PROVEEDOR,ORC_NUMERO,ORC_FECHA_ORDEN) values(?,?,?)";	
+    PreparedStatement Pst= con.prepareStatement(SQL);
+    
+    int fila=proveedores_compra.getSelectedRow();
+    id_proveedor=proveedores_compra.getValueAt(fila,0).toString();
+    Pst.setString(1,id_proveedor);
+    Pst.setString(2,txtcantidad_compras_solicitudes.getText());
+    Pst.setString(3,((JTextField)datepedido_compras_solicitudes.getDateEditor().getUiComponent()).getText());
+   
+   
+    
+    Pst.execute();
+    
+    
+    
+        JOptionPane.showMessageDialog(null,"Solicitud de pedido ingresado correctamente");
+     
+ }catch (Exception e) {
+     
+     JOptionPane.showMessageDialog(null,"Registro Fallido"+e.getMessage());
+     
+ }   
+  }
+ public void insertarDatosHasArticuloSolPedidos (){
+     int i;
+     try {
+     for ( i = 0; i <= listaCompras_solicitudes.getRowCount(); i++) {
+         
+          String SQL ="insert into orden_compra_detalle (OCD_ID_ARTICULO,OCD_ID_ORDEN,OCD_NOMBRE,OCD_CANTIDAD,DET_VALOR) values(?,?,?,?,?)";
+        PreparedStatement pst= con.prepareStatement(SQL);
+         
+         String id_articulo =listaCompras_solicitudes.getValueAt(i,0).toString();
+         String nombre =listaCompras_solicitudes.getValueAt(i,1).toString();
+         String id_orden=txtnpedido_compras_solicitudes.getText();
+         String cantidad =listaCompras_solicitudes.getValueAt(i,2).toString();
+         String precio=listaCompras_solicitudes.getValueAt(i,3).toString();
+          
+          //  id_pack=(int) tabla_packs.getValueAt(filaSeleccionado,0);
+            //System.out.println("id_pack "+dao);
+           // listaCompras_solicitudes.getRowCount()
+        
+            pst.setString(1,id_articulo);
+            pst.setString(2,id_orden);
+            pst.setString(3,nombre);
+            pst.setString(4,cantidad);
+            pst.setString(5,precio);
+            
+            pst.execute();
+          
+          }
+              }catch (Exception e){
+         //System.out.println("Error al ingresar has_articulo" + e.getMessage());  
+          }
  
+ }
+ public void numeroMayorCompras(){
+ 
+  ArrayList<Integer> list =new ArrayList<Integer>();
+     for (int i = 0; i < detalle_pedidos_realizados.getRowCount(); i++) {
+        list.add(Integer.parseInt(detalle_pedidos_realizados.getValueAt(i, 0).toString()));
+         
+     }
+     int max=Collections.max(list)+1;
+     
+     String suma= max+"";
+   txtnpedido_compras_solicitudes.setText(suma);
+     
+ }  
+ public void MostrarDatosSolPedidos(){
+     
+     String[] Titulos={"ID pedido","Nombre proovedor","Cantidad de Articulos","Fecha pedido"};
+     String[] Registros= new String[4];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,orden_compra.ORC_ID_PROVEEDOR\n" +
+                 "FROM orden_compra\n" +
+                 "JOIN proveedor ON proveedor.PRO_RUT_PROVEEDOR=orden_compra.ORC_ID_PROVEEDOR";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("ORC_ID_ORDEN");
+             Registros[1]=rs.getString("PRO_NOMBRE");
+             Registros[2]=rs.getString("ORC_NUMERO");
+             Registros[3]=rs.getString("ORC_FECHA_ORDEN");
+
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         detalle_pedidos_realizados.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }   
+ public void actualizarDatosClikerSolPedidos (){
+   String[] Titulos={"ID Articulo","Articulo","Cantidad","Precio"};
+     String[] Registros= new String[4];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+             int filaSeleccionado=detalle_pedidos_realizados.getSelectedRow();
+            String ID= detalle_pedidos_realizados.getValueAt(filaSeleccionado, 0).toString();
+         int  cantidad,stock=0;
+         
+     String SQL ="select * from orden_compra_detalle where OCD_ID_ORDEN='"+ID+"' ";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             Registros[0]=rs.getString("OCD_ID_ARTICULO");
+             Registros[1]=rs.getString("OCD_NOMBRE");
+             Registros[2]=rs.getString("OCD_CANTIDAD");
+             Registros[3]=rs.getString("DET_VALOR");
+             
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+         listaCompras_solicitudes.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }    
+ public void actualizarDatosSolPedidos(){
+     
+ try{
+      
+    String SQL ="update orden_compra set ORC_NUMERO=?,ORC_FECHA_ORDEN=? where ORC_ID_ORDEN=? ";
+    
+     int filaSeleccionado=detalle_pedidos_realizados.getSelectedRow();
+    String dao=(String)detalle_pedidos_realizados.getValueAt(filaSeleccionado, 0);
+    PreparedStatement pst= con.prepareStatement(SQL);
+    
+    pst.setString(1, txtcantidad_compras_solicitudes.getText());
+    pst.setString(2,((JTextField)datepedido_compras_solicitudes.getDateEditor().getUiComponent()).getText());
+
+    pst.setString(3, dao);
+    
+   pst.execute();
+JOptionPane.showMessageDialog(null," Registro Editado ");
+ for (int i = 0; i <= listaCompras_solicitudes.getRowCount(); i++) {
+         String cantidad;
+         int id_articulo =  Integer.parseInt(listaCompras_solicitudes.getValueAt(i,0).toString());
+         String articulo =(listaCompras_solicitudes.getValueAt(i,1).toString());
+         String precio=(listaCompras_solicitudes.getValueAt(i,3).toString());
+         
+         String sql ="update orden_compra_detalle set OCD_ID_ARTICULO=?,OCD_NOMBRE=?,OCD_CANTIDAD=?,DET_VALOR=? WHERE OCD_ID_ORDEN=? and OCD_ID_ARTICULO=? ";
+        PreparedStatement pstt= con.prepareStatement(sql);
+     
+
+             cantidad= listaCompras_solicitudes.getValueAt(i,2).toString();
+  
+            int filaSeleccionadoo=detalle_pedidos_realizados.getSelectedRow();
+            String daoo= detalle_pedidos_realizados.getValueAt(filaSeleccionadoo, 0).toString();
+            //int filaSeleccionadooo=tabla_packs.getSelectedRow();
+           // String daooo=(String)tabla_packs.getValueAt(filaSeleccionadooo, 0);
+        
+            pstt.setInt(1,id_articulo);
+            pstt.setString(2,articulo);
+            pstt.setString(3,cantidad);
+            pstt.setString(4,precio);
+            pstt.setString(5,daoo);
+            pstt.setInt(6,id_articulo);
+            pstt.execute();
+   
+ } 
+   
+
+}catch(Exception e) {
+      
+    //JOptionPane.showMessageDialog(null,"Error de Edicion "+e.getMessage());
+}
+ }  
+ public void eliminarRegistrosSolHasPedidos(){
+ int filaSeleccionada=detalle_pedidos_realizados.getSelectedRow();
+ 
+ try{
+    String SQL="delete from orden_compra_detalle where OCD_ID_ORDEN="+detalle_pedidos_realizados.getValueAt(filaSeleccionada,0);
+    
+    Statement st=con.createStatement();
+    
+    int n = st.executeUpdate(SQL);
+  if(n>=0){
+  JOptionPane.showMessageDialog(null,"Registro Eliminado");
+  }
+    
+ }catch(Exception e){
+    
+ }
+     
+ } 
+ public void limpiar_TablaCompras() {
+ 
+ DefaultTableModel modelo;
+ modelo=(DefaultTableModel)listaCompras_solicitudes.getModel();
+  modelo.removeRow(listaCompras_solicitudes.getSelectedRow());
+  
+     
+ }
+ public void insertarDatosHasArticuloSolPedidosArticulos(){
+     int i;
+     
+     try {
+         
+        String sql ="update orden_compra set ORC_NUMERO=?,ORC_FECHA_ORDEN=? where ORC_ID_ORDEN=? ";
+    
+     int filaSeleccionado=detalle_pedidos_realizados.getSelectedRow();
+    String dao=(String)detalle_pedidos_realizados.getValueAt(filaSeleccionado, 0);
+    PreparedStatement psttt= con.prepareStatement(sql);
+    
+    psttt.setString(1, txtcantidad_compras_solicitudes.getText());
+    psttt.setString(2,((JTextField)datepedido_compras_solicitudes.getDateEditor().getUiComponent()).getText());
+
+    psttt.setString(3, dao);
+    
+   psttt.execute();  
+   
+     for ( i = 0; i <= listaCompras_solicitudes.getRowCount(); i++) {
+         
+          String SQL ="insert into orden_compra_detalle (OCD_ID_ARTICULO,OCD_ID_ORDEN,OCD_NOMBRE,OCD_CANTIDAD,DET_VALOR) values(?,?,?,?,?)";
+        PreparedStatement pst= con.prepareStatement(SQL);
+         
+         String id_articulo =listaCompras_solicitudes.getValueAt(i,0).toString();
+         String nombre =listaCompras_solicitudes.getValueAt(i,1).toString();
+         int fila=detalle_pedidos_realizados.getSelectedRow();
+         String id_orden=detalle_pedidos_realizados.getValueAt(fila,0).toString();  
+         String cantidad =listaCompras_solicitudes.getValueAt(i,2).toString();
+         String precio=listaCompras_solicitudes.getValueAt(i,3).toString();
+          
+          //  id_pack=(int) tabla_packs.getValueAt(filaSeleccionado,0);
+            //System.out.println("id_pack "+dao);
+           // listaCompras_solicitudes.getRowCount()
+        
+            pst.setString(1,id_articulo);
+            pst.setString(2,id_orden);
+            pst.setString(3,nombre);
+            pst.setString(4,cantidad);
+            pst.setString(5,precio);
+            
+            pst.execute();
+          
+          }
+              }catch (Exception e){
+         //System.out.println("Error al ingresar has_articulo" + e.getMessage());  
+          }
+ 
+ }
+ public void PDFSolicitudPedidos() {
+try {
+         FileOutputStream archivo;
+         File file= new File("src/pdf/Solicitud de pedidos.pdf");
+         archivo = new FileOutputStream(file);
+         Document doc = new Document();
+         PdfWriter.getInstance(doc,archivo);
+         doc.open();
+         
+         Paragraph cli =new Paragraph();
+         cli.add(Chunk.NEWLINE);
+         cli.add("                                                  Orden de compra"+"\n\n");
+         doc.add(cli);
+ 
+         
+         PdfPTable tablapro = new PdfPTable(4);
+         tablapro.setWidthPercentage(100);
+         tablapro .getDefaultCell().setBorder(1);
+         float[] Columnapro =new float[]{10f,10f,10f,10f};
+         tablapro.setWidths(Columnapro);
+         tablapro.setHorizontalAlignment(Element.ALIGN_LEFT);
+         PdfPCell pro1 = new PdfPCell(new Phrase("Proveedor"));
+         PdfPCell pro2 = new PdfPCell(new Phrase("Articulo"));
+         PdfPCell pro3 = new PdfPCell(new Phrase("Cantidad"));
+         PdfPCell pro5 = new PdfPCell(new Phrase("Fecha pedido"));
+
+
+         tablapro.addCell(pro1);
+         tablapro.addCell(pro2);
+         tablapro.addCell(pro3);
+         tablapro.addCell(pro5);
+
+         for (int i = 0; i < listaCompras_solicitudes.getRowCount(); i++) {
+          int fila= detalle_pedidos_realizados.getSelectedRow();
+        String IdVenta =detalle_pedidos_realizados.getValueAt(fila,1).toString();
+        String Pack =listaCompras_solicitudes.getValueAt(i,1).toString();
+        String Destinatario =listaCompras_solicitudes.getValueAt(i,2).toString();
+        String Comuna =detalle_pedidos_realizados.getValueAt(fila,3).toString();
+
+        
+        tablapro.addCell(IdVenta);
+        tablapro.addCell(Pack);
+        tablapro.addCell(Destinatario);
+        tablapro.addCell(Comuna);
+
+
+         }
+          doc.add(tablapro);
+         
+         doc.close();
+         archivo.close();
+         
+         
+         
+     } catch (Exception e) {
+     }
+ }
+ 
+//INFORME CLIENTESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSsss
+public void mostrarDatosPack(){
+     
+     String[] Titulos={"Codigo pack","Nombre pack","Fecha del pedido","Nombre cliente","Estados","Comuna"};
+     String[] Registros= new String[6];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,venta.PCK_ID_PACK,venta.cliente_CLI_RUT_CLIENTE,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA\n" +
+                 "FROM `venta`\n" +
+                 "JOIN pack ON pack.PCK_ID_PACK=venta.PCK_ID_PACK\n" +
+                 "JOIN cliente ON cliente.CLI_RUT_CLIENTE=venta.cliente_CLI_RUT_CLIENTE\n" +
+                 "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                 "JOIN comunas  ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA"; 
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("PCK_ID_PACK");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("VTA_FECHA_VENTA");
+             Registros[3]=rs.getString("CLI_NOMBRE");
+             Registros[4]=rs.getString("EST_DESCRIPCION");
+             Registros[5]=rs.getString("COM_DESCRIPCION");
+             
+             Modelo.addRow(Registros);  
+         }
+         
+         ventas_realizada_infoclientes.setModel (Modelo); 
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());  
+     }
+ }      
+public void BuscarDatosPack(String buscarRut){
+     
+     String[] Titulos={"Codigo pack","Nombre pack","Fecha del pedido","Nombre cliente","Estados","Comuna"};
+     String[] Registros= new String[6];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,venta.PCK_ID_PACK,venta.cliente_CLI_RUT_CLIENTE,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA\n" +
+                 "FROM `venta`\n" +
+                 "JOIN pack ON pack.PCK_ID_PACK=venta.PCK_ID_PACK\n" +
+                 "JOIN cliente ON cliente.CLI_RUT_CLIENTE=venta.cliente_CLI_RUT_CLIENTE\n" +
+                 "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                 "JOIN comunas  ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA\n"+
+                 "where CLI_RUT_CLIENTE LIKE  '%"+buscarRut+"%' "; 
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("PCK_ID_PACK");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("VTA_FECHA_VENTA");
+             Registros[3]=rs.getString("CLI_NOMBRE");
+             Registros[4]=rs.getString("EST_DESCRIPCION");
+             Registros[5]=rs.getString("COM_DESCRIPCION");
+             
+             Modelo.addRow(Registros);  
+         }
+         
+         ventas_realizada_infoclientes.setModel (Modelo); 
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());  
+     }
+ }  
+public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
+     String[] Titulos={"Codigo pack","Nombre pack","Fecha del pedido","Nombre cliente","Estados","Comuna"};
+     String[] Registros= new String[6];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,venta.PCK_ID_PACK,venta.cliente_CLI_RUT_CLIENTE,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA\n" +
+                 "FROM `venta`\n" +
+                 "JOIN pack ON pack.PCK_ID_PACK=venta.PCK_ID_PACK\n" +
+                 "JOIN cliente ON cliente.CLI_RUT_CLIENTE=venta.cliente_CLI_RUT_CLIENTE\n" +
+                 "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                 "JOIN comunas  ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA\n"+
+                 "where VTA_FECHA_VENTA BETWEEN '"+fecha1+"' AND '"+fecha2+"' ";
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("PCK_ID_PACK");
+             Registros[1]=rs.getString("PCK_NOMBRE");
+             Registros[2]=rs.getString("VTA_FECHA_VENTA");
+             Registros[3]=rs.getString("CLI_NOMBRE");
+             Registros[4]=rs.getString("EST_DESCRIPCION");
+             Registros[5]=rs.getString("COM_DESCRIPCION");
+             
+             Modelo.addRow(Registros);  
+         }
+         
+         ventas_realizada_infoclientes.setModel (Modelo); 
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());  
+     }
+   
+ }
+ public void limpiarCajaInforCliente(){
+     desde_informe_cliente.setCalendar(null);
+     hasta_informe_cliente.setCalendar(null);
+     txtrut_informes_infoclientes.setText("");
+     
+ }
+ public void PDFimformesClientes(){
+ try {
+         FileOutputStream archivo;
+         File file= new File("src/pdf/Informe Clientes.pdf");
+         archivo = new FileOutputStream(file);
+         Document doc = new Document();
+         PdfWriter.getInstance(doc,archivo);
+         doc.open();
+         
+         Paragraph cli =new Paragraph();
+         cli.add(Chunk.NEWLINE);
+         cli.add("                                                  Informe Clientes"+"\n\n");
+         doc.add(cli);
+ 
+         PdfPTable tablapro = new PdfPTable(6);
+         tablapro.setWidthPercentage(100);
+         tablapro .getDefaultCell().setBorder(1);
+         float[] Columnapro =new float[]{10f,10f,10f,10f,10f,10f};
+         tablapro .setWidths(Columnapro);
+         tablapro .setHorizontalAlignment(Element.ALIGN_LEFT);
+         PdfPCell pro1 = new PdfPCell(new Phrase("Codigo Pack"));
+         PdfPCell pro2 = new PdfPCell(new Phrase("Pack"));
+         PdfPCell pro3 = new PdfPCell(new Phrase("Cliente"));
+         PdfPCell pro4 = new PdfPCell(new Phrase("Fecha pedido"));
+         PdfPCell pro5 = new PdfPCell(new Phrase("Comuna"));
+         PdfPCell pro6 = new PdfPCell(new Phrase("Estado"));
+        
+         tablapro.addCell(pro1);
+         tablapro.addCell(pro2);
+         tablapro.addCell(pro3);
+         tablapro.addCell(pro4);
+         tablapro.addCell(pro5);
+         tablapro.addCell(pro6);
+
+         
+         for (int i = 0; i < ventas_realizada_infoclientes.getRowCount(); i++) {
+        String Codigo_Pack =ventas_realizada_infoclientes.getValueAt(i,0).toString();
+        String Pack =ventas_realizada_infoclientes.getValueAt(i,1).toString();
+        String Cliente =ventas_realizada_infoclientes.getValueAt(i,2).toString();
+        String Fecha_pedido =ventas_realizada_infoclientes.getValueAt(i,3).toString();
+        String Comuna =ventas_realizada_infoclientes.getValueAt(i,4).toString();
+        String Estado =ventas_realizada_infoclientes.getValueAt(i,5).toString();
+        
+        
+        tablapro.addCell(Codigo_Pack);
+        tablapro.addCell(Pack);
+        tablapro.addCell(Cliente);
+        tablapro.addCell(Fecha_pedido);
+        tablapro.addCell(Comuna);
+        tablapro.addCell(Estado);
+
+         }
+         doc.add(tablapro);
+         
+         
+         
+         
+         
+         
+         doc.close();
+         archivo.close();
+         
+         
+         
+     } catch (Exception e) {
+     
+     }      
+ }
+ 
+//REVISION DE FACTURASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ 
+ public void FiltrarDatosPorNumeroFactura(String valor){
+    
+     String[] titulos={"ID Factura","Rut Proveedor","Razon Social","Numero Factura","Fecha","subtotal","iva","total"};
+      String[] registros =new String[8];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *, factura.proveedor_PRO_RUT_PROVEEDOR\n" +
+                 "from factura\n" +
+                 "JOIN proveedor ON proveedor.PRO_RUT_PROVEEDOR=factura.proveedor_PRO_RUT_PROVEEDOR\n" +
+                 "WHERE FAC_NUMERO like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("FAC_ID_FACTURA");
+             registros[1]=rs.getString("proveedor_PRO_RUT_PROVEEDOR"); 
+             registros[2]=rs.getString("PRO_RAZON");
+             registros[3]=rs.getString("FAC_NUMERO");
+             registros[4]=rs.getString("FAC_FECHA_FACTURA");
+             registros[5]=rs.getString("FAC_SUBTOTAL");
+             registros[6]=rs.getString("FAC_IVA");
+             registros[7]=rs.getString("FAC_TOTAL");
+             modelo.addRow(registros);
+             
+         }
+         
+          facturas_compras_inventariadas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     }
+       
+ }
+ public void FiltrarDatosPorRut(String valor){
+    
+     
+     String[] titulos={"ID Factura","Rut Proveedor","Razon Social","Numero Factura","Fecha","subtotal","iva","total"};
+      String[] registros =new String[8];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *, factura.proveedor_PRO_RUT_PROVEEDOR\n" +
+                 "from factura\n" +
+                 "JOIN proveedor ON proveedor.PRO_RUT_PROVEEDOR=factura.proveedor_PRO_RUT_PROVEEDOR\n" +
+                 "WHERE proveedor_PRO_RUT_PROVEEDOR like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("FAC_ID_FACTURA");
+             registros[1]=rs.getString("proveedor_PRO_RUT_PROVEEDOR"); 
+             registros[2]=rs.getString("PRO_RAZON");
+             registros[3]=rs.getString("FAC_NUMERO");
+             registros[4]=rs.getString("FAC_FECHA_FACTURA");
+             registros[5]=rs.getString("FAC_SUBTOTAL");
+             registros[6]=rs.getString("FAC_IVA");
+             registros[7]=rs.getString("FAC_TOTAL");
+             modelo.addRow(registros);
+             
+         }
+         
+          facturas_compras_inventariadas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     }
+ }
+ public void FiltrarDatosPorFecha(String valor){
+     
+     String[] titulos={"ID Factura","Rut Proveedor","Razon Social","Numero Factura","Fecha","subtotal","iva","total"};
+      String[] registros =new String[8];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *, factura.proveedor_PRO_RUT_PROVEEDOR\n" +
+                 "from factura\n" +
+                 "JOIN proveedor ON proveedor.PRO_RUT_PROVEEDOR=factura.proveedor_PRO_RUT_PROVEEDOR\n" +
+                 "WHERE FAC_FECHA_FACTURA like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("FAC_ID_FACTURA");
+             registros[1]=rs.getString("proveedor_PRO_RUT_PROVEEDOR"); 
+             registros[2]=rs.getString("PRO_RAZON");
+             registros[3]=rs.getString("FAC_NUMERO");
+             registros[4]=rs.getString("FAC_FECHA_FACTURA");
+              registros[5]=rs.getString("FAC_SUBTOTAL");
+             registros[6]=rs.getString("FAC_IVA");
+             registros[7]=rs.getString("FAC_TOTAL");
+             modelo.addRow(registros);
+             
+         }
+         
+          facturas_compras_inventariadas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     } 
+ }
+ public void limpiarCajasRevision(){
+     txtnfactura_compras_revision.setText("");
+     txtfrecepcion_compras_revision.setText("");
+     txtrut_compras_revision.setText("");
+     
+ }
+ public void mostrarDatoDetalle(String valor){
+      String[] Titulos={"idFactura","factura","codigo","articulo","unidades","subtotal","iva","total"};
+     String[] Registros= new String[8];
+     DefaultTableModel Modelo=new DefaultTableModel (null,Titulos);
+     
+     String SQL ="SELECT *,factura.FAC_ID_FACTURA, facturadetalle.ARTICULO_ART_ID_ARTICULO\n" +
+                  "FROM `factura`\n" +
+                  "JOIN facturadetalle ON factura.FAC_ID_FACTURA=facturadetalle.FAC_ID_FACTURA\n" +
+             "JOIN articulo ON articulo.ART_ID_ARTICULO=facturadetalle.ARTICULO_ART_ID_ARTICULO\n" +
+              "WHERE FAC_NUMERO like '%"+valor+"%'";
+     
+     try {
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while (rs.next()){
+             
+             Registros[0]=rs.getString("FAC_ID_FACTURA");
+             Registros[1]=rs.getString("FAC_NUMERO");
+             Registros[2]=rs.getString("ARTICULO_ART_ID_ARTICULO");
+             Registros[3]=rs.getString("ART_DESCRIPCION");
+             Registros[4]=rs.getString("DET_CANTIDAD");
+             Registros[5]=rs.getString("DET_SUBTOTAL");
+             Registros[6]=rs.getString("DET_IVA");
+             Registros[7]=rs.getString("DET_TOTAL");
+             
+             Modelo.addRow(Registros);
+             
+         }
+         
+       detalle_factura_compras_revision.setModel (Modelo);
+         
+     }catch (Exception e){
+         JOptionPane.showMessageDialog(null,"Error al mostrar datos"+e.getMessage());
+     
+     
+         
+     }
+ }   
+ public void mostrarDatoFactura(){
+    
+     String[] titulos={"ID Factura","Rut Proveedor","Razon Social","Numero Factura","Fecha","subtotal","iva","total"};
+      String[] registros =new String[8];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *, factura.proveedor_PRO_RUT_PROVEEDOR\n" +
+                 "from factura\n" +
+                 "JOIN proveedor ON proveedor.PRO_RUT_PROVEEDOR=factura.proveedor_PRO_RUT_PROVEEDOR";
+
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("FAC_ID_FACTURA");
+             registros[1]=rs.getString("proveedor_PRO_RUT_PROVEEDOR"); 
+             registros[2]=rs.getString("PRO_RAZON");
+             registros[3]=rs.getString("FAC_NUMERO");
+             registros[4]=rs.getString("FAC_FECHA_FACTURA");
+             registros[5]=rs.getString("FAC_SUBTOTAL");
+             registros[6]=rs.getString("FAC_IVA");
+             registros[7]=rs.getString("FAC_TOTAL");
+             modelo.addRow(registros);
+             
+         }
+         
+          facturas_compras_inventariadas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     }
+       
+ }
+ 
+//INFORMES DEVSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ public void filtarDatosPorRutDevolucion(String valor){
+     String[] titulos={"numero pedido","pack","destinatario","fecha de entrega","comuna","hora de entrega","estado","rut cliente"};
+      String[] registros =new String[8];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA\n" +
+                "FROM venta \n" +
+                "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                "JOIN comunas  ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA\n"+
+                "WHERE cliente_CLI_RUT_CLIENTE like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("VTA_ID_VENTA");
+             registros[1]=rs.getString("PCK_ID_PACK"); 
+             registros[2]=rs.getString("VTA_NOMBRE_DESTINATARIO");
+             registros[3]=rs.getString("VTA_FECHA_ENTREGA");
+             registros[4]=rs.getString("Comunas_COM_ID_COMUNA");
+             registros[5]=rs.getString("VTA_HORA_ENTREGA_INICIAL");
+             registros[6]=rs.getString("ESTADOS_VENTA_EST_ID_ESTADO");
+             registros[7]=rs.getString("cliente_CLI_RUT_CLIENTE");
+             modelo.addRow(registros);
+             
+         }
+         
+         devoluciones_y_cambios.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     } 
+ }
+ public void mostrarDatosPorRutDevolucion(){
+     String[] titulos={"numero pedido","pack","destinatario","fecha de entrega","comuna","hora de entrega","estado","rut cliente"};
+      String[] registros =new String[8];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA\n" +
+                "FROM venta\n" +
+                "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                "JOIN comunas ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("VTA_ID_VENTA");
+             registros[1]=rs.getString("PCK_ID_PACK"); 
+             registros[2]=rs.getString("VTA_NOMBRE_DESTINATARIO");
+             registros[3]=rs.getString("VTA_FECHA_ENTREGA");
+             registros[4]=rs.getString("COM_DESCRIPCION");
+             registros[5]=rs.getString("VTA_HORA_ENTREGA_INICIAL");
+             registros[6]=rs.getString("EST_DESCRIPCION");
+             registros[7]=rs.getString("cliente_CLI_RUT_CLIENTE");
+             modelo.addRow(registros);
+             
+         }
+         
+         devoluciones_y_cambios.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     } 
+ }
+ public void filtrarDatosPorFechaDevolucion(String fecha1, String fecha2){
+     
+      String[] titulos={"numero pedido","pack","destinatario","fecha de entrega","comuna","hora de entrega","estado","rut cliente"};
+      String[] registros =new String[8];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *,venta.ESTADOS_VENTA_EST_ID_ESTADO,venta.Comunas_COM_ID_COMUNA\n" +
+                "FROM venta \n" +
+                "JOIN estados_venta ON estados_venta.EST_ID_ESTADO=venta.ESTADOS_VENTA_EST_ID_ESTADO\n" +
+                "JOIN comunas  ON comunas.COM_ID_COMUNA=venta.Comunas_COM_ID_COMUNA\n"+
+                "where VTA_FECHA_ENTREGA BETWEEN '"+fecha1+"' AND '"+fecha2+"' ";
+     
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("VTA_ID_VENTA");
+             registros[1]=rs.getString("PCK_ID_PACK"); 
+             registros[2]=rs.getString("VTA_NOMBRE_DESTINATARIO");
+             registros[3]=rs.getString("VTA_FECHA_ENTREGA");
+             registros[4]=rs.getString("Comunas_COM_ID_COMUNA");
+              registros[5]=rs.getString("VTA_HORA_ENTREGA_INICIAL");
+             registros[6]=rs.getString("ESTADOS_VENTA_EST_ID_ESTADO");
+             registros[7]=rs.getString("cliente_CLI_RUT_CLIENTE");
+             modelo.addRow(registros);
+             
+         }
+         
+         devoluciones_y_cambios.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     }  
+     
+   
+ }
+ public void limpiarCajasDevolucion(){
+     desde_dev_y_cambios.setCalendar(null);
+     hasta_dev_y_cambios.setCalendar(null);
+     txtrut_informes_infodevycambios.setText("");
+     
+ }
+ public void PDFimformesDevolucion(){
+ try {
+         FileOutputStream archivo;
+         File file= new File("src/pdf/Informe Devoluciones.pdf");
+         archivo = new FileOutputStream(file);
+         Document doc = new Document();
+         PdfWriter.getInstance(doc,archivo);
+         doc.open();
+         
+         Paragraph cli =new Paragraph();
+         cli.add(Chunk.NEWLINE);
+         cli.add("                                                  Informe Devolucion y Cambios"+"\n\n");
+         doc.add(cli);
+ 
+         PdfPTable tablapro = new PdfPTable(8);
+         tablapro.setWidthPercentage(100);
+         tablapro .getDefaultCell().setBorder(1);
+         float[] Columnapro =new float[]{10f,10f,10f,10f,10f,10f,10f,10f};
+         tablapro .setWidths(Columnapro);
+         tablapro .setHorizontalAlignment(Element.ALIGN_LEFT);
+         PdfPCell pro1 = new PdfPCell(new Phrase("Registro Ventas"));
+         PdfPCell pro2 = new PdfPCell(new Phrase("Pack"));
+         PdfPCell pro3 = new PdfPCell(new Phrase("Destinatario"));
+         PdfPCell pro4 = new PdfPCell(new Phrase("Fecha Entrega"));
+         PdfPCell pro5 = new PdfPCell(new Phrase("Comuna"));
+         PdfPCell pro6 = new PdfPCell(new Phrase("Hora de Entrega"));
+         PdfPCell pro7 = new PdfPCell(new Phrase("Estado"));
+         PdfPCell pro8 = new PdfPCell(new Phrase("Rut Cliente"));
+
+         tablapro.addCell(pro1);
+         tablapro.addCell(pro2);
+         tablapro.addCell(pro3);
+         tablapro.addCell(pro4);
+         tablapro.addCell(pro5);
+         tablapro.addCell(pro6);
+         tablapro.addCell(pro7);
+         tablapro.addCell(pro8);
+         
+         for (int i = 0; i < devoluciones_y_cambios.getRowCount(); i++) {
+        String IdVenta =devoluciones_y_cambios.getValueAt(i,0).toString();
+        String Pack =devoluciones_y_cambios.getValueAt(i,1).toString();
+        String Destinatario =devoluciones_y_cambios.getValueAt(i,2).toString();
+        String FechaEntrega =devoluciones_y_cambios.getValueAt(i,3).toString();
+        String Comuna =devoluciones_y_cambios.getValueAt(i,4).toString();
+        String hora  =devoluciones_y_cambios.getValueAt(i,5).toString();
+        String Estado =devoluciones_y_cambios.getValueAt(i,6).toString();
+        String Rut =devoluciones_y_cambios.getValueAt(i,7).toString();
+        
+        tablapro.addCell(IdVenta);
+        tablapro.addCell(Pack);
+        tablapro.addCell(Destinatario);
+        tablapro.addCell(FechaEntrega);
+        tablapro.addCell(Comuna);
+        tablapro.addCell(hora);
+        tablapro.addCell(Estado);
+        tablapro.addCell(Rut);
+
+         }
+         doc.add(tablapro);
+         
+         
+         
+         
+         
+         
+         doc.close();
+         archivo.close();
+         
+         
+         
+     } catch (Exception e) {
+     
+     }      
+ }
+ 
+//INFORME VENTASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ 
+ public void filtrarDatosPorRutVentas(String valor){
+     String[] titulos={"numero de pedido","rut cliente","nombre cliente","fecha de compra","fecha de entrega","pack comprado","monto pagado"};
+      String[] registros =new String[7];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *FROM venta WHERE cliente_CLI_RUT_CLIENTE like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("VTA_ID_VENTA");
+             registros[1]=rs.getString("cliente_CLI_RUT_CLIENTE"); 
+             registros[2]=rs.getString("VTA_NOMBRE_CLIENTE");
+             registros[3]=rs.getString("VTA_FECHA_VENTA");
+             registros[4]=rs.getString("VTA_FECHA_ENTREGA");
+             registros[5]=rs.getString("PCK_ID_PACK");
+             registros[6]=rs.getString("VTA_TOTAL");
+             
+             modelo.addRow(registros);
+             
+         }
+         
+         detalleventarealizada_infoventas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     } 
+ }
+ public void mostrarDatosPorRutVentas(){
+     String[] titulos={"numero de pedido","rut cliente","nombre cliente","fecha de compra","fecha de entrega","pack comprado","monto pagado"};
+      String[] registros =new String[7];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *FROM venta";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("VTA_ID_VENTA");
+             registros[1]=rs.getString("cliente_CLI_RUT_CLIENTE"); 
+             registros[2]=rs.getString("VTA_NOMBRE_CLIENTE");
+             registros[3]=rs.getString("VTA_FECHA_VENTA");
+             registros[4]=rs.getString("VTA_FECHA_ENTREGA");
+             registros[5]=rs.getString("PCK_ID_PACK");
+             registros[6]=rs.getString("VTA_TOTAL");
+             
+             modelo.addRow(registros);
+             
+         }
+         
+         detalleventarealizada_infoventas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     } 
+ }
+ public void FiltrarPorFechaVentas(String fecha1, String fecha2){
+       String[] titulos={"numero de pedido","rut cliente","nombre cliente","fecha de compra","fecha de entrega","pack comprado","monto pagado"};
+      String[] registros =new String[7];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT * \n" +
+                 "FROM `venta`\n" +
+                 "where VTA_FECHA_VENTA BETWEEN '"+fecha1+"' AND '"+fecha2+"' ";
+     
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("VTA_ID_VENTA");
+             registros[1]=rs.getString("cliente_CLI_RUT_CLIENTE"); 
+             registros[2]=rs.getString("VTA_NOMBRE_CLIENTE");
+             registros[3]=rs.getString("VTA_FECHA_VENTA");
+             registros[4]=rs.getString("VTA_FECHA_ENTREGA");
+             registros[5]=rs.getString("PCK_ID_PACK");
+             registros[6]=rs.getString("VTA_TOTAL");
+             
+             modelo.addRow(registros);
+             
+         }
+         
+         detalleventarealizada_infoventas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     }  
+ }
+ public void mostrarPorFechaVentas(){
+       String[] titulos={"numero de pedido","rut cliente","nombre cliente","fecha de compra","fecha de entrega","pack comprado","monto pagado"};
+      String[] registros =new String[7];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT * \n" +
+                 "FROM `venta`";
+     
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("VTA_ID_VENTA");
+             registros[1]=rs.getString("cliente_CLI_RUT_CLIENTE"); 
+             registros[2]=rs.getString("VTA_NOMBRE_CLIENTE");
+             registros[3]=rs.getString("VTA_FECHA_VENTA");
+             registros[4]=rs.getString("VTA_FECHA_ENTREGA");
+             registros[5]=rs.getString("PCK_ID_PACK");
+             registros[6]=rs.getString("VTA_TOTAL");
+             
+             modelo.addRow(registros);
+             
+         }
+         
+         detalleventarealizada_infoventas.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     }  
+ }
+ public void limpiarCajasInformaVentas(){
+     jDateChooser2.setCalendar(null);
+     jDateChooser1.setCalendar(null);
+     txtbuscarut_informes_infoventas.setText("");
+      
+ }
+ public void PdfinformesVentas(){
+    try {
+         FileOutputStream archivo;
+         File file= new File("src/pdf/Informe de venta.pdf");
+         archivo = new FileOutputStream(file);
+         Document doc = new Document();
+         PdfWriter.getInstance(doc,archivo);
+         doc.open();
+         
+         Paragraph cli =new Paragraph();
+         cli.add(Chunk.NEWLINE);
+         cli.add("                                                  Informe De Ventas"+"\n\n");
+         doc.add(cli);
+ 
+         PdfPTable tablapro = new PdfPTable(7);
+         tablapro.setWidthPercentage(100);
+         tablapro .getDefaultCell().setBorder(1);
+         float[] Columnapro =new float[]{10f,10f,10f,10f,10f,10f,10f};
+         tablapro .setWidths(Columnapro);
+         tablapro .setHorizontalAlignment(Element.ALIGN_LEFT);
+         PdfPCell pro1 = new PdfPCell(new Phrase("Numero de pedido"));
+         PdfPCell pro2 = new PdfPCell(new Phrase("Rut cliente"));
+         PdfPCell pro3 = new PdfPCell(new Phrase("Nombre cliente"));
+         PdfPCell pro4 = new PdfPCell(new Phrase("fecha de compra"));
+         PdfPCell pro5 = new PdfPCell(new Phrase("fecha de entrega"));
+         PdfPCell pro6 = new PdfPCell(new Phrase("pack comprado"));
+         PdfPCell pro7 = new PdfPCell(new Phrase("monto pagado"));
+        
+         tablapro.addCell(pro1);
+         tablapro.addCell(pro2);
+         tablapro.addCell(pro3);
+         tablapro.addCell(pro4);
+         tablapro.addCell(pro5);
+         tablapro.addCell(pro6);
+         tablapro.addCell(pro7);
+         
+         
+         for (int i = 0; i < detalleventarealizada_infoventas.getRowCount(); i++) {
+        String IdVenta =detalleventarealizada_infoventas.getValueAt(i,0).toString();
+        String Rut =detalleventarealizada_infoventas.getValueAt(i,1).toString();
+        String Nombre =detalleventarealizada_infoventas.getValueAt(i,2).toString();
+        String fechaCompra =detalleventarealizada_infoventas.getValueAt(i,3).toString();
+        String FechaEntrega =detalleventarealizada_infoventas.getValueAt(i,4).toString();
+        String Pack  =detalleventarealizada_infoventas.getValueAt(i,5).toString();
+        String Monto =detalleventarealizada_infoventas.getValueAt(i,6).toString();
+      
+        
+        tablapro.addCell(IdVenta);
+        tablapro.addCell(Rut);
+        tablapro.addCell(Nombre);
+        tablapro.addCell(fechaCompra);
+        tablapro.addCell(FechaEntrega);
+        tablapro.addCell(Pack);
+        tablapro.addCell(Monto);
+      
+
+         }
+         doc.add(tablapro);
+         
+         
+         
+         
+         
+         
+         doc.close();
+         archivo.close();
+         
+         
+         
+     } catch (Exception e) {
+     
+     }       
+ }
+ 
+//INFORME INVENTARIOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+ 
+ public void filtrarDatosPorcategoria(String valor){
+     
+      String[] titulos={"codigo articulo","nombre articulo","stock","fecha de vencimiento","categoria","marca"};
+      String[] registros =new String[6];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *,articulo.ID_CATEGORIA\n" +
+                 "FROM articulo\n" +
+                 "JOIN categoria_articulo ON categoria_articulo.ID_Categoria=articulo.ID_CATEGORIA\n"+
+                 " WHERE CAT_DESCRIPCION like '%"+valor+"%' ";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("ART_ID_ARTICULO");
+             registros[1]=rs.getString("ART_DESCRIPCION"); 
+             registros[2]=rs.getString("ART_UNIDADES");
+             registros[3]=rs.getString("ART_FECHA_VENCIMIENTO");
+             registros[4]=rs.getString("CAT_DESCRIPCION");
+             registros[5]=rs.getString("ART_MARCAS");
+            
+             modelo.addRow(registros);
+             
+         }
+         
+         detalle_inventario.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     } 
+     
+     
+ }
+ public void mostrarDatosPorcategoria(){
+     
+      String[] titulos={"codigo articulo","nombre articulo","stock","fecha de vencimiento","categoria","marca"};
+      String[] registros =new String[6];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *,articulo.ID_CATEGORIA\n" +
+                 "FROM articulo\n" +
+                 "JOIN categoria_articulo ON categoria_articulo.ID_Categoria=articulo.ID_CATEGORIA";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("ART_ID_ARTICULO");
+             registros[1]=rs.getString("ART_DESCRIPCION"); 
+             registros[2]=rs.getString("ART_UNIDADES");
+             registros[3]=rs.getString("ART_FECHA_VENCIMIENTO");
+             registros[4]=rs.getString("CAT_DESCRIPCION");
+             registros[5]=rs.getString("ART_MARCAS");
+            
+             modelo.addRow(registros);
+             
+         }
+         
+         detalle_inventario.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     } 
+     
+     
+ }
+ public void filtrarPorFechaInventario(String fecha1, String fecha2){
+   String[] titulos={"codigo articulo","nombre articulo","stock","fecha de vencimiento","categoria","marca"};
+      String[] registros =new String[6];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *,articulo.ID_CATEGORIA\n" +
+                 "FROM articulo\n" +
+                 "JOIN categoria_articulo ON categoria_articulo.ID_Categoria=articulo.ID_CATEGORIA\n"+
+                 " WHERE ART_FECHA_VENCIMIENTO BETWEEN '"+fecha1+"' AND '"+fecha2+"'";
+     
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("ART_ID_ARTICULO");
+             registros[1]=rs.getString("ART_DESCRIPCION"); 
+             registros[2]=rs.getString("ART_UNIDADES");
+             registros[3]=rs.getString("ART_FECHA_VENCIMIENTO");
+             registros[4]=rs.getString("CAT_DESCRIPCION");
+             registros[5]=rs.getString("ART_MARCAS");
+            
+             modelo.addRow(registros);
+             
+         }
+         
+         detalle_inventario.setModel(modelo);
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     }    
+     
+     
+     
+     
+ }
+ public void limpiarCajasInventario(){
+   txtInformeDesde.setCalendar(null);
+    txtInformeHasta.setCalendar(null);
+     articulo_info_inventario.setText("");
+     
+ }
+ public void pdfInformeInventario(){
+   try {
+         FileOutputStream archivo;
+         File file= new File("src/pdf/inventario.pdf");
+         archivo = new FileOutputStream(file);
+         Document doc = new Document();
+         PdfWriter.getInstance(doc,archivo);
+         doc.open();
+         
+         Paragraph cli =new Paragraph();
+         cli.add(Chunk.NEWLINE);
+         cli.add("                                                  Informe Inventario"+"\n\n");
+         doc.add(cli);
+ 
+         PdfPTable tablapro = new PdfPTable(6);
+         tablapro.setWidthPercentage(100);
+         tablapro .getDefaultCell().setBorder(1);
+         float[] Columnapro =new float[]{10f,10f,10f,10f,10f,10f};
+         tablapro .setWidths(Columnapro);
+         tablapro .setHorizontalAlignment(Element.ALIGN_LEFT);
+         PdfPCell pro1 = new PdfPCell(new Phrase("codigo articulo"));
+         PdfPCell pro2 = new PdfPCell(new Phrase("nombre articulo"));
+         PdfPCell pro3 = new PdfPCell(new Phrase("stock"));
+         PdfPCell pro4 = new PdfPCell(new Phrase("fecha de vencimiento"));
+         PdfPCell pro5 = new PdfPCell(new Phrase("categoria"));
+         PdfPCell pro6 = new PdfPCell(new Phrase("marca"));
+       
+         tablapro.addCell(pro1);
+         tablapro.addCell(pro2);
+         tablapro.addCell(pro3);
+         tablapro.addCell(pro4);
+         tablapro.addCell(pro5);
+         tablapro.addCell(pro6);
+         
+         for (int i = 0; i < detalle_inventario.getRowCount(); i++) {
+        String idArticulo =detalle_inventario.getValueAt(i,0).toString();
+        String nombreArticulo =detalle_inventario.getValueAt(i,1).toString();
+        String stock =detalle_inventario.getValueAt(i,2).toString();
+        String FechaVencimiento =detalle_inventario.getValueAt(i,3).toString();
+        String categoria =detalle_inventario.getValueAt(i,4).toString();
+        String marca  =detalle_inventario.getValueAt(i,5).toString();
+      
+        
+        tablapro.addCell(idArticulo);
+        tablapro.addCell(nombreArticulo);
+        tablapro.addCell(stock);
+        tablapro.addCell(FechaVencimiento);
+        tablapro.addCell(categoria);
+        tablapro.addCell(marca);
+        
+         }
+         doc.add(tablapro);
+         
+         
+         
+         
+         
+         
+         doc.close();
+         archivo.close();
+         
+         
+         
+     } catch (Exception e) {
+     
+     }   
+     
+     
+     
+     
+     
+ }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -2395,11 +3734,6 @@ try {
         jLabel100 = new javax.swing.JLabel();
         jLabel101 = new javax.swing.JLabel();
         txtnpedido_compras_solicitudes = new javax.swing.JTextField();
-        txtfpedido_compras_solicitudes = new javax.swing.JTextField();
-        jScrollPane22 = new javax.swing.JScrollPane();
-        listaarticulos_compras_solicitudes = new javax.swing.JList<>();
-        jScrollPane23 = new javax.swing.JScrollPane();
-        listaarticuloselegidos_compras_solicitudes = new javax.swing.JList<>();
         jLabel102 = new javax.swing.JLabel();
         txtunidades_compras_solicitudes = new javax.swing.JTextField();
         btncancelar_compras_solicitudes = new javax.swing.JButton();
@@ -2408,10 +3742,19 @@ try {
         btnmenos_compras_solicitudes = new javax.swing.JButton();
         jScrollPane28 = new javax.swing.JScrollPane();
         proveedores_compra = new javax.swing.JTable();
+        jScrollPane24 = new javax.swing.JScrollPane();
+        listaCompras_solicitudes = new javax.swing.JTable();
+        jScrollPane25 = new javax.swing.JScrollPane();
+        listapedido_compras_solicitudes = new javax.swing.JTable();
+        datepedido_compras_solicitudes = new com.toedter.calendar.JDateChooser();
+        jLabel5 = new javax.swing.JLabel();
+        txtPrecio_compras_solicitudes = new javax.swing.JTextField();
+        jLabel154 = new javax.swing.JLabel();
+        txtcantidad_compras_solicitudes = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
         jScrollPane26 = new javax.swing.JScrollPane();
         detalle_pedidos_realizados = new javax.swing.JTable();
         btneditar_compras_solicitudes = new javax.swing.JButton();
-        btnver_compras_solicitudes = new javax.swing.JButton();
         btngeneraroc_compras_solicitudes = new javax.swing.JButton();
         jLabel51 = new javax.swing.JLabel();
         jLabel130 = new javax.swing.JLabel();
@@ -2459,10 +3802,7 @@ try {
         txtnfactura_compras_revision = new javax.swing.JTextField();
         txtrut_compras_revision = new javax.swing.JTextField();
         txtfrecepcion_compras_revision = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        cboxrazonsocial_compras_revision = new javax.swing.JComboBox<>();
         btncancelar_compras_revision = new javax.swing.JButton();
-        btnbuscar_compras_revision = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         btnver_compras_revision = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
@@ -2471,8 +3811,6 @@ try {
         informes = new javax.swing.JPanel();
         panel_informes = new javax.swing.JTabbedPane();
         informe_ventas = new javax.swing.JPanel();
-        txtbusqueda_informes_infoventas = new javax.swing.JFormattedTextField();
-        btnbuscar_informes_infoventas = new javax.swing.JButton();
         jScrollPane19 = new javax.swing.JScrollPane();
         detalleventarealizada_infoventas = new javax.swing.JTable();
         jLabel93 = new javax.swing.JLabel();
@@ -2485,6 +3823,7 @@ try {
         jLabel88 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jButton4 = new javax.swing.JButton();
         btndescargar_informes_infoventas = new javax.swing.JButton();
         jLabel134 = new javax.swing.JLabel();
         informe_inventarios = new javax.swing.JPanel();
@@ -2495,12 +3834,11 @@ try {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        cboxcategoria_informes_infoinventarios = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
-        cboxrut_informes_infoinventarios = new javax.swing.JComboBox<>();
         btnbuscar_informes_infoinventarios = new javax.swing.JButton();
-        jDateChooser3 = new com.toedter.calendar.JDateChooser();
-        jDateChooser4 = new com.toedter.calendar.JDateChooser();
+        txtInformeDesde = new com.toedter.calendar.JDateChooser();
+        txtInformeHasta = new com.toedter.calendar.JDateChooser();
+        articulo_info_inventario = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         btndescargar_informes_infoinventarios = new javax.swing.JButton();
@@ -2512,15 +3850,14 @@ try {
         jPanel24 = new javax.swing.JPanel();
         jLabel94 = new javax.swing.JLabel();
         jLabel95 = new javax.swing.JLabel();
-        txtdesde_informes_infoclientes = new javax.swing.JTextField();
         jLabel96 = new javax.swing.JLabel();
-        txthasta_informes_infoclientes = new javax.swing.JTextField();
         jLabel97 = new javax.swing.JLabel();
         txtrut_informes_infoclientes = new javax.swing.JTextField();
         btnbuscarinfo_informes_infoclientes = new javax.swing.JButton();
+        hasta_informe_cliente = new com.toedter.calendar.JDateChooser();
+        desde_informe_cliente = new com.toedter.calendar.JDateChooser();
+        jButton5 = new javax.swing.JButton();
         jLabel92 = new javax.swing.JLabel();
-        btnbuscar_informes_clientes = new javax.swing.JButton();
-        txtbusqueda_informes_infoclientes = new javax.swing.JTextField();
         informe_dev_y_cambios = new javax.swing.JPanel();
         jScrollPane12 = new javax.swing.JScrollPane();
         devoluciones_y_cambios = new javax.swing.JTable();
@@ -2528,18 +3865,17 @@ try {
         jLabel57 = new javax.swing.JLabel();
         jPanel17 = new javax.swing.JPanel();
         jLabel53 = new javax.swing.JLabel();
-        txtdesde_informes_infodevycambios = new javax.swing.JTextField();
         jLabel54 = new javax.swing.JLabel();
-        txthasta_informes_infodevycambios = new javax.swing.JTextField();
         jLabel55 = new javax.swing.JLabel();
         txtrut_informes_infodevycambios = new javax.swing.JTextField();
         jLabel56 = new javax.swing.JLabel();
         btnbuscarinfo_informes_infodevycambios = new javax.swing.JButton();
+        hasta_dev_y_cambios = new com.toedter.calendar.JDateChooser();
+        desde_dev_y_cambios = new com.toedter.calendar.JDateChooser();
+        jButton3 = new javax.swing.JButton();
         jLabel98 = new javax.swing.JLabel();
-        btnbuscar_informes_infodevycambios = new javax.swing.JButton();
         jLabel135 = new javax.swing.JLabel();
         jLabel136 = new javax.swing.JLabel();
-        txtbusqueda_informes_infodevycambios = new javax.swing.JTextField();
         jLabel39 = new javax.swing.JLabel();
         maestros = new javax.swing.JPanel();
         panel_maestros = new javax.swing.JTabbedPane();
@@ -2983,7 +4319,7 @@ try {
                 .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cboxEstados_ventas_venta, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3048,7 +4384,7 @@ try {
                 .addGroup(ventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel137, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel117))
-                .addContainerGap(1074, Short.MAX_VALUE))
+                .addContainerGap(1113, Short.MAX_VALUE))
         );
         ventaLayout.setVerticalGroup(
             ventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3179,7 +4515,7 @@ try {
                     .addComponent(txtfpago_ventas_confirmacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 283, Short.MAX_VALUE)
                         .addComponent(btncancelar_ventas_confirmacion)
                         .addGap(96, 96, 96)
                         .addComponent(btnconfirmar_ventas_confirmacion)
@@ -3231,7 +4567,7 @@ try {
                             .addComponent(txttransaccion_ventas_confirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btncancelar_ventas_confirmacion)
                             .addComponent(btnconfirmar_ventas_confirmacion))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jLabel27.setText("Ventas pendientes de pago");
@@ -3267,7 +4603,7 @@ try {
                         .addComponent(btnbuscar_ventas_confirmacion)
                         .addGap(18, 18, 18)
                         .addComponent(txtbusqueda_ventas_confirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(731, Short.MAX_VALUE))
+                .addContainerGap(770, Short.MAX_VALUE))
             .addComponent(jScrollPane7)
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -3332,7 +4668,7 @@ try {
                 .addComponent(jLabel151)
                 .addGap(18, 18, 18)
                 .addComponent(txtbusqueda_ventas_llistadestino, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(308, Short.MAX_VALUE))
+                .addContainerGap(347, Short.MAX_VALUE))
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3363,7 +4699,7 @@ try {
             .addGroup(lista_destinoLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel63)
-                .addContainerGap(1169, Short.MAX_VALUE))
+                .addContainerGap(1208, Short.MAX_VALUE))
             .addComponent(jPanel21, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lista_destinoLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -3550,9 +4886,7 @@ try {
 
         jLabel101.setText("Fecha Pedido");
 
-        jScrollPane22.setViewportView(listaarticulos_compras_solicitudes);
-
-        jScrollPane23.setViewportView(listaarticuloselegidos_compras_solicitudes);
+        txtnpedido_compras_solicitudes.setFocusable(false);
 
         jLabel102.setText("Unidades");
 
@@ -3564,10 +4898,25 @@ try {
         });
 
         btnguardar_compras_solicitudes.setText("Guardar");
+        btnguardar_compras_solicitudes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardar_compras_solicitudesActionPerformed(evt);
+            }
+        });
 
         btnmas_compras_solicitudes.setText(">");
+        btnmas_compras_solicitudes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmas_compras_solicitudesActionPerformed(evt);
+            }
+        });
 
         btnmenos_compras_solicitudes.setText("<");
+        btnmenos_compras_solicitudes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmenos_compras_solicitudesActionPerformed(evt);
+            }
+        });
 
         proveedores_compra.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -3579,6 +4928,50 @@ try {
         ));
         jScrollPane28.setViewportView(proveedores_compra);
 
+        listaCompras_solicitudes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Articulo", "Articulo", "Cantidad", "Precio"
+            }
+        ));
+        jScrollPane24.setViewportView(listaCompras_solicitudes);
+
+        listapedido_compras_solicitudes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane25.setViewportView(listapedido_compras_solicitudes);
+
+        datepedido_compras_solicitudes.setDateFormatString("yyyy-MM-dd");
+
+        jLabel5.setText("Precio");
+
+        jLabel154.setText("Cantidad de articulos:");
+
+        txtcantidad_compras_solicitudes.setFocusable(false);
+
+        jButton2.setText("Agregar Articulos");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout solicitudes_pedido1Layout = new javax.swing.GroupLayout(solicitudes_pedido1);
         solicitudes_pedido1.setLayout(solicitudes_pedido1Layout);
         solicitudes_pedido1Layout.setHorizontalGroup(
@@ -3586,41 +4979,50 @@ try {
             .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
                 .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel100))
-                    .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane22, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(txtnpedido_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtfpedido_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
+                        .addComponent(jScrollPane25, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnmenos_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                                .addComponent(jLabel102)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtunidades_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnmas_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
+                                        .addComponent(jLabel102)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtunidades_compras_solicitudes))
+                                    .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtPrecio_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(44, 44, 44)
+                                .addComponent(btnmas_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane24, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel100)
+                        .addGap(50, 50, 50)
+                        .addComponent(txtnpedido_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(datepedido_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel154)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtcantidad_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(jButton2)
+                        .addGap(29, 29, 29)
                         .addComponent(btnguardar_compras_solicitudes)
-                        .addGap(39, 39, 39)
-                        .addComponent(btncancelar_compras_solicitudes)
-                        .addGap(121, 121, 121))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btncancelar_compras_solicitudes))
                     .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addComponent(jScrollPane28, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(100, Short.MAX_VALUE))))
+                        .addGap(49, 49, 49)
+                        .addComponent(jScrollPane28, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         solicitudes_pedido1Layout.setVerticalGroup(
             solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3628,63 +5030,72 @@ try {
                 .addContainerGap()
                 .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                        .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtnpedido_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel100)
-                            .addComponent(jLabel101)
-                            .addComponent(txtfpedido_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                                    .addGap(7, 7, 7)
-                                    .addComponent(btnmas_compras_solicitudes)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtunidades_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel102))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnmenos_compras_solicitudes))
-                                .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
-                                    .addGap(16, 16, 16)
-                                    .addComponent(jScrollPane22, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, solicitudes_pedido1Layout.createSequentialGroup()
+                        .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtnpedido_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel100)
+                                .addComponent(jLabel101))
+                            .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel154)
+                                    .addComponent(txtcantidad_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(datepedido_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 15, Short.MAX_VALUE)
+                        .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, solicitudes_pedido1Layout.createSequentialGroup()
+                                .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(txtPrecio_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, solicitudes_pedido1Layout.createSequentialGroup()
-                        .addGap(0, 10, Short.MAX_VALUE)
+                                .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel102)
+                                    .addComponent(txtunidades_compras_solicitudes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(37, 37, 37))
+                            .addComponent(jScrollPane25, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane24, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
+                                .addComponent(btnmas_compras_solicitudes)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnmenos_compras_solicitudes))))
+                    .addGroup(solicitudes_pedido1Layout.createSequentialGroup()
+                        .addGap(0, 13, Short.MAX_VALUE)
                         .addComponent(jScrollPane28, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21)
+                        .addGap(18, 18, 18)
                         .addGroup(solicitudes_pedido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnguardar_compras_solicitudes)
-                            .addComponent(btncancelar_compras_solicitudes))))
+                            .addComponent(btncancelar_compras_solicitudes)
+                            .addComponent(jButton2))))
                 .addContainerGap())
         );
 
         detalle_pedidos_realizados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Numero Pedido", "Fecha Pedido", "Cantidades Articulo", "Seleccion"
+
             }
         ));
+        detalle_pedidos_realizados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                detalle_pedidos_realizadosMouseClicked(evt);
+            }
+        });
         jScrollPane26.setViewportView(detalle_pedidos_realizados);
 
         btneditar_compras_solicitudes.setText("Editar");
-
-        btnver_compras_solicitudes.setText("Ver");
+        btneditar_compras_solicitudes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneditar_compras_solicitudesActionPerformed(evt);
+            }
+        });
 
         btngeneraroc_compras_solicitudes.setText("Generar O/C");
+        btngeneraroc_compras_solicitudes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btngeneraroc_compras_solicitudesActionPerformed(evt);
+            }
+        });
 
         jLabel51.setText("Solicitudes de Pedido");
 
@@ -3699,9 +5110,7 @@ try {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, solicitudes_pedidoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btneditar_compras_solicitudes)
-                .addGap(18, 18, 18)
-                .addComponent(btnver_compras_solicitudes)
-                .addGap(18, 18, 18)
+                .addGap(89, 89, 89)
                 .addComponent(btngeneraroc_compras_solicitudes)
                 .addGap(84, 84, 84))
             .addGroup(solicitudes_pedidoLayout.createSequentialGroup()
@@ -3727,7 +5136,6 @@ try {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(solicitudes_pedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btneditar_compras_solicitudes)
-                    .addComponent(btnver_compras_solicitudes)
                     .addComponent(btngeneraroc_compras_solicitudes))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -3763,7 +5171,7 @@ try {
                     .addComponent(jLabel104, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(122, 122, 122)
                 .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtnfactura_compras_registro, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
+                    .addComponent(txtnfactura_compras_registro, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
                     .addComponent(txtrut_compras_registro))
                 .addGap(133, 133, 133)
                 .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3848,7 +5256,7 @@ try {
                         .addComponent(jLabel107)
                         .addGap(18, 18, 18)
                         .addComponent(txtcodigo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
                         .addComponent(jLabel108)
                         .addGap(18, 18, 18)
                         .addComponent(cboxarticulo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4014,42 +5422,59 @@ try {
                 txtnfactura_compras_revisionActionPerformed(evt);
             }
         });
+        txtnfactura_compras_revision.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtnfactura_compras_revisionKeyReleased(evt);
+            }
+        });
 
-        jLabel15.setText("Proveedor Razon Social");
+        txtrut_compras_revision.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtrut_compras_revisionActionPerformed(evt);
+            }
+        });
+        txtrut_compras_revision.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtrut_compras_revisionKeyReleased(evt);
+            }
+        });
 
-        cboxrazonsocial_compras_revision.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        txtfrecepcion_compras_revision.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtfrecepcion_compras_revisionKeyReleased(evt);
+            }
+        });
 
         btncancelar_compras_revision.setText("Cancelar");
-
-        btnbuscar_compras_revision.setText("Buscar");
+        btncancelar_compras_revision.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelar_compras_revisionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(41, 41, 41)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtnfactura_compras_revision)
-                    .addComponent(txtrut_compras_revision)
-                    .addComponent(txtfrecepcion_compras_revision, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(169, 169, 169)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(103, 103, 103)
-                        .addComponent(cboxrazonsocial_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel12)
+                        .addGap(41, 41, 41)
+                        .addComponent(txtnfactura_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79)
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtrut_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(158, 158, 158)
+                        .addComponent(jLabel14)
+                        .addGap(41, 41, 41)
+                        .addComponent(txtfrecepcion_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(231, 231, 231)
-                        .addComponent(btncancelar_compras_revision)
-                        .addGap(148, 148, 148)
-                        .addComponent(btnbuscar_compras_revision)))
-                .addContainerGap(367, Short.MAX_VALUE))
+                        .addGap(522, 522, 522)
+                        .addComponent(btncancelar_compras_revision)))
+                .addContainerGap(302, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4058,19 +5483,13 @@ try {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtnfactura_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
-                    .addComponent(jLabel15)
-                    .addComponent(cboxrazonsocial_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtrut_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
-                    .addComponent(txtrut_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(txtfrecepcion_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btncancelar_compras_revision)
-                    .addComponent(btnbuscar_compras_revision))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(txtfrecepcion_compras_revision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addComponent(btncancelar_compras_revision)
+                .addGap(25, 25, 25))
         );
 
         jLabel9.setText("Detalle de Factura");
@@ -4157,8 +5576,6 @@ try {
 
         informe_ventas.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 255, 204), 3, true));
 
-        btnbuscar_informes_infoventas.setText("Buscar");
-
         detalleventarealizada_infoventas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -4184,14 +5601,36 @@ try {
         jPanel23.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         btnbuscarrango_informes_infoventas.setText("Buscar");
+        btnbuscarrango_informes_infoventas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuscarrango_informes_infoventasActionPerformed(evt);
+            }
+        });
 
         jLabel91.setText("Busqueda por Rut");
+
+        txtbuscarut_informes_infoventas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtbuscarut_informes_infoventasKeyReleased(evt);
+            }
+        });
 
         jLabel89.setText("Desde");
 
         jLabel90.setText("Hasta");
 
         jLabel88.setText("Busqueda Rango Fecha Ventas");
+
+        jDateChooser1.setDateFormatString("yyyy-MM-dd");
+
+        jDateChooser2.setDateFormatString("yyyy-MM-dd");
+
+        jButton4.setText("Cancelar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
@@ -4209,16 +5648,19 @@ try {
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtbuscarut_informes_infoventas, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
                     .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(184, 277, Short.MAX_VALUE)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                        .addComponent(btnbuscarrango_informes_infoventas)
-                        .addGap(252, 252, 252))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                    .addGroup(jPanel23Layout.createSequentialGroup()
+                        .addGap(184, 316, Short.MAX_VALUE)
                         .addComponent(jLabel90)
                         .addGap(44, 44, 44)
                         .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(410, 410, 410))))
+                        .addGap(119, 119, 119)
+                        .addComponent(btnbuscarrango_informes_infoventas)
+                        .addGap(220, 220, 220))
+                    .addGroup(jPanel23Layout.createSequentialGroup()
+                        .addGap(173, 173, 173)
+                        .addComponent(jButton4)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel23Layout.createSequentialGroup()
                 .addGap(227, 227, 227)
                 .addComponent(jLabel88)
@@ -4228,22 +5670,33 @@ try {
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
                 .addComponent(jLabel88)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel89)
-                        .addComponent(jLabel90))
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel91)
-                    .addComponent(txtbuscarut_informes_infoventas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnbuscarrango_informes_infoventas))
-                .addGap(19, 19, 19))
+                    .addGroup(jPanel23Layout.createSequentialGroup()
+                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel89)
+                                .addComponent(jLabel90))
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel91)
+                            .addComponent(txtbuscarut_informes_infoventas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21))
+                    .addGroup(jPanel23Layout.createSequentialGroup()
+                        .addComponent(btnbuscarrango_informes_infoventas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton4)
+                        .addContainerGap())))
         );
 
         btndescargar_informes_infoventas.setText("Descargar");
+        btndescargar_informes_infoventas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndescargar_informes_infoventasActionPerformed(evt);
+            }
+        });
 
         jLabel134.setText("Busqueda de Ventas");
 
@@ -4262,11 +5715,7 @@ try {
                 .addGroup(informe_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, informe_ventasLayout.createSequentialGroup()
                         .addComponent(jLabel93, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(341, 341, 341)
-                        .addComponent(btnbuscar_informes_infoventas)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtbusqueda_informes_infoventas, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(127, 127, 127))
+                        .addGap(636, 636, 636))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, informe_ventasLayout.createSequentialGroup()
                         .addComponent(btndescargar_informes_infoventas)
                         .addGap(122, 122, 122))))
@@ -4279,10 +5728,7 @@ try {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(informe_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel93)
-                    .addComponent(txtbusqueda_informes_infoventas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnbuscar_informes_infoventas))
+                .addComponent(jLabel93)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -4324,13 +5770,29 @@ try {
 
         jLabel4.setText("Categoria articulo");
 
-        cboxcategoria_informes_infoinventarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel6.setText("Rut proveedor");
-
-        cboxrut_informes_infoinventarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         btnbuscar_informes_infoinventarios.setText("Buscar");
+        btnbuscar_informes_infoinventarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuscar_informes_infoinventariosActionPerformed(evt);
+            }
+        });
+
+        txtInformeDesde.setDateFormatString("yyyy-MM-dd");
+
+        txtInformeHasta.setDateFormatString("yyyy-MM-dd");
+
+        articulo_info_inventario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                articulo_info_inventarioKeyReleased(evt);
+            }
+        });
+
+        jButton6.setText("Cancelar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -4342,58 +5804,46 @@ try {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jDateChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(txtInformeDesde, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(94, 94, 94)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cboxcategoria_informes_infoinventarios, 0, 118, Short.MAX_VALUE)
-                    .addComponent(cboxrut_informes_infoinventarios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 580, Short.MAX_VALUE)
+                        .addGap(83, 83, 83))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(articulo_info_inventario, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(txtInformeHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(107, 107, 107)
                 .addComponent(btnbuscar_informes_infoinventarios)
-                .addGap(33, 33, 33))
+                .addGap(531, 531, 531))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(3, 3, 3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtInformeHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtInformeDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)))
+                    .addComponent(btnbuscar_informes_infoinventarios))
+                .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(cboxcategoria_informes_infoinventarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnbuscar_informes_infoinventarios))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(22, 22, 22)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(56, 56, 56)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(cboxrut_informes_infoinventarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 5, Short.MAX_VALUE)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addComponent(articulo_info_inventario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         jLabel7.setText("Detalle de Inventario");
@@ -4401,13 +5851,18 @@ try {
         jLabel8.setText("Informe Inventario");
 
         btndescargar_informes_infoinventarios.setText("Descargar");
+        btndescargar_informes_infoinventarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndescargar_informes_infoinventariosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout informe_inventariosLayout = new javax.swing.GroupLayout(informe_inventarios);
         informe_inventarios.setLayout(informe_inventariosLayout);
         informe_inventariosLayout.setHorizontalGroup(
             informe_inventariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1289, Short.MAX_VALUE)
             .addGroup(informe_inventariosLayout.createSequentialGroup()
                 .addGroup(informe_inventariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(informe_inventariosLayout.createSequentialGroup()
@@ -4446,22 +5901,18 @@ try {
         jLabel99.setText("Detalle Ventas Realizadas");
 
         btndescargas_informes_infoclientes.setText("Descargar");
+        btndescargas_informes_infoclientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndescargas_informes_infoclientesActionPerformed(evt);
+            }
+        });
 
         ventas_realizada_infoclientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "Codigo Pack", "Pack", "Fecha Registro", "Cliente", "Estado", "Comuna"
+
             }
         ));
         jScrollPane21.setViewportView(ventas_realizada_infoclientes);
@@ -4476,7 +5927,29 @@ try {
 
         jLabel97.setText("Busqueda por Rut ");
 
+        txtrut_informes_infoclientes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtrut_informes_infoclientesKeyReleased(evt);
+            }
+        });
+
         btnbuscarinfo_informes_infoclientes.setText("Buscar");
+        btnbuscarinfo_informes_infoclientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuscarinfo_informes_infoclientesActionPerformed(evt);
+            }
+        });
+
+        hasta_informe_cliente.setDateFormatString("yyyy-MM-dd");
+
+        desde_informe_cliente.setDateFormatString("yyyy-MM-dd");
+
+        jButton5.setText("Cancelar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
         jPanel24.setLayout(jPanel24Layout);
@@ -4485,51 +5958,53 @@ try {
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addGap(330, 330, 330)
                 .addComponent(jLabel94)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(781, Short.MAX_VALUE))
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
+                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel97, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel95, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel24Layout.createSequentialGroup()
-                        .addComponent(jLabel95, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(95, 95, 95)
-                        .addComponent(txtdesde_informes_infoclientes, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
-                    .addGroup(jPanel24Layout.createSequentialGroup()
-                        .addComponent(jLabel97, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtrut_informes_infoclientes)))
+                    .addComponent(txtrut_informes_infoclientes, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                    .addComponent(desde_informe_cliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel24Layout.createSequentialGroup()
                         .addGap(252, 252, 252)
                         .addComponent(jLabel96)
-                        .addGap(70, 70, 70)
-                        .addComponent(txthasta_informes_infoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel24Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnbuscarinfo_informes_infoclientes)
-                        .addGap(155, 155, 155))))
+                        .addGap(35, 35, 35)
+                        .addComponent(hasta_informe_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(148, 148, 148)
+                        .addComponent(btnbuscarinfo_informes_infoclientes))
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addGap(182, 182, 182)
+                        .addComponent(jButton5)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel24Layout.setVerticalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addGap(8, 8, 8)
-                .addComponent(jLabel94)
-                .addGap(1, 1, 1)
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel95, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtdesde_informes_infoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel96)
-                    .addComponent(txthasta_informes_infoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnbuscarinfo_informes_infoclientes)
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addComponent(jLabel94)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel95, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel96))
+                            .addComponent(hasta_informe_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(desde_informe_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel97)
                     .addComponent(txtrut_informes_infoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnbuscarinfo_informes_infoclientes))
+                    .addComponent(jButton5))
                 .addGap(14, 14, 14))
         );
 
         jLabel92.setText("Busqueda deVentas");
-
-        btnbuscar_informes_clientes.setText("Buscar");
 
         javax.swing.GroupLayout informe_clientesLayout = new javax.swing.GroupLayout(informe_clientes);
         informe_clientes.setLayout(informe_clientesLayout);
@@ -4538,11 +6013,7 @@ try {
             .addGroup(informe_clientesLayout.createSequentialGroup()
                 .addGap(302, 302, 302)
                 .addComponent(jLabel99, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 375, Short.MAX_VALUE)
-                .addComponent(btnbuscar_informes_clientes)
-                .addGap(18, 18, 18)
-                .addComponent(txtbusqueda_informes_infoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75))
+                .addGap(75, 720, Short.MAX_VALUE))
             .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(informe_clientesLayout.createSequentialGroup()
                 .addGap(43, 43, 43)
@@ -4562,11 +6033,7 @@ try {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(informe_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel99, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(informe_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnbuscar_informes_clientes)
-                        .addComponent(txtbusqueda_informes_infoclientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel99, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19)
                 .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -4580,16 +6047,7 @@ try {
 
         devoluciones_y_cambios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Registro venta", "Pack", "Destinatario", "Fecha entrega", "Comuna", "Hora entrega", "Devolución ", "Ver"
@@ -4620,19 +6078,7 @@ try {
 
         jLabel53.setText("Desde:");
 
-        txtdesde_informes_infodevycambios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtdesde_informes_infodevycambiosActionPerformed(evt);
-            }
-        });
-
         jLabel54.setText("Hasta:");
-
-        txthasta_informes_infodevycambios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txthasta_informes_infodevycambiosActionPerformed(evt);
-            }
-        });
 
         jLabel55.setText("Busqueda por rango de fecha:");
 
@@ -4641,10 +6087,31 @@ try {
                 txtrut_informes_infodevycambiosActionPerformed(evt);
             }
         });
+        txtrut_informes_infodevycambios.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtrut_informes_infodevycambiosKeyReleased(evt);
+            }
+        });
 
         jLabel56.setText("Busqueda por rut:");
 
         btnbuscarinfo_informes_infodevycambios.setText("Buscar");
+        btnbuscarinfo_informes_infodevycambios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuscarinfo_informes_infodevycambiosActionPerformed(evt);
+            }
+        });
+
+        hasta_dev_y_cambios.setDateFormatString("yyyy-MM-dd");
+
+        desde_dev_y_cambios.setDateFormatString("yyyy-MM-dd");
+
+        jButton3.setText("Cancelar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -4657,18 +6124,21 @@ try {
                     .addComponent(jLabel53))
                 .addGap(58, 58, 58)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtdesde_informes_infodevycambios, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                    .addComponent(txtrut_informes_infodevycambios))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtrut_informes_infodevycambios, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(desde_dev_y_cambios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel54)
-                        .addGap(39, 39, 39)
-                        .addComponent(txthasta_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(333, 333, 333))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(hasta_dev_y_cambios, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(94, 94, 94)
                         .addComponent(btnbuscarinfo_informes_infodevycambios)
-                        .addGap(150, 150, 150))))
+                        .addGap(195, 195, 195))
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGap(154, 154, 154)
+                        .addComponent(jButton3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addGap(423, 423, 423)
                 .addComponent(jLabel55)
@@ -4677,28 +6147,29 @@ try {
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel55)
+                .addGap(1, 1, 1)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel17Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel55))
-                    .addGroup(jPanel17Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel53)
-                            .addComponent(txtdesde_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel54)
-                            .addComponent(txthasta_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel53)
+                                .addComponent(jLabel54)
+                                .addComponent(btnbuscarinfo_informes_infodevycambios))
+                            .addComponent(desde_dev_y_cambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel56)
-                            .addComponent(txtrut_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnbuscarinfo_informes_infodevycambios))))
-                .addContainerGap(19, Short.MAX_VALUE))
+                            .addComponent(txtrut_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addComponent(hasta_dev_y_cambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel98.setText("Busqueda de Ventas");
-
-        btnbuscar_informes_infodevycambios.setText("Buscar");
 
         javax.swing.GroupLayout informe_dev_y_cambiosLayout = new javax.swing.GroupLayout(informe_dev_y_cambios);
         informe_dev_y_cambios.setLayout(informe_dev_y_cambiosLayout);
@@ -4714,18 +6185,11 @@ try {
                     .addGroup(informe_dev_y_cambiosLayout.createSequentialGroup()
                         .addGap(397, 397, 397)
                         .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(124, 124, 124)
-                        .addComponent(btnbuscar_informes_infodevycambios)
-                        .addGroup(informe_dev_y_cambiosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(informe_dev_y_cambiosLayout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel136)
-                                .addGap(35, 35, 35)
-                                .addComponent(jLabel135))
-                            .addGroup(informe_dev_y_cambiosLayout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(txtbusqueda_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(250, Short.MAX_VALUE))
+                        .addGap(235, 235, 235)
+                        .addComponent(jLabel136)
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel135)))
+                .addContainerGap(352, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, informe_dev_y_cambiosLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btndescargar_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4738,15 +6202,12 @@ try {
                 .addComponent(jLabel98)
                 .addGroup(informe_dev_y_cambiosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(informe_dev_y_cambiosLayout.createSequentialGroup()
-                        .addGap(119, 119, 119)
-                        .addGroup(informe_dev_y_cambiosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel57)
-                            .addComponent(btnbuscar_informes_infodevycambios)
-                            .addComponent(txtbusqueda_informes_infodevycambios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(124, 124, 124)
+                        .addComponent(jLabel57))
                     .addGroup(informe_dev_y_cambiosLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addGroup(informe_dev_y_cambiosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel135)
                             .addComponent(jLabel136, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -4896,7 +6357,7 @@ try {
                             .addComponent(txtrut_maestros_clientes, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                             .addComponent(txtcel_maestros_clientes)
                             .addComponent(txtfnac_maestros_clientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(439, Short.MAX_VALUE))
+                        .addContainerGap(478, Short.MAX_VALUE))
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addComponent(jLabel68, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -4979,7 +6440,7 @@ try {
                         .addComponent(jLabel48)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtBuscarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(361, Short.MAX_VALUE))
+                .addContainerGap(400, Short.MAX_VALUE))
         );
         clientesLayout.setVerticalGroup(
             clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5083,7 +6544,7 @@ try {
                         .addGroup(proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtemail_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbactdes_maestros_proveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addContainerGap(228, Short.MAX_VALUE))
         );
         proveedores1Layout.setVerticalGroup(
             proveedores1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5293,7 +6754,7 @@ try {
                     .addComponent(cboxcategoria_maestros_articulos1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(articulos1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                         .addComponent(btncancelar_maestros_articulos)
                         .addGap(72, 72, 72)
                         .addComponent(btnguardar_maestros_articulos)
@@ -5301,7 +6762,7 @@ try {
                     .addGroup(articulos1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(txtcategoria_maestros_articulos1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(398, Short.MAX_VALUE))))
+                        .addContainerGap(437, Short.MAX_VALUE))))
         );
         articulos1Layout.setVerticalGroup(
             articulos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5402,7 +6863,7 @@ try {
             .addGroup(articulosLayout.createSequentialGroup()
                 .addGap(471, 471, 471)
                 .addComponent(jLabel139)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 341, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 380, Short.MAX_VALUE)
                 .addComponent(jLabel144)
                 .addGap(50, 50, 50)
                 .addComponent(txtbusqueda_maestros_articulos, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -5566,10 +7027,10 @@ try {
                         .addComponent(jLabel155)
                         .addGap(18, 18, 18)
                         .addComponent(cboxEstados_maestros_packs, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(169, Short.MAX_VALUE))
+                        .addContainerGap(208, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -5735,7 +7196,7 @@ try {
                         .addComponent(jLabel142)
                         .addGap(58, 58, 58)
                         .addComponent(cbrrss_maestros_rrss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 348, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 387, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btncancelar_maestros_rrss)
@@ -5921,7 +7382,7 @@ try {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 46, Short.MAX_VALUE)
+            .addGap(0, 66, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5984,9 +7445,9 @@ try {
                     .addGroup(categoria_articulosLayout.createSequentialGroup()
                         .addGap(526, 526, 526)
                         .addComponent(btneditar_maestros_catarticulos)
-                        .addGap(431, 607, Short.MAX_VALUE))
+                        .addGap(431, 626, Short.MAX_VALUE))
                     .addGroup(categoria_articulosLayout.createSequentialGroup()
-                        .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 1191, Short.MAX_VALUE)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 1210, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -6057,7 +7518,7 @@ try {
                         .addGap(44, 44, 44)
                         .addComponent(cbcomuna_maestros_comunas, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel44))
-                .addContainerGap(436, Short.MAX_VALUE))
+                .addContainerGap(475, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnguardar_maestros_comunas)
@@ -6157,7 +7618,7 @@ try {
                     .addGroup(comunasLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(375, Short.MAX_VALUE))
+                .addContainerGap(414, Short.MAX_VALUE))
             .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane14)
         );
@@ -6224,7 +7685,7 @@ try {
                         .addComponent(cbbanco_maestros_bancos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(38, 38, 38))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
-                        .addContainerGap(787, Short.MAX_VALUE)
+                        .addContainerGap(826, Short.MAX_VALUE)
                         .addComponent(btnguardar_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(87, 87, 87)
                 .addComponent(btncancelar_maestros_bancos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -6375,7 +7836,7 @@ try {
                 .addComponent(cbcategoria_maestros_catventas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                .addContainerGap(814, Short.MAX_VALUE)
+                .addContainerGap(853, Short.MAX_VALUE)
                 .addComponent(btnguardar_maestros_catventas, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(74, 74, 74)
                 .addComponent(btncancelar_maestros_catventas, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -6437,7 +7898,7 @@ try {
             .addComponent(jPanel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane10)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, categoria_ventasLayout.createSequentialGroup()
-                .addContainerGap(313, Short.MAX_VALUE)
+                .addContainerGap(352, Short.MAX_VALUE)
                 .addGroup(categoria_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, categoria_ventasLayout.createSequentialGroup()
                         .addComponent(jLabel42)
@@ -6605,7 +8066,7 @@ try {
                 .addComponent(jLabel84)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtbusqueda_maestros_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 654, Short.MAX_VALUE))
+                .addGap(0, 693, Short.MAX_VALUE))
             .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane11)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, usuariosLayout.createSequentialGroup()
@@ -6731,6 +8192,11 @@ llenar_comboEstado();
     }//GEN-LAST:event_btnconfirmar_ventas_confirmacionActionPerformed
 
     private void btnver_compras_revisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnver_compras_revisionActionPerformed
+ String factura;
+    
+        int fila=facturas_compras_inventariadas.getSelectedRow(); 
+      factura=facturas_compras_inventariadas.getValueAt(fila,3).toString();
+      mostrarDatoDetalle(factura);
         // TODO add your handling code here:
     }//GEN-LAST:event_btnver_compras_revisionActionPerformed
 
@@ -6815,15 +8281,8 @@ filtrarDatos(txtbusqueda_maestros_usuarios.getText());
         // TODO add your handling code here:
     }//GEN-LAST:event_txtrut_informes_infodevycambiosActionPerformed
 
-    private void txthasta_informes_infodevycambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txthasta_informes_infodevycambiosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txthasta_informes_infodevycambiosActionPerformed
-
-    private void txtdesde_informes_infodevycambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdesde_informes_infodevycambiosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtdesde_informes_infodevycambiosActionPerformed
-
     private void btndescargar_informes_infodevycambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndescargar_informes_infodevycambiosActionPerformed
+PDFimformesDevolucion();
         // TODO add your handling code here:
     }//GEN-LAST:event_btndescargar_informes_infodevycambiosActionPerformed
 
@@ -7592,6 +9051,183 @@ limpiar_TablaPacks();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnmas_compras_solicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmas_compras_solicitudesActionPerformed
+DefaultTableModel modelo;
+      String id_articulo,articulo,cantidad,precio;
+      
+        int fila=listapedido_compras_solicitudes.getSelectedRow();
+        
+        try {
+            
+            modelo=(DefaultTableModel)listapedido_compras_solicitudes.getModel();
+            id_articulo=listapedido_compras_solicitudes.getValueAt(fila,0).toString();
+            articulo=listapedido_compras_solicitudes.getValueAt(fila,1).toString();
+            cantidad= txtunidades_compras_solicitudes.getText();
+            precio=txtPrecio_compras_solicitudes.getText();
+           
+            
+            
+          modelo=(DefaultTableModel)listaCompras_solicitudes.getModel();
+          
+          String filamodelo[]={id_articulo,articulo,cantidad,precio};
+          
+          modelo.addRow(filamodelo);
+          
+        sumaCantidades();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Error al traspasar datos"+e.getMessage());
+        }
+  
+    }//GEN-LAST:event_btnmas_compras_solicitudesActionPerformed
+
+    private void btnguardar_compras_solicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_compras_solicitudesActionPerformed
+InsertarDatosCompras();
+insertarDatosHasArticuloSolPedidos();
+MostrarDatosSolPedidos();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnguardar_compras_solicitudesActionPerformed
+
+    private void detalle_pedidos_realizadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_detalle_pedidos_realizadosMouseClicked
+actualizarDatosClikerSolPedidos ();
+sumaCantidades();
+int filaSeleccionadoo= detalle_pedidos_realizados.rowAtPoint(evt.getPoint());
+try{
+
+Date date=(Date) new SimpleDateFormat("yyyy-MM-dd").parse((String)detalle_pedidos_realizados.getValueAt(filaSeleccionadoo,3));
+datepedido_compras_solicitudes.setDate(date);
+}catch(Exception e){
+    JOptionPane.showMessageDialog(null, "Error al editar la fecha "+e.getMessage());    
+}
+    }//GEN-LAST:event_detalle_pedidos_realizadosMouseClicked
+
+    private void btneditar_compras_solicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditar_compras_solicitudesActionPerformed
+actualizarDatosSolPedidos();
+MostrarDatosSolPedidos();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btneditar_compras_solicitudesActionPerformed
+
+    private void btnmenos_compras_solicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmenos_compras_solicitudesActionPerformed
+limpiar_TablaCompras();
+sumaCantidades();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnmenos_compras_solicitudesActionPerformed
+
+    private void txtnfactura_compras_revisionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnfactura_compras_revisionKeyReleased
+FiltrarDatosPorNumeroFactura(txtnfactura_compras_revision.getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtnfactura_compras_revisionKeyReleased
+
+    private void txtrut_compras_revisionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrut_compras_revisionKeyReleased
+FiltrarDatosPorRut(txtrut_compras_revision.getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtrut_compras_revisionKeyReleased
+
+    private void txtfrecepcion_compras_revisionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfrecepcion_compras_revisionKeyReleased
+FiltrarDatosPorFecha(txtfrecepcion_compras_revision.getText());
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtfrecepcion_compras_revisionKeyReleased
+
+    private void txtrut_compras_revisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtrut_compras_revisionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtrut_compras_revisionActionPerformed
+
+    private void btncancelar_compras_revisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelar_compras_revisionActionPerformed
+limpiarCajasRevision();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelar_compras_revisionActionPerformed
+
+    private void txtrut_informes_infoclientesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrut_informes_infoclientesKeyReleased
+        BuscarDatosPack(txtrut_informes_infoclientes.getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtrut_informes_infoclientesKeyReleased
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+insertarDatosHasArticuloSolPedidosArticulos();
+MostrarDatosSolPedidos();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btngeneraroc_compras_solicitudesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngeneraroc_compras_solicitudesActionPerformed
+PDFSolicitudPedidos();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btngeneraroc_compras_solicitudesActionPerformed
+
+    private void btnbuscarinfo_informes_infodevycambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarinfo_informes_infodevycambiosActionPerformed
+filtrarDatosPorFechaDevolucion(((JTextField)desde_dev_y_cambios.getDateEditor().getUiComponent()).getText(),((JTextField)hasta_dev_y_cambios.getDateEditor().getUiComponent()).getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnbuscarinfo_informes_infodevycambiosActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+limpiarCajasDevolucion();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void txtrut_informes_infodevycambiosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrut_informes_infodevycambiosKeyReleased
+filtarDatosPorRutDevolucion(txtrut_informes_infodevycambios.getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtrut_informes_infodevycambiosKeyReleased
+
+    private void btnbuscarrango_informes_infoventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarrango_informes_infoventasActionPerformed
+FiltrarPorFechaVentas(((JTextField)jDateChooser2.getDateEditor().getUiComponent()).getText(),((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnbuscarrango_informes_infoventasActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+limpiarCajasInformaVentas();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void btndescargar_informes_infoventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndescargar_informes_infoventasActionPerformed
+PdfinformesVentas();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btndescargar_informes_infoventasActionPerformed
+
+    private void txtbuscarut_informes_infoventasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarut_informes_infoventasKeyReleased
+filtrarDatosPorRutVentas(txtbuscarut_informes_infoventas.getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtbuscarut_informes_infoventasKeyReleased
+
+    private void btnbuscar_informes_infoinventariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscar_informes_infoinventariosActionPerformed
+filtrarPorFechaInventario(((JTextField)txtInformeDesde.getDateEditor().getUiComponent()).getText(),((JTextField)txtInformeHasta.getDateEditor().getUiComponent()).getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnbuscar_informes_infoinventariosActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+ limpiarCajasInventario();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void btndescargar_informes_infoinventariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndescargar_informes_infoinventariosActionPerformed
+pdfInformeInventario();       
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btndescargar_informes_infoinventariosActionPerformed
+
+    private void articulo_info_inventarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_articulo_info_inventarioKeyReleased
+filtrarDatosPorcategoria(articulo_info_inventario.getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_articulo_info_inventarioKeyReleased
+
+    private void btnbuscarinfo_informes_infoclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarinfo_informes_infoclientesActionPerformed
+filtrarDatosPorFechaInforCliente(((JTextField)desde_informe_cliente.getDateEditor().getUiComponent()).getText(),((JTextField)hasta_informe_cliente.getDateEditor().getUiComponent()).getText());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnbuscarinfo_informes_infoclientesActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+
+limpiarCajaInforCliente();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void btndescargas_informes_infoclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndescargas_informes_infoclientesActionPerformed
+PDFimformesClientes();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btndescargas_informes_infoclientesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -7629,6 +9265,7 @@ limpiar_TablaPacks();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel RRSS;
+    private javax.swing.JTextField articulo_info_inventario;
     private javax.swing.JPanel articulos;
     private javax.swing.JPanel articulos1;
     private javax.swing.JTable articuloselegidos_maestros_packs;
@@ -7638,11 +9275,7 @@ limpiar_TablaPacks();
     private javax.swing.JButton btnGuardar_maestros_usuarios;
     private javax.swing.JButton btnactualizar_maestros_usuarios;
     private javax.swing.JButton btnagregar_compras_registro;
-    private javax.swing.JButton btnbuscar_compras_revision;
-    private javax.swing.JButton btnbuscar_informes_clientes;
-    private javax.swing.JButton btnbuscar_informes_infodevycambios;
     private javax.swing.JButton btnbuscar_informes_infoinventarios;
-    private javax.swing.JButton btnbuscar_informes_infoventas;
     private javax.swing.JButton btnbuscar_maestros_catventas;
     private javax.swing.JButton btnbuscar_maestros_packs;
     private javax.swing.JButton btnbuscar_ventas_confirmacion;
@@ -7707,7 +9340,6 @@ limpiar_TablaPacks();
     private javax.swing.JButton btnmenos_maestros_packs;
     private javax.swing.JButton btnventas_maestros_clientes;
     private javax.swing.JButton btnver_compras_revision;
-    private javax.swing.JButton btnver_compras_solicitudes;
     private javax.swing.JPanel categoria_articulos;
     private javax.swing.JPanel categoria_ventas;
     private javax.swing.JTable categoriaarticulos;
@@ -7724,15 +9356,12 @@ limpiar_TablaPacks();
     private javax.swing.JComboBox<String> cboxarticulo_compras_registro;
     private javax.swing.JComboBox<String> cboxatcdes_maestros_clientes;
     private javax.swing.JComboBox<String> cboxbanco_ventas_confirmacion;
-    private javax.swing.JComboBox<String> cboxcategoria_informes_infoinventarios;
     private javax.swing.JComboBox<String> cboxcategoria_maestros_articulos1;
     private javax.swing.JComboBox<String> cboxcomunas_ventas_venta;
     private javax.swing.JComboBox<String> cboxestado_ventas_adespacho;
     private javax.swing.JComboBox<String> cboxpacks_ventas_venta;
     private javax.swing.JComboBox<String> cboxproveedor_maestros_articulos;
     private javax.swing.JComboBox<String> cboxrazonsocial_compras_registro;
-    private javax.swing.JComboBox<String> cboxrazonsocial_compras_revision;
-    private javax.swing.JComboBox<String> cboxrut_informes_infoinventarios;
     private javax.swing.JComboBox<String> cbrrss_maestros_rrss;
     private javax.swing.JPanel clientes;
     private javax.swing.JPanel compras;
@@ -7740,6 +9369,9 @@ limpiar_TablaPacks();
     private javax.swing.JTable comunasregistradas;
     private javax.swing.JPanel confirmacion;
     private javax.swing.JPanel confirmacion_despacho;
+    private com.toedter.calendar.JDateChooser datepedido_compras_solicitudes;
+    private com.toedter.calendar.JDateChooser desde_dev_y_cambios;
+    private com.toedter.calendar.JDateChooser desde_informe_cliente;
     private javax.swing.JTable detalle_dev_cambios;
     private javax.swing.JTable detalle_factura_compras_registro;
     private javax.swing.JTable detalle_factura_compras_revision;
@@ -7748,17 +9380,22 @@ limpiar_TablaPacks();
     private javax.swing.JTable detalleventarealizada_infoventas;
     private javax.swing.JTable devoluciones_y_cambios;
     private javax.swing.JTable facturas_compras_inventariadas;
+    private com.toedter.calendar.JDateChooser hasta_dev_y_cambios;
+    private com.toedter.calendar.JDateChooser hasta_informe_cliente;
     private javax.swing.JPanel informe_clientes;
     private javax.swing.JPanel informe_dev_y_cambios;
     private javax.swing.JPanel informe_inventarios;
     private javax.swing.JPanel informe_ventas;
     private javax.swing.JPanel informes;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
-    private com.toedter.calendar.JDateChooser jDateChooser3;
-    private com.toedter.calendar.JDateChooser jDateChooser4;
     private com.toedter.calendar.JDateChooser jDfentrega_ventas_venta;
     private com.toedter.calendar.JDateChooser jDfventa_ventas_venta;
     private com.toedter.calendar.JDateChooser jDvencimiento_maestros_articulos;
@@ -7818,11 +9455,11 @@ limpiar_TablaPacks();
     private javax.swing.JLabel jLabel147;
     private javax.swing.JLabel jLabel148;
     private javax.swing.JLabel jLabel149;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel150;
     private javax.swing.JLabel jLabel151;
     private javax.swing.JLabel jLabel152;
     private javax.swing.JLabel jLabel153;
+    private javax.swing.JLabel jLabel154;
     private javax.swing.JLabel jLabel155;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -7861,6 +9498,7 @@ limpiar_TablaPacks();
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
@@ -7871,7 +9509,6 @@ limpiar_TablaPacks();
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel59;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
@@ -7951,8 +9588,8 @@ limpiar_TablaPacks();
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane20;
     private javax.swing.JScrollPane jScrollPane21;
-    private javax.swing.JScrollPane jScrollPane22;
-    private javax.swing.JScrollPane jScrollPane23;
+    private javax.swing.JScrollPane jScrollPane24;
+    private javax.swing.JScrollPane jScrollPane25;
     private javax.swing.JScrollPane jScrollPane26;
     private javax.swing.JScrollPane jScrollPane27;
     private javax.swing.JScrollPane jScrollPane28;
@@ -7965,13 +9602,13 @@ limpiar_TablaPacks();
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable listaCompras_solicitudes;
     private javax.swing.JPanel lista_destino;
     private javax.swing.JTable listaarticulos;
-    private javax.swing.JList<String> listaarticulos_compras_solicitudes;
     private javax.swing.JTable listaarticulos_maestros_packs;
-    private javax.swing.JList<String> listaarticuloselegidos_compras_solicitudes;
     private javax.swing.JTable listadeclientes_maestros;
     private javax.swing.JTable listadestino_despacho;
+    private javax.swing.JTable listapedido_compras_solicitudes;
     private javax.swing.JPanel maestros;
     private javax.swing.JPanel packs;
     private javax.swing.JTabbedPane panel_compras;
@@ -7992,12 +9629,12 @@ limpiar_TablaPacks();
     private javax.swing.JTable tabla_packs;
     private javax.swing.JTabbedPane tablas;
     private javax.swing.JTextField txtBuscarClientes;
+    private com.toedter.calendar.JDateChooser txtInformeDesde;
+    private com.toedter.calendar.JDateChooser txtInformeHasta;
+    private javax.swing.JTextField txtPrecio_compras_solicitudes;
     private javax.swing.JTextField txt_ncliente_maestros_clientes;
     private javax.swing.JTextField txtbanco_ventas_confirmacion;
     private javax.swing.JTextField txtbuscarut_informes_infoventas;
-    private javax.swing.JTextField txtbusqueda_informes_infoclientes;
-    private javax.swing.JTextField txtbusqueda_informes_infodevycambios;
-    private javax.swing.JFormattedTextField txtbusqueda_informes_infoventas;
     private javax.swing.JTextField txtbusqueda_maestros_articulos;
     private javax.swing.JTextField txtbusqueda_maestros_bancos;
     private javax.swing.JTextField txtbusqueda_maestros_catarticulos;
@@ -8010,14 +9647,13 @@ limpiar_TablaPacks();
     private javax.swing.JTextField txtbusqueda_ventas_confirmacion;
     private javax.swing.JTextField txtbusqueda_ventas_llistadestino;
     private javax.swing.JTextField txtcantidad_compras_registro;
+    private javax.swing.JTextField txtcantidad_compras_solicitudes;
     private javax.swing.JTextField txtcategoria_maestros_articulos1;
     private javax.swing.JTextField txtcategoria_maestros_catarticulos;
     private javax.swing.JTextField txtcategoria_maestros_catventas;
     private javax.swing.JTextField txtcel_maestros_clientes;
     private javax.swing.JTextField txtcodigo_compras_registro;
     private javax.swing.JTextField txtcontraseña_maestros_usuarios;
-    private javax.swing.JTextField txtdesde_informes_infoclientes;
-    private javax.swing.JTextField txtdesde_informes_infodevycambios;
     private javax.swing.JTextField txtdestinatario_ventas_venta;
     private javax.swing.JTextField txtdireccion_maestros_proveedores;
     private javax.swing.JTextField txtdireccion_ventas_venta;
@@ -8032,11 +9668,8 @@ limpiar_TablaPacks();
     private javax.swing.JTextField txtfono_maestros_proveedores;
     private javax.swing.JTextField txtfono_ventas_venta;
     private com.toedter.calendar.JDateChooser txtfpago_ventas_confirmacion;
-    private javax.swing.JTextField txtfpedido_compras_solicitudes;
     private javax.swing.JFormattedTextField txtfrecepcion_compras_registro;
     private javax.swing.JTextField txtfrecepcion_compras_revision;
-    private javax.swing.JTextField txthasta_informes_infoclientes;
-    private javax.swing.JTextField txthasta_informes_infodevycambios;
     private javax.swing.JTextField txthoraf_ventas_venta;
     private javax.swing.JTextField txthorai_ventas_venta;
     private javax.swing.JTextField txtmarcas_maestros_articulos;

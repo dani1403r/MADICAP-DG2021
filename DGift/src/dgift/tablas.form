@@ -1959,11 +1959,11 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="jLabel131" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="registro_compras1" min="-2" max="-2" attributes="0"/>
+                              <Component id="registro_compras1" min="-2" pref="101" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel132" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jPanel18" min="-2" pref="76" max="-2" attributes="0"/>
+                              <Component id="jPanel18" min="-2" pref="87" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel133" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -1997,20 +1997,41 @@
                                       <Component id="jLabel103" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel104" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
                                   </Group>
+                                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="txtrut_compras_registro" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtnfactura_compras_registro" min="-2" pref="163" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel106" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                          <Component id="cboxrazonsocial_compras_registro" min="-2" pref="150" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel105" min="-2" pref="96" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                                          <Component id="jdcfrecepcion_compras_registro" min="-2" pref="150" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                                   <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtnfactura_compras_registro" pref="337" max="32767" attributes="0"/>
-                                      <Component id="txtrut_compras_registro" max="32767" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="133" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel106" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel105" min="-2" pref="96" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="cboxrazonsocial_compras_registro" max="32767" attributes="0"/>
-                                      <Component id="txtfrecepcion_compras_registro" pref="150" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel156" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="txtsubtot_compras_registro_total" min="-2" pref="69" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="jLabel157" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="txtiva_compras_registro_total" min="-2" pref="69" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="jLabel158" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="txttotal_compras_registro_total" min="-2" pref="69" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="btnguardar_compras_registro" min="-2" max="-2" attributes="0"/>
@@ -2024,32 +2045,57 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel103" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="txtnfactura_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="txtfrecepcion_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel105" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="jLabel105" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="jLabel156" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txtsubtot_compras_registro_total" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Component id="jdcfrecepcion_compras_registro" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="17" max="32767" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="btncancelarfac_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="btnguardar_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel106" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="cboxrazonsocial_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="txtrut_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel104" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="jLabel104" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                                          <Component id="txtrut_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jLabel106" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="cboxrazonsocial_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="txtiva_compras_registro_total" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                                                      <Component id="jLabel157" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="txttotal_compras_registro_total" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jLabel158" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                           </Group>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -2081,19 +2127,15 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="txtrut_compras_registro">
                         </Component>
-                        <Component class="javax.swing.JFormattedTextField" name="txtfrecepcion_compras_registro">
-                        </Component>
                         <Component class="javax.swing.JComboBox" name="cboxrazonsocial_compras_registro">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                              </StringArray>
+                              <StringArray count="0"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cboxrazonsocial_compras_registroItemStateChanged"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                           </AuxValues>
@@ -2107,6 +2149,35 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardar_compras_registroActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="com.toedter.calendar.JDateChooser" name="jdcfrecepcion_compras_registro">
+                          <Properties>
+                            <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel156">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Subtotal"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel157">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="IVA"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel158">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Total"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="txtsubtot_compras_registro_total">
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="txtiva_compras_registro_total">
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="txttotal_compras_registro_total">
                         </Component>
                       </SubComponents>
                     </Container>
@@ -2120,12 +2191,13 @@
                         <Component class="javax.swing.JTable" name="detalle_factura_compras_registro">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="4" rowCount="4">
-                                <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                                <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                                <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                                <Column editable="true" title="Title 4" type="java.lang.Object"/>
-                              </Table>
+                              <Table columnCount="0" rowCount="0"/>
+                            </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="0"/>
+                            </Property>
+                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
                         </Component>
@@ -2145,32 +2217,39 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <Component id="jLabel107" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="txtcodigo_compras_registro" min="-2" pref="114" max="-2" attributes="0"/>
-                                          <EmptySpace pref="165" max="32767" attributes="0"/>
-                                          <Component id="jLabel108" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="cboxarticulo_compras_registro" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
-                                          <Component id="jLabel109" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="txtcantidad_compras_registro" min="-2" pref="114" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                                          <Component id="jLabel110" min="-2" pref="33" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="txtvalor_compras_registro" min="-2" pref="114" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+                                  <Component id="jLabel107" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="txtcodigo_compras_registro" min="-2" pref="114" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="jLabel108" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="cboxarticulo1_compras_registro" pref="151" max="32767" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jLabel109" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="txtcantidad_compras_registro" min="-2" pref="85" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jLabel6" min="-2" pref="61" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="txtsubtot_compras_registro" min="-2" pref="86" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="txtiva_compras_registro" min="-2" pref="83" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="jLabel110" min="-2" pref="40" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="txttotal_compras_registro" min="-2" pref="90" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="jLabel111" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="txtvencimiento_compras_registro" min="-2" pref="114" max="-2" attributes="0"/>
+                                          <Component id="jdarticulo1_compras_registro" min="-2" pref="103" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Group type="102" attributes="0">
                                           <Component id="btnagregar_compras_registro" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
                                           <Component id="btncancelardetal_compras_registro" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -2185,10 +2264,8 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel107" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel109" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="cboxarticulo_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="cboxarticulo1_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel108" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="txtcantidad_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="txtcodigo_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -2196,18 +2273,29 @@
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtvalor_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel110" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel111" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtvencimiento_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel111" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txttotal_compras_registro" alignment="1" max="32767" attributes="0"/>
+                                          <Component id="jLabel110" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtiva_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtsubtot_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtcantidad_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel109" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jdarticulo1_compras_registro" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="btnagregar_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btncancelardetal_compras_registro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="btncancelardetal_compras_registro" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnagregar_compras_registro" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -2220,17 +2308,15 @@
                             <Property name="text" type="java.lang.String" value="Cantidad"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JComboBox" name="cboxarticulo_compras_registro">
+                        <Component class="javax.swing.JComboBox" name="cboxarticulo1_compras_registro">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                              </StringArray>
+                              <StringArray count="0"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cboxarticulo1_compras_registroItemStateChanged"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                           </AuxValues>
@@ -2247,14 +2333,12 @@
                             <Property name="text" type="java.lang.String" value="Codigo"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="txtvalor_compras_registro">
+                        <Component class="javax.swing.JTextField" name="txttotal_compras_registro">
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel110">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Valor"/>
+                            <Property name="text" type="java.lang.String" value="Total:"/>
                           </Properties>
-                        </Component>
-                        <Component class="javax.swing.JFormattedTextField" name="txtvencimiento_compras_registro">
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel111">
                           <Properties>
@@ -2269,6 +2353,28 @@
                         <Component class="javax.swing.JButton" name="btnagregar_compras_registro">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Agregar Articulo"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnagregar_compras_registroActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel6">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Subtotal:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="txtsubtot_compras_registro">
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel15">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="IVA:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="txtiva_compras_registro">
+                        </Component>
+                        <Component class="com.toedter.calendar.JDateChooser" name="jdarticulo1_compras_registro">
+                          <Properties>
+                            <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -3255,22 +3361,25 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="302" max="-2" attributes="0"/>
-                              <Component id="jLabel99" min="-2" pref="267" max="-2" attributes="0"/>
-                              <EmptySpace min="75" pref="720" max="32767" attributes="0"/>
-                          </Group>
                           <Component id="jPanel24" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                              <Component id="jLabel92" min="-2" pref="183" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
                           <Component id="jScrollPane21" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btndescargas_informes_infoclientes" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="174" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="302" max="-2" attributes="0"/>
+                                      <Component id="jLabel99" min="-2" pref="267" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                                      <Component id="jLabel92" min="-2" pref="183" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>

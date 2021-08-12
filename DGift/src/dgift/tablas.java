@@ -84,6 +84,9 @@ public class tablas extends javax.swing.JFrame {
         mostrarPorFechaVentas();
         mostrarDatosPorRutDevolucion();
         mostrarDatosPorcategoria();
+        llenar_comboproveedorcompra();
+        llenar_comboarticulocompra();
+        mostrarDatosRegistroCompra();
         
     }
 //USUARIOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
@@ -224,25 +227,49 @@ public class tablas extends javax.swing.JFrame {
 //CLIENTESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
  public void insertarDatosClientes(){
  
+ String packs=txt_ncliente_maestros_clientes.getText();
+ 
+ String[] registros= new String[2];
+ //String sql="insert into cliente(CLI_RUT_CLIENTE,CLI_NOMBRE,CLI_CELULAR,CLI_TELEFONO,CLI_CORREO,CLI_NACIMIENTO,CLI_ACTIVADO_DESACTIVADO) values(?,?,?,?,?,?,?)";
+ 
  try{
-    
-    String SQL ="insert into cliente(CLI_RUT_CLIENTE,CLI_NOMBRE,CLI_CELULAR,CLI_TELEFONO,CLI_CORREO,CLI_NACIMIENTO,CLI_ACTIVADO_DESACTIVADO) values(?,?,?,?,?,?,?)";
+       
+    String sql ="SELECT * FROM `cliente`"; 
+    Statement stt=con.createStatement();
+         ResultSet rss=stt.executeQuery(sql);
+      while(rss.next()){
+         
+             registros[0]=rss.getString("CLI_RUT_CLIENTE");
+             registros[1]=rss.getString("CLI_NOMBRE"); 
+            //registros[1]=rs.getString("CAT_DESCRIPCION");
+             
+            if (packs.equals(registros[1])) {
+            
+         JOptionPane.showMessageDialog(null,"Dato duplicado");
+          
+        }else{
+            
+             String SQL ="insert into cliente(CLI_RUT_CLIENTE,CLI_NOMBRE,CLI_CELULAR,CLI_TELEFONO,CLI_CORREO,CLI_NACIMIENTO,CLI_ACTIVADO_DESACTIVADO) values(?,?,?,?,?,?,?)"; 
     
     PreparedStatement pst= con.prepareStatement(SQL);
     
-    pst.setString(1,txtrut_maestros_clientes.getText());
-    pst.setString(2,txt_ncliente_maestros_clientes.getText());
-    pst.setString(3,txtcel_maestros_clientes.getText()); 
-    pst.setString(4,txtfono_maestros_clientes.getText());
-    pst.setString(5,txtemaill_maestros_clientes.getText());
-    pst.setString(6,((JTextField)txtfnac_maestros_clientes.getDateEditor().getUiComponent()).getText());
-    int seleccionado=cboxatcdes_maestros_clientes.getSelectedIndex();
-    pst.setString(7,cboxatcdes_maestros_clientes.getItemAt(seleccionado));
+         pst.setString(1,txtrut_maestros_clientes.getText());
+         pst.setString(2,txt_ncliente_maestros_clientes.getText());
+         pst.setString(3,txtcel_maestros_clientes.getText()); 
+         pst.setString(4,txtfono_maestros_clientes.getText());
+         pst.setString(5,txtemaill_maestros_clientes.getText());
+         pst.setString(6,((JTextField)txtfnac_maestros_clientes.getDateEditor().getUiComponent()).getText());
+         int seleccionado=cboxatcdes_maestros_clientes.getSelectedIndex();
+         pst.setString(7,cboxatcdes_maestros_clientes.getItemAt(seleccionado));
     
-   pst.execute();
-   
-    JOptionPane.showMessageDialog(null,"Registro Exitoso");
-   
+         pst.execute();
+    
+         JOptionPane.showMessageDialog(null,"Registro Exitoso");
+            
+            }
+     
+         }
+ 
 }catch(Exception e) {
       
     JOptionPane.showMessageDialog(null,"Registro Fallido"+e.getMessage());
@@ -327,7 +354,7 @@ public class tablas extends javax.swing.JFrame {
      
      
      
-  } 
+  }              
  public void eliminarRegistrosClientes(){
  int filaSeleccionada=listadeclientes_maestros.getSelectedRow();
  
@@ -385,16 +412,12 @@ public class tablas extends javax.swing.JFrame {
  public void insertarDatosBanco(){
  
  try{
-    
     String SQL ="insert into bancos(BAN_DESCRIPCION,BAN_ACTIVADO_DESACTIVADO) values(?,?)";
     
     PreparedStatement pst= con.prepareStatement(SQL);
-    
     pst.setString(1,txtnbanco_maestros_bancos.getText());
-  
     int seleccionado=cbbanco_maestros_bancos.getSelectedIndex();
     pst.setString(2,cbbanco_maestros_bancos.getItemAt(seleccionado));
-    
    pst.execute();
    
     JOptionPane.showMessageDialog(null,"Registro Editado");
@@ -962,7 +985,6 @@ public class tablas extends javax.swing.JFrame {
     pst.setString(5,txtmarcas_maestros_articulos.getText());
     int seleccionado=cboxproveedor_maestros_articulos.getSelectedIndex();
     pst.setString(6,cboxproveedor_maestros_articulos.getItemAt(seleccionado));
-    
    pst.execute();
    
     JOptionPane.showMessageDialog(null,"Registro Exitoso");
@@ -3623,6 +3645,150 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
      
  }
  
+ 
+ //registro compra=============================================================================================================
+//
+ public void llenar_comboproveedorcompra(){
+  cboxrazonsocial_compras_registro.removeAllItems();
+ 
+ try {
+     
+     
+ String q ="SELECT * FROM proveedor where PRO_ACTIVADO_DESACTIVADO='Activado'";
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(q);
+   // ='PRO_DESCRIPCION'
+         while(rs.next()){
+         
+          cboxrazonsocial_compras_registro.addItem(rs.getString("PRO_NOMBRE"));   
+         
+         }
+     } catch (Exception e) {
+         System.out.println("Incorrecto  "+e.getMessage());
+     }
+    
+ 
+ }
+ public void llenar_comboarticulocompra(){
+  cboxarticulo1_compras_registro.removeAllItems();
+  
+     
+ try {
+   String q ="SELECT * FROM articulo where ART_ACTIVADO_DESACTIVADO='Activado'";
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(q);
+    // ='FAC_ID_FACTURA'='ART_ID_ARTICULO
+         while(rs.next()){
+      // String q ="SELECT * FROM categoria_articulo where CAT_ACTIVADO_DESACTIVADO='Activado'";      
+             
+          cboxarticulo1_compras_registro.addItem(rs.getString("ART_DESCRIPCION"));
+          
+         //cboxcategoria_maestros_articulos1.addItem(rs.getString("ID_CATEGORIA"));
+         }
+     } catch (Exception e) {
+         System.out.println("Incorrector asd "+e.getMessage());
+     }
+    
+ 
+ }
+ public void insertarDatosregistrocompra(){
+ 
+ try{
+    
+    String SQL = "insert into factura (proveedor_PRO_RUT_PROVEEDOR,FAC_NUMERO,FAC_FECHA_FACTURA,FAC_SUBTOTAL,FAC_IVA,FAC_TOTAL) values(?,?,?,?,?,?)";
+                 
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+
+    pst.setString(1,txtrut_compras_registro.getText());
+    pst.setString(2,txtnfactura_compras_registro.getText());
+    pst.setString(3,((JTextField)jdcfrecepcion_compras_registro.getDateEditor().getUiComponent()).getText());
+   // int seleccionado=cboxrazonsocial_compras_registro.getSelectedIndex();
+    //pst.setString(5,cboxrazonsocial_compras_registro.getItemAt(seleccionado));
+   // pst.setString(4,txtcodigo_compras_registro.getText());
+   // int seleccionado=cboxarticulo_compras_registro.getSelectedIndex();
+   // pst.setString(7,cboxarticulo_compras_registro.getItemAt(seleccionado));
+    //pst.setString(3,txtcantidad_compras_registro.getText());
+    pst.setString(4,txtsubtot_compras_registro_total.getText());
+    pst.setString(5,txtiva_compras_registro_total.getText());
+    pst.setString(6,txttotal_compras_registro_total.getText());
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Exitoso");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error al guardar la factura  "+e.getMessage());
+}
+ } 
+ public void mostrarDatosRegistroCompra(){
+     
+      String[] titulos={"ID Factura","Numero factura","proveedor","fecha de factura","Total"};
+      String[] registros =new String[5];
+      DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+      
+     String SQL="SELECT *,factura.proveedor_PRO_RUT_PROVEEDOR\n" +
+                "FROM `factura`\n" +
+                "JOIN proveedor ON proveedor.PRO_RUT_PROVEEDOR=factura.proveedor_PRO_RUT_PROVEEDOR";
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("FAC_ID_FACTURA");
+             registros[1]=rs.getString("FAC_NUMERO"); 
+             registros[2]=rs.getString("PRO_NOMBRE");
+             registros[3]=rs.getString("FAC_FECHA_FACTURA");
+             registros[4]=rs.getString("FAC_TOTAL");
+            
+             modelo.addRow(registros);
+             
+         }
+         
+         detalle_factura_compras_registro.setModel(modelo);
+         
+     }catch(Exception e){
+     JOptionPane.showMessageDialog(null,"Error al mostrar datos "+e.getMessage());
+     } 
+     
+     
+ }
+ public void insertarDatosRegistroDetalle(){
+ 
+ try{
+    
+    String SQL = "insert into facturadetalle (FAC_ID_FACTURA,ARTICULO_ART_ID_ARTICULO,DET_FECHA_VENCIMIENTO,DET_CANTIDAD,DET_SUBTOTAL,DET_IVA,DET_TOTAL) values(?,?,?,?,?,?,?)";
+                 
+    
+    PreparedStatement pst= con.prepareStatement(SQL);
+    int fila=detalle_factura_compras_registro.getSelectedRow();
+    String id_factura =detalle_factura_compras_registro.getValueAt(fila,0).toString();
+    String id_articulo =txtcodigo_compras_registro.getText();
+    pst.setString(1,id_factura);
+    pst.setString(2,id_articulo);
+    pst.setString(3,((JTextField)jdarticulo1_compras_registro.getDateEditor().getUiComponent()).getText());
+   // int seleccionado=cboxrazonsocial_compras_registro.getSelectedIndex();
+    //pst.setString(5,cboxrazonsocial_compras_registro.getItemAt(seleccionado));
+   // pst.setString(4,txtcodigo_compras_registro.getText());
+   // int seleccionado=cboxarticulo_compras_registro.getSelectedIndex();
+   // pst.setString(7,cboxarticulo_compras_registro.getItemAt(seleccionado));
+    pst.setString(4,txtcantidad_compras_registro.getText());
+    pst.setString(5,txtsubtot_compras_registro.getText());
+    pst.setString(6,txtiva_compras_registro.getText());
+    pst.setString(7,txttotal_compras_registro.getText());
+   pst.execute();
+   
+    JOptionPane.showMessageDialog(null,"Registro Exitoso");
+   
+}catch(Exception e) {
+      
+    JOptionPane.showMessageDialog(null,"Error al guardar la factura  "+e.getMessage());
+}
+ } 
+ 
+ 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -3766,25 +3932,35 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
         jLabel106 = new javax.swing.JLabel();
         txtnfactura_compras_registro = new javax.swing.JTextField();
         txtrut_compras_registro = new javax.swing.JTextField();
-        txtfrecepcion_compras_registro = new javax.swing.JFormattedTextField();
         cboxrazonsocial_compras_registro = new javax.swing.JComboBox<>();
         btncancelarfac_compras_registro = new javax.swing.JButton();
         btnguardar_compras_registro = new javax.swing.JButton();
+        jdcfrecepcion_compras_registro = new com.toedter.calendar.JDateChooser();
+        jLabel156 = new javax.swing.JLabel();
+        jLabel157 = new javax.swing.JLabel();
+        jLabel158 = new javax.swing.JLabel();
+        txtsubtot_compras_registro_total = new javax.swing.JTextField();
+        txtiva_compras_registro_total = new javax.swing.JTextField();
+        txttotal_compras_registro_total = new javax.swing.JTextField();
         jScrollPane27 = new javax.swing.JScrollPane();
         detalle_factura_compras_registro = new javax.swing.JTable();
         jPanel18 = new javax.swing.JPanel();
         txtcantidad_compras_registro = new javax.swing.JTextField();
         jLabel109 = new javax.swing.JLabel();
-        cboxarticulo_compras_registro = new javax.swing.JComboBox<>();
+        cboxarticulo1_compras_registro = new javax.swing.JComboBox<>();
         jLabel108 = new javax.swing.JLabel();
         txtcodigo_compras_registro = new javax.swing.JTextField();
         jLabel107 = new javax.swing.JLabel();
-        txtvalor_compras_registro = new javax.swing.JTextField();
+        txttotal_compras_registro = new javax.swing.JTextField();
         jLabel110 = new javax.swing.JLabel();
-        txtvencimiento_compras_registro = new javax.swing.JFormattedTextField();
         jLabel111 = new javax.swing.JLabel();
         btncancelardetal_compras_registro = new javax.swing.JButton();
         btnagregar_compras_registro = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtsubtot_compras_registro = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        txtiva_compras_registro = new javax.swing.JTextField();
+        jdarticulo1_compras_registro = new com.toedter.calendar.JDateChooser();
         btneditar_compras_registro = new javax.swing.JButton();
         btneliminar_compras_registro = new javax.swing.JButton();
         jLabel131 = new javax.swing.JLabel();
@@ -5154,11 +5330,28 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
 
         jLabel106.setText("Proveedor Razon Social");
 
-        cboxrazonsocial_compras_registro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboxrazonsocial_compras_registro.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxrazonsocial_compras_registroItemStateChanged(evt);
+            }
+        });
 
         btncancelarfac_compras_registro.setText("Cancelar");
 
         btnguardar_compras_registro.setText("Guardar");
+        btnguardar_compras_registro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardar_compras_registroActionPerformed(evt);
+            }
+        });
+
+        jdcfrecepcion_compras_registro.setDateFormatString("yyyy-MM-dd");
+
+        jLabel156.setText("Subtotal");
+
+        jLabel157.setText("IVA");
+
+        jLabel158.setText("Total");
 
         javax.swing.GroupLayout registro_compras1Layout = new javax.swing.GroupLayout(registro_compras1);
         registro_compras1.setLayout(registro_compras1Layout);
@@ -5169,18 +5362,34 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
                 .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel103)
                     .addComponent(jLabel104, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtrut_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtnfactura_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(registro_compras1Layout.createSequentialGroup()
+                        .addComponent(jLabel106)
+                        .addGap(26, 26, 26)
+                        .addComponent(cboxrazonsocial_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(registro_compras1Layout.createSequentialGroup()
+                        .addComponent(jLabel105, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(65, 65, 65)
+                        .addComponent(jdcfrecepcion_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(122, 122, 122)
-                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtnfactura_compras_registro, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
-                    .addComponent(txtrut_compras_registro))
-                .addGap(133, 133, 133)
-                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel106)
-                    .addComponent(jLabel105, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
-                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cboxrazonsocial_compras_registro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtfrecepcion_compras_registro, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(registro_compras1Layout.createSequentialGroup()
+                        .addComponent(jLabel156)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtsubtot_compras_registro_total, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(registro_compras1Layout.createSequentialGroup()
+                        .addComponent(jLabel157)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtiva_compras_registro_total, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(registro_compras1Layout.createSequentialGroup()
+                        .addComponent(jLabel158)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txttotal_compras_registro_total, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnguardar_compras_registro)
                 .addGap(54, 54, 54)
@@ -5191,38 +5400,52 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
             registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(registro_compras1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel103)
                         .addComponent(txtnfactura_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtfrecepcion_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel105, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(jLabel105))
+                    .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel156)
+                            .addComponent(txtsubtot_compras_registro_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jdcfrecepcion_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registro_compras1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btncancelarfac_compras_registro)
-                            .addComponent(btnguardar_compras_registro)
-                            .addComponent(jLabel106)
-                            .addComponent(cboxrazonsocial_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnguardar_compras_registro))
                         .addGap(22, 22, 22))
                     .addGroup(registro_compras1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtrut_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel104))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(registro_compras1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel104)
+                                    .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(txtrut_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel106)
+                                        .addComponent(cboxrazonsocial_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(registro_compras1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtiva_compras_registro_total, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel157))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(registro_compras1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txttotal_compras_registro_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel158))))
+                        .addContainerGap())))
         );
 
         detalle_factura_compras_registro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane27.setViewportView(detalle_factura_compras_registro);
@@ -5231,19 +5454,34 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
 
         jLabel109.setText("Cantidad");
 
-        cboxarticulo_compras_registro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboxarticulo1_compras_registro.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxarticulo1_compras_registroItemStateChanged(evt);
+            }
+        });
 
         jLabel108.setText("Articulo");
 
         jLabel107.setText("Codigo");
 
-        jLabel110.setText("Valor");
+        jLabel110.setText("Total:");
 
         jLabel111.setText("Vencimiento");
 
         btncancelardetal_compras_registro.setText("Cancelar");
 
         btnagregar_compras_registro.setText("Agregar Articulo");
+        btnagregar_compras_registro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnagregar_compras_registroActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Subtotal:");
+
+        jLabel15.setText("IVA:");
+
+        jdarticulo1_compras_registro.setDateFormatString("yyyy-MM-dd");
 
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
@@ -5251,31 +5489,38 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel107)
+                .addGap(18, 18, 18)
+                .addComponent(txtcodigo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel108)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cboxarticulo1_compras_registro, 0, 151, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel109)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtcantidad_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtsubtot_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel15)
+                .addGap(18, 18, 18)
+                .addComponent(txtiva_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel110, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addComponent(jLabel107)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtcodigo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
-                        .addComponent(jLabel108)
-                        .addGap(18, 18, 18)
-                        .addComponent(cboxarticulo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69)
-                        .addComponent(jLabel109)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtcantidad_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(62, 62, 62)
-                        .addComponent(jLabel110, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtvalor_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(75, 75, 75)
+                        .addComponent(txttotal_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel111)
                         .addGap(18, 18, 18)
-                        .addComponent(txtvencimiento_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jdarticulo1_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnagregar_compras_registro)
-                        .addGap(82, 82, 82)
+                        .addGap(96, 96, 96)
                         .addComponent(btncancelardetal_compras_registro)))
                 .addGap(59, 59, 59))
         );
@@ -5286,24 +5531,31 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
                 .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel107)
                     .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel109)
-                        .addComponent(cboxarticulo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cboxarticulo1_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel108)
-                        .addComponent(txtcantidad_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtcodigo_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(58, 58, 58))
             .addGroup(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtvalor_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel110)
-                    .addComponent(jLabel111)
-                    .addComponent(txtvencimiento_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnagregar_compras_registro)
-                    .addComponent(btncancelardetal_compras_registro))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel111)
+                        .addComponent(txttotal_compras_registro)
+                        .addComponent(jLabel110)
+                        .addComponent(txtiva_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel15)
+                        .addComponent(txtsubtot_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6)
+                        .addComponent(txtcantidad_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel109))
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addComponent(jdarticulo1_compras_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btncancelardetal_compras_registro)
+                    .addComponent(btnagregar_compras_registro))
+                .addContainerGap())
         );
 
         btneditar_compras_registro.setText("Editar");
@@ -5347,11 +5599,11 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registro_comprasLayout.createSequentialGroup()
                 .addComponent(jLabel131)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(registro_compras1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(registro_compras1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel132)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel133)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -6010,20 +6262,21 @@ public void filtrarDatosPorFechaInforCliente(String fecha1, String fecha2){
         informe_clientes.setLayout(informe_clientesLayout);
         informe_clientesLayout.setHorizontalGroup(
             informe_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(informe_clientesLayout.createSequentialGroup()
-                .addGap(302, 302, 302)
-                .addComponent(jLabel99, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 720, Short.MAX_VALUE))
             .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(informe_clientesLayout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jLabel92, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane21)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, informe_clientesLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btndescargas_informes_infoclientes)
                 .addGap(174, 174, 174))
+            .addGroup(informe_clientesLayout.createSequentialGroup()
+                .addGroup(informe_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(informe_clientesLayout.createSequentialGroup()
+                        .addGap(302, 302, 302)
+                        .addComponent(jLabel99, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(informe_clientesLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel92, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         informe_clientesLayout.setVerticalGroup(
             informe_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -9228,6 +9481,94 @@ PDFimformesClientes();
         // TODO add your handling code here:
     }//GEN-LAST:event_btndescargas_informes_infoclientesActionPerformed
 
+    private void btnguardar_compras_registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardar_compras_registroActionPerformed
+insertarDatosregistrocompra();
+mostrarDatosRegistroCompra();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnguardar_compras_registroActionPerformed
+
+    private void cboxrazonsocial_compras_registroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxrazonsocial_compras_registroItemStateChanged
+ int seleccionado= cboxrazonsocial_compras_registro.getSelectedIndex();
+ String packs=cboxrazonsocial_compras_registro.getItemAt(seleccionado);
+ 
+ String[] registros= new String[2];
+ String SQL="SELECT * from proveedor where PRO_ACTIVADO_DESACTIVADO='Activado' ";
+ 
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("PRO_RUT_PROVEEDOR");
+             registros[1]=rs.getString("PRO_NOMBRE"); 
+            //registros[1]=rs.getString("CAT_DESCRIPCION");
+             
+            if (packs.equals(registros[1])) {
+            
+          String  valor= registros[0];
+          txtrut_compras_registro.setText(valor);
+          
+          
+        } 
+             
+             
+         }
+     
+         
+        
+ 
+     }catch(Exception e){
+           
+           }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboxrazonsocial_compras_registroItemStateChanged
+
+    private void cboxarticulo1_compras_registroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxarticulo1_compras_registroItemStateChanged
+ int seleccionado= cboxarticulo1_compras_registro.getSelectedIndex();
+ String packs=cboxarticulo1_compras_registro.getItemAt(seleccionado);
+ 
+ String[] registros= new String[2];
+ String SQL="SELECT * from articulo where ART_ACTIVADO_DESACTIVADO='Activado' ";
+ 
+     try{
+         
+         Statement st=con.createStatement();
+         ResultSet rs=st.executeQuery(SQL);
+         
+         while(rs.next()){
+         
+             registros[0]=rs.getString("ART_ID_ARTICULO");
+             registros[1]=rs.getString("ART_DESCRIPCION"); 
+            //registros[1]=rs.getString("CAT_DESCRIPCION");
+             
+            if (packs.equals(registros[1])) {
+            
+          String  valor= registros[0];
+          txtcodigo_compras_registro.setText(valor);
+          
+          
+        } 
+             
+             
+         }
+     
+         
+        
+ 
+     }catch(Exception e){
+           
+           }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboxarticulo1_compras_registroItemStateChanged
+
+    private void btnagregar_compras_registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregar_compras_registroActionPerformed
+insertarDatosRegistroDetalle();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnagregar_compras_registroActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -9353,7 +9694,7 @@ PDFimformesClientes();
     private javax.swing.JComboBox<String> cboxEstados_maestros_packs;
     private javax.swing.JComboBox<String> cboxEstados_ventas_venta;
     private javax.swing.JComboBox<String> cboxRRSS_ventas_venta;
-    private javax.swing.JComboBox<String> cboxarticulo_compras_registro;
+    private javax.swing.JComboBox<String> cboxarticulo1_compras_registro;
     private javax.swing.JComboBox<String> cboxatcdes_maestros_clientes;
     private javax.swing.JComboBox<String> cboxbanco_ventas_confirmacion;
     private javax.swing.JComboBox<String> cboxcategoria_maestros_articulos1;
@@ -9455,12 +9796,16 @@ PDFimformesClientes();
     private javax.swing.JLabel jLabel147;
     private javax.swing.JLabel jLabel148;
     private javax.swing.JLabel jLabel149;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel150;
     private javax.swing.JLabel jLabel151;
     private javax.swing.JLabel jLabel152;
     private javax.swing.JLabel jLabel153;
     private javax.swing.JLabel jLabel154;
     private javax.swing.JLabel jLabel155;
+    private javax.swing.JLabel jLabel156;
+    private javax.swing.JLabel jLabel157;
+    private javax.swing.JLabel jLabel158;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -9509,6 +9854,7 @@ PDFimformesClientes();
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel59;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
@@ -9602,6 +9948,8 @@ PDFimformesClientes();
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private com.toedter.calendar.JDateChooser jdarticulo1_compras_registro;
+    private com.toedter.calendar.JDateChooser jdcfrecepcion_compras_registro;
     private javax.swing.JTable listaCompras_solicitudes;
     private javax.swing.JPanel lista_destino;
     private javax.swing.JTable listaarticulos;
@@ -9668,10 +10016,11 @@ PDFimformesClientes();
     private javax.swing.JTextField txtfono_maestros_proveedores;
     private javax.swing.JTextField txtfono_ventas_venta;
     private com.toedter.calendar.JDateChooser txtfpago_ventas_confirmacion;
-    private javax.swing.JFormattedTextField txtfrecepcion_compras_registro;
     private javax.swing.JTextField txtfrecepcion_compras_revision;
     private javax.swing.JTextField txthoraf_ventas_venta;
     private javax.swing.JTextField txthorai_ventas_venta;
+    private javax.swing.JTextField txtiva_compras_registro;
+    private javax.swing.JTextField txtiva_compras_registro_total;
     private javax.swing.JTextField txtmarcas_maestros_articulos;
     private javax.swing.JTextField txtnarticulo_maestros_articulo;
     private javax.swing.JTextField txtnbanco_maestros_bancos;
@@ -9697,15 +10046,17 @@ PDFimformesClientes();
     private javax.swing.JTextField txtrut_ventas_confirmacion;
     private javax.swing.JTextField txtrut_ventas_venta;
     private javax.swing.JTextField txtsaludo_ventas_venta;
+    private javax.swing.JTextField txtsubtot_compras_registro;
+    private javax.swing.JTextField txtsubtot_compras_registro_total;
     private javax.swing.JTextField txtsubtotal_ventas_venta;
+    private javax.swing.JTextField txttotal_compras_registro;
+    private javax.swing.JTextField txttotal_compras_registro_total;
     private javax.swing.JTextField txttotal_ventas_venta;
     private javax.swing.JTextField txttransaccion_ventas_confirmacion;
     private javax.swing.JTextField txtunidades_compras_solicitudes;
     private javax.swing.JTextField txtunidades_maestros_articulos;
     private javax.swing.JTextField txtunidades_maestros_packs;
     private javax.swing.JTextField txtusuario_maestros_usuarios;
-    private javax.swing.JTextField txtvalor_compras_registro;
-    private javax.swing.JFormattedTextField txtvencimiento_compras_registro;
     private javax.swing.JPanel usuarios;
     private javax.swing.JPanel venta;
     private javax.swing.JPanel ventas;
